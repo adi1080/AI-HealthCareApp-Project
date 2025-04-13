@@ -1,0 +1,32 @@
+<div class="container">
+<h3>LOGIN</h3>
+<br><br>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+   <div>
+      <label for="un">User Name:-</label>
+      <input type="text" id="un" placeholder="Enter Username" formControlName="username" >
+   </div>
+   
+   <br><br>
+   
+   <div>
+      <label for="ps">Password:-</label>
+      <input type="password" id="ps" placeholder="Enter Password" formControlName="password">
+   </div>
+   
+   <br><br>
+
+   <div>
+      <input type="submit" value="Login" [disabled]="!loginForm.valid">
+   </div>
+
+   <br><br>
+
+   <div>
+      Not a member? <a href="javascript:void(0)" (click)="teleport()" class="transform">Sign Up</a>
+   </div>
+
+</form>
+</div>
+ 

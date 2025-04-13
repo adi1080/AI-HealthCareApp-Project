@@ -1,0 +1,10 @@
+.nav-link{
+    color: black;
+    &:hover{
+        border-bottom: 2px solid black;
+    }
+}
+
+.navbar-brand{
+    color: black;
+}
