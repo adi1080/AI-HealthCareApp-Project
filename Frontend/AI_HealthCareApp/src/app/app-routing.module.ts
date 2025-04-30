@@ -6,6 +6,8 @@ import { LoginComponent } from './Main/login/login.component';
 import { RegisterComponent } from './Main/register/register.component';
 import { AddProfileComponent as AddDoctorProfileComponent} from './Doctor/Components/profile/add-profile/add-profile.component';
 import { UpdateComponent as DoctorProfileUpdateComponent} from './Doctor/Components/profile/update/update.component';
+import { AddInfoComponent as AddPatientProfileComponent} from './Patient/Components/profile/add-info/add-info.component';
+import { UpdateComponent as PatientProfileUpdateComponent} from './Patient/Components/profile/update/update.component';
 
 
 const routes: Routes = [
@@ -15,6 +17,8 @@ const routes: Routes = [
 
   {path: 'doctor/profile/addInfo' , component:AddDoctorProfileComponent},
   {path: 'doctor/profile/update' , component:DoctorProfileUpdateComponent},
+  {path: 'patient/profile/addInfo' , component:AddPatientProfileComponent},
+  {path: 'patient/profile/update' , component:PatientProfileUpdateComponent},
 
   {path:'admin' , loadChildren:() =>import('./Admin/admin.module').then((m) => m.AdminModule)},
   {path:'doctor' , loadChildren:()=>import('./Doctor/doctor.module').then((m)=>m.DoctorModule)},

@@ -5,14 +5,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { HomeComponent } from './Components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
+import { AddInfoComponent } from './Components/profile/add-info/add-info.component';
+import { UpdateComponent } from './Components/profile/update/update.component';
 
 const routes: Routes = [
 {
-  path: '',
+  path:'',
   component: NavbarComponent,
   children:[
-    {path:'profile' , component:ProfileComponent},
+    {path:'' , component:HomeComponent},
     {path:'home' , component:HomeComponent},
+    {path:'profile' , component:ProfileComponent},
 
   ]                             
 }
@@ -22,7 +25,9 @@ const routes: Routes = [
   declarations: [
     NavbarComponent,
     ProfileComponent,
-    HomeComponent
+    HomeComponent,
+    AddInfoComponent,
+    UpdateComponent
   ],
   imports: [
     CommonModule,

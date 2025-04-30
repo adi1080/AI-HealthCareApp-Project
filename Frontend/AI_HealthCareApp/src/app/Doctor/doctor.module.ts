@@ -15,8 +15,9 @@ const routes: Routes = [
     path: '',
     component: NavbarComponent,
     children: [
-      {path: 'profile', component: ProfileComponent},
-      {path: 'home' , component: HomeComponent},  
+      {path:'' , component:HomeComponent , pathMatch:'full'},
+      {path: 'home' , component: HomeComponent}, 
+      {path: 'profile', component: ProfileComponent}, 
     ],
   },
 ];

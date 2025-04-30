@@ -3,6 +3,10 @@ package com.MajorProject.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +25,24 @@ public class DoctorController {
 
     @PostMapping("/addprofile")
     public String updateDoctorProfile(
-    		@RequestParam("id") long id,
-            @RequestParam("name") String name,
-            @RequestParam("mobileNo") long mobileno,
-            @RequestParam("gender") String gender,
-            @RequestParam("age") int age,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("speciality") String speciality,
-            @RequestParam("experience") String experience,
-            @RequestParam("clinicName") String clinicName,
-            @RequestParam("clinicAddress") String clinicAddress,
-            @RequestParam("consultationFees") double consultationFees) throws IOException {
-
-        // Convert the image file to a byte array (this will be stored as BLOB)
-        byte[] imageBytes = image.getBytes();
-
+    		@RequestParam long id,
+            @RequestParam String name,
+            @RequestParam("mobileNo") long mobileno, //matchinig values of angular needed in () if u give different names here
+            @RequestParam String gender,
+            @RequestParam int age,
+            @RequestParam MultipartFile image,
+            @RequestParam String speciality,
+            @RequestParam String experience,
+            @RequestParam String clinicName,
+            @RequestParam String clinicAddress,
+            @RequestParam double consultationFees) throws IOException {
+    	
+    	boolean exist = doctorService.checkprofileExistsOrNot(id);
+    	if(exist == true) {
+    		System.out.println("profile already exists");
+    		return "profile already exists";
+    	}
+    	else {
         // Create a Doctor object and populate it with the incoming data
         Doctor doctor = new Doctor();
         doctor.setId(id);
@@ -43,7 +50,7 @@ public class DoctorController {
         doctor.setMobileNo(mobileno);
         doctor.setAge(age);
         doctor.setGender(gender);
-        doctor.setImage(image.getBytes());
+        doctor.setImage(image.getBytes()); //convert image file to byte array (stored as blob in db)
         doctor.setExperience(experience);
         doctor.setSpeciality(speciality);
         doctor.setClinicName(clinicName);
@@ -56,12 +63,37 @@ public class DoctorController {
         doctorService.saveProfile(doctor);
 
         return "profile saved Successfully";
-        
+    	}
     }
     
-//    @PostMapping("/addprofile")
-//    public Doctor addDetails(@RequestBody Doctor doctor) {
-//    	System.out.println(doctor);
-//    	return doctorService.saveProfile(doctor);
-//    }
+    @GetMapping("profile/{id}")
+    public ResponseEntity<Map<String, Object>> showprofile(@PathVariable long id)
+    {
+    	System.out.println(id);
+    	Optional<Doctor> doc = doctorService.FindDoctorById(id);
+        if (doc.isPresent()) {
+            Doctor doctor = doc.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", doctor.getId());
+            response.put("name", doctor.getName());
+            response.put("gender", doctor.getGender());
+            response.put("age", doctor.getAge());
+            response.put("mobileNo", doctor.getMobileNo());
+            response.put("speciality", doctor.getSpeciality());
+            response.put("experience", doctor.getExperience());
+            response.put("clinicName", doctor.getClinicName());
+            response.put("clinicAddress", doctor.getClinicAddress());
+            response.put("consultationFees", doctor.getConsultationFees());
+            
+            // Convert byte[] to Base64
+            String base64Image = Base64.getEncoder().encodeToString(doctor.getImage());
+            response.put("image", base64Image);
+            
+            return ResponseEntity.ok(response);
+        }
+        else {
+        	 return ResponseEntity.notFound().build();
+        }
+    }
+    
 }

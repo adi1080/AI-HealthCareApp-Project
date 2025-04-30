@@ -12,6 +12,7 @@ import { RegisterComponent } from './Main/register/register.component';
 import { AdminModule } from './Admin/admin.module';
 import { DoctorModule } from './Doctor/doctor.module';
 import { PatientModule } from './Patient/patient.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PatientModule } from './Patient/patient.module';
     SharedModule,
     AdminModule,
     DoctorModule,
-    PatientModule
+    PatientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

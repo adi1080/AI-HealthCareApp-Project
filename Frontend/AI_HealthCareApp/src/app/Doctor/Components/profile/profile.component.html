@@ -1,21 +1,26 @@
 <div class="container">
-  <h3>Your Profile</h3>
   <!-- image -->
-  <img src="" alt="Profile Img"/>
-  <div class="info">
+   <div *ngIf="Doctor">
+    <h3>Your Profile</h3>
+    <img [src]="doctorImage" alt="Profile Image" width="200"/>
     <h6>
-      Name:- <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button>
+      Name:- {{Doctor.name}}<button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button>
     </h6>
-    <h6>Mobile No:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Gender:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Age:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Speciality:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Experience:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Clinic Name:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Clinic Address:- <button class="bi bi-pencil mod">Edit</button></h6>
-    <h6>Consultation Fees :- <button class="bi bi-pencil mod">Edit</button></h6>
-
-    <i>New User?</i>
-    <button class="btn btn-danger" (click)="addDetails()">Add Details</button>
+    <h6>Mobile No:- {{Doctor.mobileNo}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Gender:- {{Doctor.gender}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Age:- {{Doctor.age}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Speciality:- {{Doctor.speciality}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Experience:- {{Doctor.experience}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Clinic Name:- {{Doctor.clinicName}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Clinic Address:- {{Doctor.clinicAddress}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Consultation Fees :- {{Doctor.consultationFees}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
   </div>
+
+<div *ngIf="!Doctor" class="newuser">
+    <i><h1>Welcome New User! </h1><br>
+       Add Your Details From Here </i> <br>
+    <button class="btn btn-outline-danger btnedit" (click)="addDetails()">Add Details</button>
+</div>
+
+
 </div>

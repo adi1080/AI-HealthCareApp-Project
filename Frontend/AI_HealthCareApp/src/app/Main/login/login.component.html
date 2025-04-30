@@ -1,27 +1,20 @@
-<div class="container">
-<h3>LOGIN</h3>
-<br><br>
+<h3 class="heading">Login</h3>
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+<div class="form">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
    <div>
-      <label for="un">User Name:-</label>
-      <input type="text" id="un" placeholder="Enter Username" formControlName="username" >
-   </div>
-   
-   <br><br>
-   
-   <div>
-      <label for="ps">Password:-</label>
-      <input type="password" id="ps" placeholder="Enter Password" formControlName="password">
-   </div>
-   
-   <br><br>
+      <label for="exampleInputText" class="form-label mt-4">User Name</label>
+      <input type="text" class="form-control" id="exampleInputText" placeholder="User Name" autocomplete="off" formControlName="username">
+    </div>
+    
+    <div>
+      <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off" formControlName="password">
+    </div>
 
    <div>
-      <input type="submit" value="Login" [disabled]="!loginForm.valid">
+      <input type="submit" class="btn btn-outline-success btnedit" value="Login" [disabled]="!loginForm.valid">
    </div>
-
-   <br><br>
 
    <div>
       Not a member? <a href="javascript:void(0)" (click)="teleport()" class="transform">Sign Up</a>
@@ -29,4 +22,3 @@
 
 </form>
 </div>
- 

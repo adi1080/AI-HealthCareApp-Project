@@ -11,6 +11,10 @@ export class DoctorService {
   constructor(private http:HttpClient) { }
 
   addDoctorProfile(doctor:any){
-    return this.http.post(`${this.baseUrl}/addprofile`,doctor);
+    return this.http.post(`${this.baseUrl}/addprofile`,doctor , {responseType:'text'});
+  }
+
+  FindById(id:any):Observable<any>{
+    return this.http.get(`${this.baseUrl}/profile/${id}`);
   }
 }

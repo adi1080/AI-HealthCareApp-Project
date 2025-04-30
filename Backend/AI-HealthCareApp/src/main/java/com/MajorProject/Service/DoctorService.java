@@ -25,4 +25,13 @@ public class DoctorService {
         return doctorRepository.save(doctor); // This will either update or insert the doctor based on whether the ID exists
     }
 	
+    public boolean checkprofileExistsOrNot(long id) {
+    	if(doctorRepository.existsById(id)) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    	
+    }
 }

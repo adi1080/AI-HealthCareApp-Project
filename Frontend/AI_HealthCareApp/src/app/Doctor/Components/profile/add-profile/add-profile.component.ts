@@ -12,6 +12,8 @@ export class AddProfileComponent implements OnInit {
   uid!: any;
   AddProfileForm!: FormGroup;
   selectedFile: File | null = null;
+  checkProfileExistance!:any;
+  msg:string ='';
 
   constructor(
     private router: Router,
@@ -20,13 +22,12 @@ export class AddProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    var userId = localStorage.getItem('userId'); // Get userId from localStorage
-    console.log('User ID from localStorage:', userId); // Log userId to verify it is being retrieved
-    this.uid = userId;
+    this.uid = localStorage.getItem('userId');
+    console.log(this.uid);
 
     this.AddProfileForm = this.formBuilder.group({
       id:[this.uid],
-      name: [null],
+      name: [],
       mobileNo: [],
       gender: [],
       age: [],
@@ -44,6 +45,13 @@ export class AddProfileComponent implements OnInit {
   }
 
   addDetailsById() {
+
+    if (this.AddProfileForm.invalid) {
+      this.msg = 'Please fill out all required fields.';
+      this.AddProfileForm.markAllAsTouched(); // Highlights all invalid fields
+      return;
+    }
+
     //formdata is used to assign key-value pairs
     const formData = new FormData();
     formData.append('id', this.AddProfileForm.get('id')?.value);
@@ -58,17 +66,23 @@ export class AddProfileComponent implements OnInit {
     formData.append('clinicAddress', this.AddProfileForm.get('clinicAddress')?.value);
     formData.append('consultationFees', this.AddProfileForm.get('consultationFees')?.value);
 
-    console.log(formData);
     this.docService.addDoctorProfile(formData).subscribe(
       response => {
-        console.log('Profile added successfully:', response);
+        console.log(response);
+        if(response == "profile already exists"){
+          this.msg = "profile already exists";
+          this.router.navigateByUrl('doctor/profile/addInfo');
+        }
+        else{
+          window.location.reload();
+          this.msg = "Profile Added Successfully";
+          this.router.navigateByUrl('doctor/profile/addInfo');
+        }
       },
       error => {
         console.error('Error adding profile:', error);
-      }
+      } 
     );
-   
-    this.router.navigateByUrl('profile');
   }
 
 }
