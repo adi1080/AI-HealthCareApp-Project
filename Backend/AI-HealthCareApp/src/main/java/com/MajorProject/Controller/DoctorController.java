@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,8 +25,8 @@ public class DoctorController {
     DoctorService doctorService;
 
     @PostMapping("/addprofile")
-    public String updateDoctorProfile(
-    		@RequestParam long id,
+    public String AddDoctorProfile(
+    		@RequestParam("id") long id,
             @RequestParam String name,
             @RequestParam("mobileNo") long mobileno, //matchinig values of angular needed in () if u give different names here
             @RequestParam String gender,
@@ -96,4 +97,44 @@ public class DoctorController {
         }
     }
     
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateDoctor(@PathVariable Long id,
+                                          @RequestParam("name") String name,
+                                          @RequestParam("mobileNo") long mobileNo,
+                                          @RequestParam("gender") String gender,
+                                          @RequestParam("age") int age,
+                                          @RequestParam("speciality") String speciality,
+                                          @RequestParam("experience") String experience,
+                                          @RequestParam("clinicName") String clinicName,
+                                          @RequestParam("clinicAddress") String clinicAddress,
+                                          @RequestParam("consultationFees") int consultationFees,
+                                          @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        Optional<Doctor> doctorOptional = doctorService.FindDoctorById(id);
+        if (!doctorOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found");
+        }
+
+        Doctor doctor = doctorOptional.get();
+        doctor.setName(name);
+        doctor.setMobileNo(mobileNo);
+        doctor.setGender(gender);
+        doctor.setAge(age);
+        doctor.setSpeciality(speciality);
+        doctor.setExperience(experience);
+        doctor.setClinicName(clinicName);
+        doctor.setClinicAddress(clinicAddress);
+        doctor.setConsultationFees(consultationFees);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                doctor.setImage(imageFile.getBytes());
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Image processing failed");
+            }
+        }
+
+        doctorService.saveProfile(doctor);
+        return ResponseEntity.ok(doctor);
+    }
+
 }

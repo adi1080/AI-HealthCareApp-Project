@@ -44,7 +44,7 @@ export class AddProfileComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  addDetailsById() {
+  addDetails() {
 
     if (this.AddProfileForm.invalid) {
       this.msg = 'Please fill out all required fields.';
@@ -74,7 +74,6 @@ export class AddProfileComponent implements OnInit {
           this.router.navigateByUrl('doctor/profile/addInfo');
         }
         else{
-          window.location.reload();
           this.msg = "Profile Added Successfully";
           this.router.navigateByUrl('doctor/profile/addInfo');
         }

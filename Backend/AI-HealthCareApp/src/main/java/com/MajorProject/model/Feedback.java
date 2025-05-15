@@ -7,17 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 public class Feedback {
 
@@ -34,5 +25,48 @@ public class Feedback {
 	private int rating;//1-5
 	private String FeedbackComment;
 	private LocalDate Date;
+	public long getFeedbackid() {
+		return Feedbackid;
+	}
+	public void setFeedbackid(long feedbackid) {
+		Feedbackid = feedbackid;
+	}
+	public Patient getPatient() {
+		return patient;
+	}
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+	public Doctor getDoctor() {
+		return doctor;
+	}
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+	public int getRating() {
+		return rating;
+	}
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	public String getFeedbackComment() {
+		return FeedbackComment;
+	}
+	public void setFeedbackComment(String feedbackComment) {
+		FeedbackComment = feedbackComment;
+	}
+	public LocalDate getDate() {
+		return Date;
+	}
+	public void setDate(LocalDate date) {
+		Date = date;
+	}
+	@Override
+	public String toString() {
+		return "Feedback [Feedbackid=" + Feedbackid + ", patient=" + patient + ", doctor=" + doctor + ", rating="
+				+ rating + ", FeedbackComment=" + FeedbackComment + ", Date=" + Date + "]";
+	}
+	
+	
 	
 }

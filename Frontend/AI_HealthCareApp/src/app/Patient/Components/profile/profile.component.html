@@ -1,1 +1,24 @@
-<p>profile works!</p>
+<h2>your profile</h2>
+
+<div class="container">
+  <!-- image -->
+   <div *ngIf="Patient">
+    <h3>Your Profile</h3>
+    <h6>
+      Name:- {{Patient.Name}}<button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button>
+    </h6>
+    <h6>Age :- {{Patient.Age}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Gender:- {{Patient.Gender}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Address:- {{Patient.Address}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Mobile Number :- {{Patient.Mobileno}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <h6>Helath Status:- {{Patient.History}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+  </div>
+
+<div *ngIf="!Patient" class="newuser">
+    <i><h1>Welcome New User! </h1><br>
+       Add Your Details From Here </i> <br>
+    <button class="btn btn-outline-danger btnedit" (click)="addDetails()">Add Details</button>
+</div>
+
+
+</div>

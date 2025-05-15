@@ -7,6 +7,7 @@ import { HomeComponent } from './Components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddInfoComponent } from './Components/profile/add-info/add-info.component';
 import { UpdateComponent } from './Components/profile/update/update.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
 {
@@ -33,7 +34,7 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-
+    ReactiveFormsModule,
 
   ],
   exports: [
