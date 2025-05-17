@@ -22,4 +22,7 @@ export class DoctorService {
     return this.http.put(`${this.baseUrl}/update/${id}`, data);
   }
 
+FindAllByAddressAndName(params: any) {
+  return this.http.get<any>(`${this.baseUrl}/search`, { params });
+}
 }

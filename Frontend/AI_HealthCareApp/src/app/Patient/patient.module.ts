@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AddInfoComponent } from './Components/profile/add-info/add-info.component';
 import { UpdateComponent } from './Components/profile/update/update.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SearchDoctorComponent } from './Components/search-doctor/search-doctor.component';
 
 const routes: Routes = [
 {
@@ -17,7 +18,8 @@ const routes: Routes = [
     {path:'' , component:HomeComponent},
     {path:'home' , component:HomeComponent},
     {path:'profile' , component:ProfileComponent},
-
+    {path:'Search' , component:SearchDoctorComponent},
+    
   ]                             
 }
 ];
@@ -28,7 +30,8 @@ const routes: Routes = [
     ProfileComponent,
     HomeComponent,
     AddInfoComponent,
-    UpdateComponent
+    UpdateComponent,
+    SearchDoctorComponent
   ],
   imports: [
     CommonModule,

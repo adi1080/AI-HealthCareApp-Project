@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -137,4 +138,11 @@ public class DoctorController {
         return ResponseEntity.ok(doctor);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Set<Doctor>> findadoctor(@RequestParam("clinicAddress") String address , @RequestParam("clinicName") String name){
+    	System.out.println(name);
+    	System.out.println(address);
+    	Set<Doctor> doclist = doctorService.find(name , address);
+    	return ResponseEntity.ok(doclist);
+    }
 }

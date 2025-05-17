@@ -1,0 +1,7 @@
+<div class="container">
+<form [formGroup]="searchForm" (ngSubmit)="search()">
+<input type="text" placeholder="Enter Address/City" formControlName="clinicAddress">
+<input type="text" placeholder="Enter clinic Name" formControlName="clinicName">
+<button class="btn btn-outline-primary btnedit">Find</button>
+</form>
+</div>

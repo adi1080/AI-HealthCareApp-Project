@@ -1,6 +1,7 @@
 package com.MajorProject.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +35,8 @@ public class DoctorService {
     	}
     	
     }
+
+	public Set<Doctor> find(String name, String address) {
+		return doctorRepository.findAllByClinicNameAndClinicAddress(name , address);
+	}
 }

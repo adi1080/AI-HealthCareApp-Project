@@ -13,7 +13,7 @@ public class PatientService {
 	@Autowired
 	PatientRepository pr;
 	
-	public Patient addProfile(Patient patient) {
+	public Patient saveProfile(Patient patient) {
 		return pr.save(patient);
 	}
 	

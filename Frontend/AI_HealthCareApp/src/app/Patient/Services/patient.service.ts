@@ -17,5 +17,8 @@ baseUrl = "http://localhost:9090/Patient";
        return this.http.get(`${this.baseUrl}/FindById/${id}`);
    }
 
+   updateprofile(id:any , patientProfile:any){
+    return this.http.put(`${this.baseUrl}/updateprofile/${id}`,patientProfile);
+   }
 
 }

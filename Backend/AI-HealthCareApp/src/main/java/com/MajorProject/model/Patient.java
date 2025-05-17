@@ -18,7 +18,7 @@ public class Patient {
 	@Id
 	private long id;
 	
-	@JsonProperty("Name")
+	@JsonProperty("Name")  //so that it doesn't give null values since backend takes data in small letter
 	private String Name;
 	@JsonProperty("Age")
 	private int Age;
