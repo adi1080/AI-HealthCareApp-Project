@@ -1,24 +1,30 @@
-  <header>
-    <nav class="navbar navbar-expand-lg" style="background-color: rgb(66, 167, 73);"> 
-      <div class="container-fluid">
-      <a class="navbar-brand"
-            href="#"> <img src="assets/app-logo-main.png" width="30" height="30" alt="logo" class="applogo" />
-        </a> <a class="navbar-brand" href="#">HealthCare</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<header>
+  <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to right, #f8f9fa, #e9ecef);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="assets/logo.png" width="40" height="40" alt="logo" class="applogo" />
+      </a>
+      <a class="navbar-brand" href="#" style="font-weight: bold; color: #007bff;">HealthCare</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item" *ngFor='let item of navItems'>
-                    <button class="nav-link" (click)="navigateTo(item.route)">{{item.name}} </button>
-                </li>
-                <li class="nav-item" >
-                    <button class="nav-link logout" (click)="returntologin()">Logout</button>
-                </li>
-            </ul>
-        </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="nav navbar-nav ms-auto">
+          <li class="nav-item" *ngFor='let item of navItems'>
+            <button class="nav-link" (click)="navigateTo(item.route)" style="font-weight: 500; color: #343a40;">
+              {{item.name}}
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link logout" (click)="returntologin()" style="font-weight: 500; color: #dc3545;">
+              Logout
+            </button>
+          </li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 </header>
+

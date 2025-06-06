@@ -34,7 +34,7 @@ constructor(){}
       },
       {
         name:'Schedule',
-        route:'doctor/schedule',
+        route:'doctor/schedule/',
         data:null
       }
     ];

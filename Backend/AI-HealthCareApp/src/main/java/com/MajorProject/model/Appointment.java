@@ -7,8 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -25,8 +28,10 @@ public class Appointment {
     @ManyToOne
     private Doctor doctor; // The doctor for the appointment
 
-    private LocalDate date; // lowercase "date" for proper naming convention
-                            // Date and time of the appointment
+    @OneToOne
+    private DoctorAvailability availability;
+// lowercase "date" for proper naming convention
+                           // Date and time of the appointment
     
     private String reason; // Reason for the appointment
    
@@ -59,7 +64,7 @@ public class Appointment {
 	public void setAppointmentId(long appointmentId) {
 		this.appointmentId = appointmentId;
 	}
-
+ 
 	public Patient getPatient() {
 		return patient;
 	}
@@ -74,14 +79,6 @@ public class Appointment {
 
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
 	}
 
 	public String getReason() {
@@ -100,10 +97,18 @@ public class Appointment {
 		this.status = status;
 	}
 
+	public DoctorAvailability getAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(DoctorAvailability availability) {
+		this.availability = availability;
+	}
+
 	@Override
 	public String toString() {
-		return "Appointment [appointmentId=" + appointmentId + ", patient=" + patient + ", doctor=" + doctor + ", date="
-				+ date + ", reason=" + reason + ", status=" + status + "]";
+		return "Appointment [appointmentId=" + appointmentId + ", patient=" + patient + ", doctor=" + doctor
+				+ ", availability=" + availability + ", reason=" + reason + ", status=" + status + "]";
 	}
 
  

@@ -1,9 +1,24 @@
-.c-item{
-    height: 480px;
-}
-  
-.c-img{
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.6);
-}
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero {
+            background: linear-gradient(135deg, #6a1b9a, #d32f2f);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .features {
+            padding: 40px 0;
+        }
+        .feature-icon {
+            font-size: 50px;
+            color: #6a1b9a;
+        }
+        .nav-link {
+            color: #6a1b9a !important;
+        }
+        .nav-link:hover {
+            color: #4a148c !important;
+        }

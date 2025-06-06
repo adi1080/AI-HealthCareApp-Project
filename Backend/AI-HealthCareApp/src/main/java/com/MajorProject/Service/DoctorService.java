@@ -1,5 +1,6 @@
 package com.MajorProject.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,7 +37,13 @@ public class DoctorService {
     	
     }
 
-	public Set<Doctor> find(String name, String address) {
-		return doctorRepository.findAllByClinicNameAndClinicAddress(name , address);
+	public Set<Doctor> find(String city , String speciality) {
+		System.out.println("Finding doctors with speciality: '" + speciality + "' and address: '" + city + "'");
+		return doctorRepository.findAllByCityIgnoreCaseAndSpecialityIgnoreCase(city , speciality);
+	}
+
+	public List<Doctor> findbyname(String name) {
+		return doctorRepository.findByName(name);
+		
 	}
 }

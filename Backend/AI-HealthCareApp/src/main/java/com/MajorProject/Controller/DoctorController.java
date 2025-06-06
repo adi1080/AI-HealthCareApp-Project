@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -29,9 +30,11 @@ public class DoctorController {
     public String AddDoctorProfile(
     		@RequestParam("id") long id,
             @RequestParam String name,
+            @RequestParam String about,
             @RequestParam("mobileNo") long mobileno, //matchinig values of angular needed in () if u give different names here
             @RequestParam String gender,
             @RequestParam int age,
+            @RequestParam String city,
             @RequestParam MultipartFile image,
             @RequestParam String speciality,
             @RequestParam String experience,
@@ -49,9 +52,11 @@ public class DoctorController {
         Doctor doctor = new Doctor();
         doctor.setId(id);
         doctor.setName(name);
+        doctor.setAbout(about);
         doctor.setMobileNo(mobileno);
         doctor.setAge(age);
         doctor.setGender(gender);
+        doctor.setCity(city);
         doctor.setImage(image.getBytes()); //convert image file to byte array (stored as blob in db)
         doctor.setExperience(experience);
         doctor.setSpeciality(speciality);
@@ -78,8 +83,10 @@ public class DoctorController {
             Map<String, Object> response = new HashMap<>();
             response.put("id", doctor.getId());
             response.put("name", doctor.getName());
+            response.put("about", doctor.getAbout());
             response.put("gender", doctor.getGender());
             response.put("age", doctor.getAge());
+            response.put("city", doctor.getCity());
             response.put("mobileNo", doctor.getMobileNo());
             response.put("speciality", doctor.getSpeciality());
             response.put("experience", doctor.getExperience());
@@ -101,9 +108,11 @@ public class DoctorController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateDoctor(@PathVariable Long id,
                                           @RequestParam("name") String name,
+                                          @RequestParam("about") String about,
                                           @RequestParam("mobileNo") long mobileNo,
                                           @RequestParam("gender") String gender,
                                           @RequestParam("age") int age,
+                                          @RequestParam("city") String city,
                                           @RequestParam("speciality") String speciality,
                                           @RequestParam("experience") String experience,
                                           @RequestParam("clinicName") String clinicName,
@@ -117,9 +126,11 @@ public class DoctorController {
 
         Doctor doctor = doctorOptional.get();
         doctor.setName(name);
+        doctor.setAbout(about);
         doctor.setMobileNo(mobileNo);
         doctor.setGender(gender);
         doctor.setAge(age);
+        doctor.setCity(city);
         doctor.setSpeciality(speciality);
         doctor.setExperience(experience);
         doctor.setClinicName(clinicName);
@@ -139,10 +150,21 @@ public class DoctorController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Set<Doctor>> findadoctor(@RequestParam("clinicAddress") String address , @RequestParam("clinicName") String name){
-    	System.out.println(name);
-    	System.out.println(address);
-    	Set<Doctor> doclist = doctorService.find(name , address);
-    	return ResponseEntity.ok(doclist);
+    public ResponseEntity<?> findadoctor(@RequestParam(required = false) String city , @RequestParam(required = false) String speciality , @RequestParam(value = "doctorname" , required = false) String name){
+   
+    	if (name != null && !name.trim().isEmpty() &&
+    	        (city == null || city.trim().isEmpty()) &&
+    	        (speciality == null || speciality.trim().isEmpty())) {
+    	        List<Doctor> doctorsByName = doctorService.findbyname(name.trim());
+    	        return ResponseEntity.ok(doctorsByName);
+    	    }
+
+    	    if (city != null && !city.trim().isEmpty() && 
+    	        speciality != null && !speciality.trim().isEmpty()) {
+    	        Set<Doctor> doctorsByCityAndSpeciality = doctorService.find(city.trim(), speciality.trim());
+    	        return ResponseEntity.ok(doctorsByCityAndSpeciality);
+    	    }
+
+    	    return ResponseEntity.badRequest().body("Please provide either doctor name or both city and speciality.");
     }
 }

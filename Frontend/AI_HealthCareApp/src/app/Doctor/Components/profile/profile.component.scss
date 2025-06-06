@@ -1,36 +1,30 @@
-.mod{
-    height: 80px;
-    width:auto;
-    color: #1e5ed2;
-    background-color: white;
+
+  .profile-card {
+    background: linear-gradient(135deg, #d6527a, #d11843);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+  }
+  .profile-card:hover {
+    transform: scale(1.02);
+  }
+  .profile-details h6 {
+    margin: 1rem 0;
+    font-weight: 500;
+  }
+  .mod {
+    background: none;
     border: 0;
-}
-
-h3{
-    text-align: center;
-}
-
-img{
-    margin-left: 38vw;
-}
-
-.info{
-    display: grid;
-    gap: 30px;
-    justify-content: space-around;
-
-}
-
-.container{
-    margin-top: 20px;
-}
-
-.newuser{
-    text-align: center;
-    margin-top: 20vh;
-}
-
-.btnedit{
-    border-radius: 0;
-
-}
+    cursor: pointer;
+    color: #3469db;
+    transition: color 0.3s ease;
+  }
+  .mod:hover {
+    color: #4a148c;
+  }
+  .newuser h1 {
+    color: #d32f2f;
+  }
+  .newuser p {
+    font-size: 1.2rem;
+  }

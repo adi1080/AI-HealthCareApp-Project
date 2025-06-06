@@ -20,9 +20,11 @@ public class Doctor {
 	private long id;
 	
 	private String name;
+	private String about;
 	private long mobileNo;
 	private String gender;
 	private int age;
+	private String city;
 	
 	@Lob
 	private byte[] image;
@@ -132,15 +134,29 @@ public class Doctor {
 		this.patients = patients;
 	}
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
 	@Override
 	public String toString() {
-		return "Doctor [id=" + id + ", name=" + name + ", mobileNo=" + mobileNo + ", gender=" + gender + ", age=" + age
-				+ ", image=" + Arrays.toString(image) + ", speciality=" + speciality + ", experience=" + experience
-				+ ", clinicName=" + clinicName + ", clinicAddress=" + clinicAddress + ", consultationFees="
-				+ consultationFees + ", patients=" + patients + "]";
+		return "Doctor [id=" + id + ", name=" + name + ", about=" + about + ", mobileNo=" + mobileNo + ", gender="
+				+ gender + ", age=" + age + ", city=" + city + ", image=" + Arrays.toString(image) + ", speciality="
+				+ speciality + ", experience=" + experience + ", clinicName=" + clinicName + ", clinicAddress="
+				+ clinicAddress + ", consultationFees=" + consultationFees + ", patients=" + patients + "]";
 	}
-	
-	
-	
+
 	
 }

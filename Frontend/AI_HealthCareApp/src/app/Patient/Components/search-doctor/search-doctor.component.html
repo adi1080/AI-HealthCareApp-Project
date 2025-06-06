@@ -1,7 +1,35 @@
-<div class="container">
-<form [formGroup]="searchForm" (ngSubmit)="search()">
-<input type="text" placeholder="Enter Address/City" formControlName="clinicAddress">
-<input type="text" placeholder="Enter clinic Name" formControlName="clinicName">
-<button class="btn btn-outline-primary btnedit">Find</button>
-</form>
+<div class="app-container">
+  <form [formGroup]="searchForm" (ngSubmit)="search()" class="search-panel">
+    <h1 class="title">Find Your Specialist Doctor</h1>
+    <div class="inputs-wrapper">
+      <div class="input-group">
+        <input type="text" placeholder="Enter City Name" formControlName="city" required />
+        <span class="input-icon">📍</span>
+      </div>
+      <div class="input-group">
+        <input type="text" placeholder="Enter Speciality of Doctor" formControlName="speciality" required />
+        <span class="input-icon">🔎</span>
+      </div>
+      <div class="input-group">
+        <input type="text" placeholder="Enter Doctor Name (optional)" formControlName="doctorname" />
+        <span class="input-icon">👨‍⚕️</span>
+      </div>
+      <button type="submit" class="btn-find">Find</button>
+    </div>
+  </form>
+  <div class="doctors-grid">
+    <div *ngFor="let doctor of doctors" class="doctor-card" (click)="openInfo(doctor.id)">
+      <div class="image-wrapper">
+        <img [src]="'data:image/jpeg;base64,' + doctor.image" alt="Doctor Image" />
+      </div>
+      <div class="doctor-info">
+        <h3 class="doctor-name">{{doctor.name}}</h3>
+        <p><strong>Experience:</strong> {{doctor.experience}} years</p>
+        <p><strong>Clinic:</strong> {{doctor.clinicName}}</p>
+        <p><strong>Address:</strong> {{doctor.clinicAddress}}</p>
+        <p><strong>Mobile:</strong> {{doctor.mobileno}}</p>
+        <p><strong>Consultation Fees:</strong> ${{doctor.consultationFees}}</p>
+      </div>
+    </div>
+  </div>
 </div>

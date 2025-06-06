@@ -1,0 +1,318 @@
+ /* Import fonts */
+ @import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@700&display=swap');
+
+  :host {
+    display: block;
+    background: #ffffff;
+    color: #6b7280;
+    font-family: 'Inter', sans-serif;
+    padding: 4rem 1rem 4rem;
+  }
+
+  .availability-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .availability-header {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 3rem; /* ~48px */
+    margin-bottom: 3rem;
+    color: #111827;
+    user-select: none;
+    text-align: center;
+  }
+
+  .icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #2563eb;
+    font-size: 2rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.75rem;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+
+  .icon-button:hover,
+  .icon-button:focus {
+    color: #1e40af;
+    background: rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+
+  /* Availability list styling */
+  .availability-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .availability-item {
+    background: #f9fafb;
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: #111827;
+    font-size: 1.125rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .availability-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Modal backdrop */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(255 255 255 / 0.3);
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+
+  /* Modal content */
+  .modal-content {
+    background: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    padding: 2rem 3rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    user-select: text;
+  }
+
+  .modal-header {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: #111827;
+    margin: 0;
+    user-select: none;
+  }
+
+  /* DateTime input */
+  .datetime-input {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #d1d5db;
+    border-radius: 0.75rem;
+    transition: border-color 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .datetime-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  }
+
+  /* Modal buttons container */
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  /* Buttons */
+  .btn {
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.625rem 1.75rem;
+    border-radius: 0.75rem;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+
+  .btn-primary:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+  }
+
+  .btn-primary:hover:not(:disabled),
+  .btn-primary:focus:not(:disabled) {
+    background-color: #1e40af;
+    outline: none;
+  }
+
+  .btn-secondary {
+    background-color: #f3f4f6;
+    color: #111827;
+  }
+
+  .btn-secondary:hover,
+  .btn-secondary:focus {
+    background-color: #e5e7eb;
+    outline: none;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 480px) {
+    .availability-container {
+      padding: 0 1rem;
+    }
+
+    .modal-content {
+      padding: 1.5rem 2rem 2rem;
+    }
+  }
+
+  :host {
+    display: block;
+    background: #ffffff;
+    color: #6b7280;
+    font-family: 'Inter', sans-serif;
+    padding: 4rem 1rem 6rem;
+  }
+
+  .availability-wrapper {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Hero / Header */
+  .availability-hero {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .availability-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 3.5rem; /* ~56px */
+    color: #111827;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .availability-subtitle {
+    font-size: 1.125rem; /* ~18px */
+    color: #6b7280;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    user-select: none;
+  }
+
+  /* Add Availability Button */
+  .btn-add-availability {
+    font-size: 2.25rem;
+    color: #2563eb;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    transition: color 0.3s, background-color 0.3s;
+    user-select: none;
+  }
+
+  .btn-add-availability:hover,
+  .btn-add-availability:focus {
+    color: #1e40af;
+    background-color: rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+
+  /* Availability List Section */
+  .availability-list-section {
+    padding-top: 2rem;
+  }
+
+  .availability-list-header {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    user-select: none;
+  }
+
+  /* Availability item */
+  .availability-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .availability-item {
+    background: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #111827;
+    font-weight: 600;
+    font-size: 1.125rem;
+    user-select: none;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .availability-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .availability-item time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+
+  /* Remove button */
+  .btn-remove {
+    background: transparent;
+    border: none;
+    color: #2563eb;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    user-select: none;
+  }
+
+  .btn-remove:hover,
+  .btn-remove:focus {
+    color: #1e40af;
+    outline: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .availability-title {
+      font-size: 2.5rem;
+    }
+
+    .availability-subtitle {
+      font-size: 1rem;
+    }
+  }
+

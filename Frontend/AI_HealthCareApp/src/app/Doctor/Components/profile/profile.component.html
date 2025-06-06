@@ -1,26 +1,56 @@
-<div class="container">
-  <!-- image -->
-   <div *ngIf="Doctor">
-    <h3>Your Profile</h3>
-    <img [src]="doctorImage" alt="Profile Image" width="200"/>
-    <h6>
-      Name:- {{Doctor.name}}<button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button>
-    </h6>
-    <h6>Mobile No:- {{Doctor.mobileNo}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Gender:- {{Doctor.gender}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Age:- {{Doctor.age}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Speciality:- {{Doctor.speciality}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Experience:- {{Doctor.experience}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Clinic Name:- {{Doctor.clinicName}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Clinic Address:- {{Doctor.clinicAddress}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Consultation Fees :- {{Doctor.consultationFees}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+<div class="container mt-5">
+  <div *ngIf="Doctor" class="profile-card p-4 rounded shadow">
+    <h3 class="text-center mb-4">Your Profile</h3>
+    <div class="text-center mb-3">
+      <img [src]="doctorImage" alt="Profile Image" class="img-fluid rounded-circle shadow-sm" width="250"/>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h4><i class="bi bi-person-fill"></i> Name: <span class="text-success">{{Doctor.name}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-info-circle-fill"></i> About Me: <span class="text-success">{{Doctor.about}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-telephone-fill"></i> Mobile No: <span class="text-success">{{Doctor.mobileNo}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-gender-ambiguous"></i> Gender: <span class="text-success">{{Doctor.gender}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+      </div>
+      <div class="col-md-6">
+        <h4><i class="bi bi-calendar-fill"></i> Age: <span class="text-success">{{Doctor.age}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-geo-alt-fill"></i> City: <span class="text-success">{{Doctor.city}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-star-fill"></i> Speciality: <span class="text-success">{{Doctor.speciality}}</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+        <h4><i class="bi bi-briefcase-fill"></i> Experience: <span class="text-success">{{Doctor.experience}} years</span>
+          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+        </h4>
+      </div>
+    </div>
+    <h4><i class="bi bi-hospital-fill"></i> Clinic Name: <span class="text-success">{{Doctor.clinicName}}</span>
+      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+    </h4>
+    <h4><i class="bi bi-house-fill"></i> Clinic Address: <span class="text-success">{{Doctor.clinicAddress}}</span>
+      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+    </h4>
+    <h4><i class="bi bi-cash-stack"></i> Consultation Fees: <span class="text-success">{{Doctor.consultationFees}}</span>
+      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
+    </h4>
   </div>
 
-<div *ngIf="!Doctor" class="newuser">
-    <i><h1>Welcome New User! </h1><br>
-       Add Your Details From Here </i> <br>
+  <div *ngIf="!Doctor" class="newuser text-center mt-5">
+    <i>
+      <h1>Welcome New User!</h1>
+      <p>Add Your Details From Here</p>
+    </i>
     <button class="btn btn-outline-danger btnedit" (click)="addDetails()">Add Details</button>
+  </div>
 </div>
 
-
-</div>

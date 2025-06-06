@@ -9,6 +9,9 @@ import { AddInfoComponent } from './Components/profile/add-info/add-info.compone
 import { UpdateComponent } from './Components/profile/update/update.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SearchDoctorComponent } from './Components/search-doctor/search-doctor.component';
+import { DocInfoComponent } from './Components/doc-info/doc-info.component';
+import { BookAppointmentComponent } from './Components/book-appointment/book-appointment.component';
+import { DocFeedbackComponent } from './Components/doc-feedback/doc-feedback.component';
 
 const routes: Routes = [
 {
@@ -19,7 +22,7 @@ const routes: Routes = [
     {path:'home' , component:HomeComponent},
     {path:'profile' , component:ProfileComponent},
     {path:'Search' , component:SearchDoctorComponent},
-    
+
   ]                             
 }
 ];
@@ -31,7 +34,10 @@ const routes: Routes = [
     HomeComponent,
     AddInfoComponent,
     UpdateComponent,
-    SearchDoctorComponent
+    SearchDoctorComponent,
+    DocInfoComponent,
+    BookAppointmentComponent,
+    DocFeedbackComponent
   ],
   imports: [
     CommonModule,
