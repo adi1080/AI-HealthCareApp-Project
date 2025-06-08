@@ -3,6 +3,7 @@ package com.MajorProject.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.model.Doctor;
+import com.MajorProject.model.DoctorAvailability;
 
 @RestController
 @CrossOrigin( origins = "http://localhost:4200/doctor")
@@ -152,19 +154,47 @@ public class DoctorController {
     @GetMapping("/search")
     public ResponseEntity<?> findadoctor(@RequestParam(required = false) String city , @RequestParam(required = false) String speciality , @RequestParam(value = "doctorname" , required = false) String name){
    
-    	if (name != null && !name.trim().isEmpty() &&
-    	        (city == null || city.trim().isEmpty()) &&
-    	        (speciality == null || speciality.trim().isEmpty())) {
+    	if (name != null && !name.trim().isEmpty()) {
     	        List<Doctor> doctorsByName = doctorService.findbyname(name.trim());
     	        return ResponseEntity.ok(doctorsByName);
     	    }
 
     	    if (city != null && !city.trim().isEmpty() && 
     	        speciality != null && !speciality.trim().isEmpty()) {
-    	        Set<Doctor> doctorsByCityAndSpeciality = doctorService.find(city.trim(), speciality.trim());
+    	        List<Doctor> doctorsByCityAndSpeciality = doctorService.find(city.trim(), speciality.trim());
     	        return ResponseEntity.ok(doctorsByCityAndSpeciality);
     	    }
-
     	    return ResponseEntity.badRequest().body("Please provide either doctor name or both city and speciality.");
+    }
+    
+    @PostMapping("/schedule/{doctorId}")
+    public String addAvailability(@PathVariable("doctorId") long doctorId, @RequestBody DoctorAvailability availability) {
+//         System.out.println(doctorId);
+    	Doctor doctor = doctorService.FindDoctorById(doctorId).orElseThrow(
+    			() -> new RuntimeException("Doctor not found with id : "+ doctorId));
+    	
+    	DoctorAvailability avail = new DoctorAvailability();
+        avail.setDate(availability.getDate());
+        avail.setTime(availability.getTime());
+        avail.setBooked(false);
+        avail.setDoctor(doctor); // or load doctor using doctorId
+
+        DoctorAvailability savedavail = doctorService.saveAvailability(avail);
+//        System.out.println(savedavail);
+        return "availability added";
+    }
+    
+    @GetMapping("/schedule/find/{doctorId}")
+    public ResponseEntity<?> FindAllAvailabilityByDoctorid(@PathVariable long doctorId){
+    	
+    	List<DoctorAvailability> availList = doctorService.FindAllAvailabilities(doctorId);
+//    	System.out.println(availList);
+    	return ResponseEntity.ok(availList);
+    }
+
+    @DeleteMapping("/schedule/delete/{availabilityId}")
+    public String DeleteAvailablilityById(@PathVariable long availabilityId) {
+    	doctorService.deleteAvailability(availabilityId);
+    	return "availability deleted";
     }
 }

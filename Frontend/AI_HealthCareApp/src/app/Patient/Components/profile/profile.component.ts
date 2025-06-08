@@ -18,6 +18,7 @@ constructor(private router:Router , private patientSevice:PatientService){}
     this.patientSevice.FindPatientById(this.loggedInUser).subscribe(
       (response)=>{
         this.Patient = response;
+        localStorage.setItem('PatientId', this.Patient.id);
       },
       (error)=>{
         console.log(error);

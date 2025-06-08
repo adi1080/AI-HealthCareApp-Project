@@ -25,4 +25,16 @@ export class DoctorService {
 FindAllByAddressAndName(params: any) {
   return this.http.get<any>(`${this.baseUrl}/search`, { params });
 }
+
+addAvailability(id: any, availability: any) {
+  return this.http.post(`${this.baseUrl}/schedule/${id}`, availability , { responseType: 'text' });
+}
+
+FindAllAvailability(id: any): Observable<any> {
+  return this.http.get(`${this.baseUrl}/schedule/find/${id}`);
+}
+
+DeleteAvailabilityById(availabilityId: any): Observable<any> {
+  return this.http.delete(`${this.baseUrl}/schedule/delete/${availabilityId}`, { responseType: 'text' });
+}
 }

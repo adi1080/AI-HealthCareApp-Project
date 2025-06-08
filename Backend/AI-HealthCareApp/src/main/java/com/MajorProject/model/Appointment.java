@@ -107,9 +107,11 @@ public class Appointment {
 
 	@Override
 	public String toString() {
-		return "Appointment [appointmentId=" + appointmentId + ", patient=" + patient + ", doctor=" + doctor
-				+ ", availability=" + availability + ", reason=" + reason + ", status=" + status + "]";
+	    return "Appointment [appointmentId=" + appointmentId 
+	            + ", patientId=" + (patient != null ? patient.getId() : null) 
+	            + ", doctorId=" + (doctor != null ? doctor.getId() : null) 
+	            + ", availabilityId=" + (availability != null ? availability.getId() : null) 
+	            + ", reason=" + reason + ", status=" + status + "]";
 	}
-
  
 }

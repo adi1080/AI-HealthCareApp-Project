@@ -11,6 +11,7 @@ export class ProfileComponent implements OnInit{
   loggedInUserId:any = localStorage.getItem('userId');
   Doctor:any;
   doctorImage!:string;
+  StoreLoggedInDoctorId:any;
 
   constructor(private router:Router , private docService:DoctorService){}
 
@@ -20,6 +21,8 @@ ngOnInit(): void {
             this.Doctor = doctor;
             this.doctorImage = 'data:image/jpeg;base64,' + doctor.image;
         console.log(this.Doctor);
+          this.StoreLoggedInDoctorId = this.Doctor.id;
+          localStorage.setItem("LoggedIndocId",this.StoreLoggedInDoctorId);
       },
        (error)=>{
         console.log(error);

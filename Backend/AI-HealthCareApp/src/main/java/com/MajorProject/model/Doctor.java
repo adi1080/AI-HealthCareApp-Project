@@ -3,6 +3,8 @@ package com.MajorProject.model;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +38,11 @@ public class Doctor {
 	private double consultationFees;
 	
 	@OneToMany(mappedBy = "doctor")
-	private List<Patient> patients;
+	@JsonManagedReference
+	private List<DoctorAvailability> availability;
+	
+	@OneToMany(mappedBy = "doctor")
+	private List<Appointment> appointments;
 
 	public long getId() {
 		return id;
@@ -52,6 +58,14 @@ public class Doctor {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
 	}
 
 	public long getMobileNo() {
@@ -76,6 +90,14 @@ public class Doctor {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public byte[] getImage() {
@@ -126,37 +148,30 @@ public class Doctor {
 		this.consultationFees = consultationFees;
 	}
 
-	public List<Patient> getPatients() {
-		return patients;
+	public List<DoctorAvailability> getAvailability() {
+		return availability;
 	}
 
-	public void setPatients(List<Patient> patients) {
-		this.patients = patients;
+	public void setAvailability(List<DoctorAvailability> availability) {
+		this.availability = availability;
 	}
 
-	public String getCity() {
-		return city;
+	public List<Appointment> getAppointments() {
+		return appointments;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getAbout() {
-		return about;
-	}
-
-	public void setAbout(String about) {
-		this.about = about;
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
 	}
 
 	@Override
 	public String toString() {
-		return "Doctor [id=" + id + ", name=" + name + ", about=" + about + ", mobileNo=" + mobileNo + ", gender="
-				+ gender + ", age=" + age + ", city=" + city + ", image=" + Arrays.toString(image) + ", speciality="
-				+ speciality + ", experience=" + experience + ", clinicName=" + clinicName + ", clinicAddress="
-				+ clinicAddress + ", consultationFees=" + consultationFees + ", patients=" + patients + "]";
+	    return "Doctor [id=" + id + ", name=" + name + ", about=" + about + ", mobileNo=" + mobileNo + ", gender=" 
+	            + gender + ", age=" + age + ", city=" + city + ", image=" + Arrays.toString(image) 
+	            + ", speciality=" + speciality + ", experience=" + experience + ", clinicName=" + clinicName 
+	            + ", clinicAddress=" + clinicAddress + ", consultationFees=" + consultationFees + "]";
 	}
+
 
 	
 }

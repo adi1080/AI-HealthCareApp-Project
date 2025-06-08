@@ -25,6 +25,8 @@ public class Feedback {
 	private int rating;//1-5
 	private String FeedbackComment;
 	private LocalDate Date;
+	
+	
 	public long getFeedbackid() {
 		return Feedbackid;
 	}

@@ -1,24 +1,33 @@
-<h3 class="heading">Login</h3>
+<div class="login-page">
+   <main class="container" role="main" aria-label="Login Form">
+      <h1 class="login-title" style="text-align: center;">Login</h1>
+      <p class="login-subtext">
+         Welcome back! Please enter your credentials to access your account.
+      </p>
 
-<div class="form">
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-   <div>
-      <label for="exampleInputText" class="form-label mt-4">User Name</label>
-      <input type="text" class="form-control" id="exampleInputText" placeholder="User Name" autocomplete="off" formControlName="username">
-    </div>
-    
-    <div>
-      <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off" formControlName="password">
-    </div>
+      <section class="login-card" aria-labelledby="login-title">
+         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="form-group">
+               <label for="username" class="form-label">User Name</label>
+               <input id="username" type="text" formControlName="username" placeholder="User Name" class="form-input"
+                  autocomplete="username" required aria-required="true" />
+            </div>
 
-   <div class="button-wrapper">
-      <input type="submit" class="btn-btn-success btnedit" value="Login" [disabled]="!loginForm.valid">
-   </div>
+            <div class="form-group">
+               <label for="password" class="form-label">Password</label>
+               <input id="password" type="password" formControlName="password" placeholder="Password" class="form-input"
+                  autocomplete="current-password" required aria-required="true" />
+            </div>
 
-   <div>
-      Not a member? <a href="javascript:void(0)" (click)="teleport()" class="transform">Sign Up</a>
-   </div>
+            <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+               Login
+            </button>
 
-</form>
+            <p class="signup-prompt">
+               Not a member?
+               <a href="javascript:void(0)" (click)="teleport()" class="signup-link">Sign Up</a>
+            </p>
+         </form>
+      </section>
+   </main>
 </div>

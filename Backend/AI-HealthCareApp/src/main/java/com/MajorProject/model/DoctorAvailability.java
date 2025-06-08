@@ -1,7 +1,10 @@
 package com.MajorProject.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class DoctorAvailability {
@@ -11,48 +14,70 @@ public class DoctorAvailability {
     private long id;
 
     @ManyToOne
+    @JsonBackReference
     private Doctor doctor;
 
-    private LocalDateTime startTime;
+    private LocalDate date;
+    private LocalTime time;
 
 
     private boolean isBooked = false; // Marked true once a patient books this slot
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public Doctor getDoctor() {
-        return doctor;
-    }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
+	public Doctor getDoctor() {
+		return doctor;
+	}
 
-    public boolean isBooked() {
-        return isBooked;
-    }
 
-    public void setBooked(boolean booked) {
-        isBooked = booked;
-    }
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
 
-    @Override
-    public String toString() {
-        return "DoctorAvailability [id=" + id + ", doctor=" + doctor + ", startTime=" + startTime +
-               ", isBooked=" + isBooked + "]";
-    }
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+
+	public LocalTime getTime() {
+		return time;
+	}
+
+
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
+
+
+	public boolean isBooked() {
+		return isBooked;
+	}
+
+
+	public void setBooked(boolean isBooked) {
+		this.isBooked = isBooked;
+	}
+
+
+	@Override
+	public String toString() {
+	    return "DoctorAvailability [id=" + id + ", doctorId=" + (doctor != null ? doctor.getId() : null)
+	            + ", date=" + date + ", time=" + time + ", isBooked=" + isBooked + "]";
+	}
+  
 }

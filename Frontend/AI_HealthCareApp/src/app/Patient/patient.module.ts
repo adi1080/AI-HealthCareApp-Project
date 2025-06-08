@@ -7,7 +7,7 @@ import { HomeComponent } from './Components/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { AddInfoComponent } from './Components/profile/add-info/add-info.component';
 import { UpdateComponent } from './Components/profile/update/update.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchDoctorComponent } from './Components/search-doctor/search-doctor.component';
 import { DocInfoComponent } from './Components/doc-info/doc-info.component';
 import { BookAppointmentComponent } from './Components/book-appointment/book-appointment.component';
@@ -43,6 +43,7 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
+    FormsModule,
     ReactiveFormsModule,
 
   ],

@@ -1,5 +1,7 @@
 package com.MajorProject.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -31,8 +34,8 @@ public class Patient {
 	@JsonProperty("History")
 	private String History;
 	
-	@ManyToOne
-	private Doctor doctor;
+   @OneToMany(mappedBy = "patient")
+   private List<Appointment> appointments;
 
 	public long getId() {
 		return id;
@@ -90,20 +93,18 @@ public class Patient {
 		History = history;
 	}
 
-	public Doctor getDoctor() {
-		return doctor;
+	public List<Appointment> getAppointments() {
+		return appointments;
 	}
 
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
+	public void setAppointments(List<Appointment> appointments) {
+		this.appointments = appointments;
 	}
 
 	@Override
 	public String toString() {
 		return "Patient [id=" + id + ", Name=" + Name + ", Age=" + Age + ", Gender=" + Gender + ", Address=" + Address
-				+ ", Mobileno=" + Mobileno + ", History=" + History + ", doctor=" + doctor + "]";
+				+ ", Mobileno=" + Mobileno + ", History=" + History + ", appointments=" + appointments + "]";
 	}
-
-	
 
 }

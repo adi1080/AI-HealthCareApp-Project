@@ -36,4 +36,8 @@ export class RegisterComponent implements OnInit{
     // this.UserForm.reset();
     this.router.navigateByUrl("/login")
   }
+
+  navigateToLogin(){
+    this.router.navigateByUrl('/login')
+  }
 }

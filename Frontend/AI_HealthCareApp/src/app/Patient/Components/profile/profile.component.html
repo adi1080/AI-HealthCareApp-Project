@@ -1,24 +1,84 @@
-<h2>your profile</h2>
+<div class="container" style="margin-top: 25px;">
+    <section *ngIf="Patient" role="region" aria-label="Patient Profile" class="profile-card" tabindex="0">
+      <header class="profile-header" id="profile-title"><h3>Your Profile</h3></header>
+      <div class="profile-item">
+        <i class="bi bi-person"></i>
+        <span class="profile-label">Name:</span>
+        <span class="profile-value">{{Patient.name}}</span>
+        <button class="edit-btn" aria-label="Edit Name" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <div class="profile-item">
+        <i class="bi bi-telephone"></i>
+        <span class="profile-label">Mobile No:</span>
+        <span class="profile-value">{{Patient.Mobileno}}</span>
+        <button class="edit-btn" aria-label="Edit Mobile No" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <div class="profile-item">
+        <i class="bi bi-gender-ambiguous"></i>
+        <span class="profile-label">Gender:</span>
+        <span class="profile-value">{{Patient.Gender}}</span>
+        <button class="edit-btn" aria-label="Edit Gender" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <div class="profile-item">
+        <i class="bi bi-calendar"></i>
+        <span class="profile-label">Age:</span>
+        <span class="profile-value">{{Patient.Age}}</span>
+        <button class="edit-btn" aria-label="Edit Age" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <div class="profile-item" style="grid-column: 1 / -1;">
+        <i class="bi bi-house"></i>
+        <span class="profile-label">Address:</span>
+        <span class="profile-value">{{Patient.Address}}</span>
+        <button class="edit-btn" aria-label="Edit Address" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <div class="profile-item" style="grid-column: 1 / -1;">
+        <i class="bi bi-heart"></i>
+        <span class="profile-label">Health Status:</span>
+        <span class="profile-value">{{Patient.History}}</span>
+        <button class="edit-btn" aria-label="Edit Health Status" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+    </section>
 
-<div class="container">
-  <!-- image -->
-   <div *ngIf="Patient">
-    <h3>Your Profile</h3>
-    <h6>
-      Name:- {{Patient.Name}}<button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button>
-    </h6>
-    <h6>Age :- {{Patient.Age}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Gender:- {{Patient.Gender}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Address:- {{Patient.Address}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Mobile Number :- {{Patient.Mobileno}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
-    <h6>Helath Status:- {{Patient.History}} <button class="bi bi-pencil mod" (click)="EditDetails()">Edit</button></h6>
+    <section *ngIf="Patient" role="region" aria-label="Health Overview" class="overview-card" tabindex="0">
+      <h4 class="overview-header">Health Overview</h4>
+      <div class="metric">
+        <i class="bi bi-calendar-check"></i>
+        <span class="metric-label">Upcoming Appointments</span>
+        <span class="metric-value">{{Patient.upcomingAppointments || 0}}</span>
+      </div>
+      <div class="metric">
+        <i class="bi bi-clock-history"></i>
+        <span class="metric-label">Last Visit</span>
+        <span class="metric-value"></span>
+      </div>
+      <div class="metric">
+        <i class="bi bi-capsule"></i>
+        <span class="metric-label">Active Medications</span>
+        <span class="metric-value">{{Patient.medications?.length || 0}}</span>
+      </div>
+      <div class="metric">
+        <i class="bi bi-graph-up-arrow"></i>
+        <span class="metric-label">Health Score</span>
+        <span class="metric-value">{{Patient.healthScore || 'N/A'}}</span>
+      </div>
+    </section>
+
+    <section *ngIf="!Patient" class="new-user" role="region" aria-label="New User Welcome">
+      <h1>Welcome New User!</h1>
+      <p>Add Your Details From Here</p>
+      <button class="btn-add-details" (click)="addDetails()">Add Details</button>
+    </section>
   </div>
 
-<div *ngIf="!Patient" class="newuser">
-    <i><h1>Welcome New User! </h1><br>
-       Add Your Details From Here </i> <br>
-    <button class="btn btn-outline-danger btnedit" (click)="addDetails()">Add Details</button>
-</div>
-
-
-</div>

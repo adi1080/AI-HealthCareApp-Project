@@ -9,8 +9,9 @@ import com.MajorProject.model.Doctor;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long>{
 
-	public Set<Doctor> findAllByCityIgnoreCaseAndSpecialityIgnoreCase(String city , String speciality);
+	public List<Doctor> findAllByCityIgnoreCaseAndSpecialityIgnoreCase(String city , String speciality);
 
-	public List<Doctor> findByName(String name);
+	List<Doctor> findByNameContainingIgnoreCase(String name);
+
 
 }

@@ -1,32 +1,48 @@
-<h3 class="heading">Register</h3>
+<div class="registration-page">
+   <main class="container" role="main" aria-label="Registration Form">
+      <h1 class="registration-title" style="text-align: center;">Register</h1>
+      <p class="registration-subtext">
+         Create an account to get started. Please fill in the details below.
+      </p>
 
-<div class="form">
-<form [formGroup]="UserForm" (ngSubmit)="onSubmit()">
-<div>
-  <label for="exampleInputText" class="form-label mt-4">User Name</label>
-  <input type="text" class="form-control" id="exampleInputText" placeholder="User Name" autocomplete="off" formControlName="username">
-</div>
+      <section class="registration-card" aria-labelledby="registration-title">
+         <form [formGroup]="UserForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="form-group">
+               <label for="username" class="form-label">User  Name</label>
+               <input id="username" type="text" formControlName="username" placeholder="User  Name" class="form-input"
+                  autocomplete="username" required aria-required="true" />
+            </div>
 
+            <div class="form-group">
+               <label for="password" class="form-label">Password</label>
+               <input id="password" type="password" formControlName="password" placeholder="Password" class="form-input"
+                  autocomplete="new-password" required aria-required="true" />
+            </div>
 
-<div>
-  <label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" autocomplete="off" formControlName="password">
-</div>
+            <div class="form-group">
+               <label for="email" class="form-label">Email Address</label>
+               <input id="email" type="email" formControlName="emailid" placeholder="Enter email" class="form-input"
+                  autocomplete="email" required aria-required="true" />
+            </div>
 
-<div>
-  <label for="exampleInputEmail1" class="form-label mt-4">Email address</label>
-  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" formControlName="emailid">
-  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-</div>
+            <div class="form-group">
+               <label for="role" class="form-label">Select Your Role</label>
+               <select id="role" class="form-select" formControlName="role" required>
+                  <option value="" disabled selected>Select your role</option>
+                  <option value="Patient">Patient</option>
+                  <option value="Doctor">Doctor</option>
+               </select>
+            </div>
 
-<div>
-  <label for="exampleSelect1" class="form-label mt-4">Select Your Role</label>
-      <select class="form-select" id="exampleSelect1" formControlName="role">
-        <option value="Patient">Patient</option>
-        <option value="Doctor">Doctor</option>
-      </select>
-    </div>
+            <button type="submit" class="btn-primary" [disabled]="!UserForm.valid">
+               Register
+            </button>
 
-    <input type="submit" class="btn btn-primary btnedit"  value="Save" [disabled]="!UserForm.valid">
-  </form>
+            <p class="login-prompt">
+               Already a member?
+               <a href="javascript:void(0)" (click)="navigateToLogin()" class="login-link">Login</a>
+            </p>
+         </form>
+      </section>
+   </main>
 </div>
