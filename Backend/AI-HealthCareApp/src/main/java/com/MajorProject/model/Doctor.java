@@ -38,7 +38,6 @@ public class Doctor {
 	private double consultationFees;
 	
 	@OneToMany(mappedBy = "doctor")
-	@JsonManagedReference
 	private List<DoctorAvailability> availability;
 	
 	@OneToMany(mappedBy = "doctor")

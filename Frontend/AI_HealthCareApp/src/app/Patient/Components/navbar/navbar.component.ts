@@ -26,7 +26,7 @@ ngOnInit(): void {
     },
     {
       name:'Find A Doctor',
-      route:'patient/Search',
+      route:'patient/pre-search',
       data:null
     },
     {

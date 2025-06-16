@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DoctorService } from 'src/app/Doctor/Services/doctor.service';
+import { PatientService } from '../../Services/patient.service';
 
 @Component({
   selector: 'app-doc-info',
@@ -14,12 +15,13 @@ doctorInfo:any;
 doctorImage:any;
 appointmentForm!:FormGroup;
 bookingAppointment:boolean = false;
-LoggedInPatient = localStorage.getItem("PatientId");
+LoggedInPatient:any = localStorage.getItem("PatientId");
 availabilitySlots:{id:any , date: string, time: string, isBooked: boolean }[] = [];
 bookingReason:string = "";
+selectedtime:any;
+message: {[slotId: string]: string } = {}
 
-
-constructor(private doctorService:DoctorService , private _router:Router , private fb:FormBuilder){}
+constructor(private doctorService:DoctorService , private _router:Router , private fb:FormBuilder , private patientService:PatientService){}
 
   ngOnInit(): void {
     this.DoctorId = localStorage.getItem("DocId");
@@ -56,17 +58,52 @@ constructor(private doctorService:DoctorService , private _router:Router , priva
           console.error("Error fetching availability slots:", error);
       }
     )
+
+    this.appointmentForm = this.fb.group({
+      reason: []
+    });
   }
 
   popup(){
     this.bookingAppointment = true;
   }
 
-  confirmBooking(){
+  onSubmit(){
+      if (this.appointmentForm.invalid || !this.selectedtime) {
+      alert('Please fill in all fields and select a slot.');
+      return;
+    }
 
+    const formValue = this.appointmentForm.value;
+
+    const appointment = {
+      reason: formValue.reason,
+      doctor: { id: this.doctorInfo.id },
+      patient: { id: Number(this.LoggedInPatient) }, // ✅ convert string to number
+      availability: { id: this.selectedtime },
+      status: 'PENDING'
+    };
+    console.log("Appointment details:", appointment);
+
+    this.patientService.BookAppointment(appointment).subscribe({
+      next: res => {
+        alert('Appointment booked!');
+        this.bookingAppointment = false;
+        this.appointmentForm.reset();
+        window.location.reload();
+      },
+      error: error => {
+        console.error(error);
+        alert('Booking failed.');
+      }
+    });
   }
 
-  open(timeslotid:any){
-
+  open(TimeSlotId:any){
+  this.selectedtime = TimeSlotId;
+  // Clear previous messages
+  this.message = {};
+  // Set message only for selected slot
+  this.message[TimeSlotId] = 'Slot selected';
   }
 }

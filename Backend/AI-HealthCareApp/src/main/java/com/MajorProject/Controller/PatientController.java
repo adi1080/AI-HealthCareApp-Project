@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.MajorProject.Repository.PatientRepository;
+import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
+import com.MajorProject.model.Appointment;
+import com.MajorProject.model.Doctor;
+import com.MajorProject.model.DoctorAvailability;
 import com.MajorProject.model.Patient;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,6 +29,9 @@ public class PatientController {
 
 	@Autowired
 	PatientService ps;
+	
+	@Autowired
+	DoctorService ds;
 
 	@PostMapping("addProfile")
 	public String createProfile(@RequestBody Patient patient) {
@@ -43,6 +50,7 @@ public class PatientController {
 	public Optional<Patient> showProfileDetails(@PathVariable long id) {
         System.out.println(id);
 		Optional<Patient> patient = ps.FindById(id);
+		System.out.println(patient);
 		return patient;
 	}
 
@@ -66,4 +74,37 @@ public class PatientController {
 				
 		return ResponseEntity.ok(existingPatient);
 	}
+	
+	@PostMapping("BookAppointment")
+	public ResponseEntity<?> createAppointment(@RequestBody Appointment appointment) {
+		System.out.println(appointment);
+	    try {
+	        // You receive doctor, patient, and availability as nested objects with only IDs
+	        Doctor doctor = ds.FindDoctorById(appointment.getDoctor().getId())
+	                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+	        Patient patient = ps.FindById(appointment.getPatient().getId())
+	                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+	        DoctorAvailability availability = ds.findAvailability(appointment.getAvailability().getId())
+	                .orElseThrow(() -> new RuntimeException("Availability not found"));
+
+	        if (ps.existsByAvailability(availability)) {
+	            return ResponseEntity.badRequest().body("Slot already booked.");
+	        }
+
+	        appointment.setDoctor(doctor);
+	        appointment.setPatient(patient);
+	        appointment.setAvailability(availability);
+	        appointment.setStatus(Appointment.AppointmentStatus.PENDING);
+	        availability.setBooked(true);
+	        
+	        Appointment saved = ps.saveAppointment(appointment);
+	        return ResponseEntity.ok(saved);
+
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+	    }
+	}
+
 }

@@ -10,6 +10,7 @@ import { AddInfoComponent as AddPatientProfileComponent} from './Patient/Compone
 import { UpdateComponent as PatientProfileUpdateComponent} from './Patient/Components/profile/update/update.component';
 import { DocInfoComponent } from './Patient/Components/doc-info/doc-info.component';
 import { BookAppointmentComponent } from './Patient/Components/book-appointment/book-appointment.component';
+import { SearchDoctorComponent } from './Patient/Components/search-doctor/search-doctor.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,8 @@ const routes: Routes = [
 
   {path: 'doctor/profile/addInfo' , component:AddDoctorProfileComponent},
   {path: 'doctor/profile/update' , component:DoctorProfileUpdateComponent},
+
+  {path:'patient/search', component:SearchDoctorComponent},
 
   
   {path: 'patient/profile/addInfo' , component:AddPatientProfileComponent},

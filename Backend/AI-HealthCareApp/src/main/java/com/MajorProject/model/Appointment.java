@@ -12,6 +12,7 @@ import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -22,7 +23,6 @@ public class Appointment {
     private long appointmentId;
 
     @ManyToOne
-    @JsonIgnore
     private Patient patient; // The patient who books the appointment
 
     @ManyToOne

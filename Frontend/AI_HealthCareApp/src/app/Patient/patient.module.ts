@@ -12,6 +12,7 @@ import { SearchDoctorComponent } from './Components/search-doctor/search-doctor.
 import { DocInfoComponent } from './Components/doc-info/doc-info.component';
 import { BookAppointmentComponent } from './Components/book-appointment/book-appointment.component';
 import { DocFeedbackComponent } from './Components/doc-feedback/doc-feedback.component';
+import { PreSearchComponent } from './Components/pre-search/pre-search.component';
 
 const routes: Routes = [
 {
@@ -21,7 +22,7 @@ const routes: Routes = [
     {path:'' , component:HomeComponent},
     {path:'home' , component:HomeComponent},
     {path:'profile' , component:ProfileComponent},
-    {path:'Search' , component:SearchDoctorComponent},
+    {path:'pre-search' , component:PreSearchComponent},
 
   ]                             
 }
@@ -37,7 +38,8 @@ const routes: Routes = [
     SearchDoctorComponent,
     DocInfoComponent,
     BookAppointmentComponent,
-    DocFeedbackComponent
+    DocFeedbackComponent,
+    PreSearchComponent
   ],
   imports: [
     CommonModule,

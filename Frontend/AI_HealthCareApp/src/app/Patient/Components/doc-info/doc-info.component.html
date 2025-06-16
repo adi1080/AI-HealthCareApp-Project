@@ -1,33 +1,62 @@
 <app-navbar></app-navbar>
-<div *ngIf="doctorInfo">
-    <img [src]="doctorImage" alt="Profile Image" width="200"/>
-    <h6>
-      Name:- {{doctorInfo.name}}
-    </h6>
-    <h6>About Me :- {{doctorInfo.about}}</h6>
-    <h6>Clinic Contact Number:- {{doctorInfo.mobileNo}} </h6>
-    <h6>Age:- {{doctorInfo.age}} </h6>
-    <h6>city:- {{doctorInfo.city}} </h6>
-    <h6>Speciality:- {{doctorInfo.speciality}} </h6>
-    <h6>Experience:- {{doctorInfo.experience}} </h6>
-    <h6>Clinic Name:- {{doctorInfo.clinicName}} </h6>
-    <h6>Clinic Address:- {{doctorInfo.clinicAddress}} </h6>
-    <h6>Consultation Fees :- {{doctorInfo.consultationFees}} </h6>
+
+<div class="container my-5" style="max-width: 900px;">
+  <div *ngIf="doctorInfo" class="card shadow-sm rounded-3 p-4">
+    <div class="d-flex flex-column flex-md-row align-items-center gap-4">
+      <img [src]="doctorImage" alt="Profile Image" class="rounded-circle border border-2 border-primary" width="180"
+        height="180" style="object-fit: cover;" />
+      <div class="flex-grow-1">
+        <h1 class="fw-bold mb-3 display-5">{{doctorInfo.name}}</h1>
+        <h4 class="fw-semibold text-primary mb-2">About Me</h4>
+        <p class="text-secondary fs-5 mb-4" style="line-height: 1.5;">{{doctorInfo.about}}</p>
+        <div class="row g-3 text-secondary fs-6">
+          <div class="col-6 col-md-4"><strong>Clinic Contact:</strong> {{doctorInfo.mobileNo}}</div>
+          <div class="col-6 col-md-4"><strong>Age:</strong> {{doctorInfo.age}}</div>
+          <div class="col-6 col-md-4"><strong>City:</strong> {{doctorInfo.city}}</div>
+          <div class="col-6 col-md-4"><strong>Speciality:</strong> {{doctorInfo.speciality}}</div>
+          <div class="col-6 col-md-4"><strong>Experience:</strong> {{doctorInfo.experience}} years</div>
+          <div class="col-6 col-md-4"><strong>Clinic Name:</strong> {{doctorInfo.clinicName}}</div>
+          <div class="col-12 col-md-8"><strong>Clinic Address:</strong> {{doctorInfo.clinicAddress}}</div>
+          <div class="col-6 col-md-4"><strong>Consultation Fees:</strong> {{doctorInfo.consultationFees |
+            currency:'RUPEES'}}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <button (click)="popup()">Book Appointment</button>
+  <div class="text-center my-5">
+    <button (click)="popup()" class="btn btn-primary btn-lg px-5 shadow-sm">Book Appointment</button>
+  </div>
 
-<div *ngIf="bookingAppointment" class="popup">
-<div *ngFor="let slot of availabilitySlots">
-  <p>{{ slot.date }} - {{ slot.time }}</p>
-  <button (click)="open(slot.id)">Book This Slot</button>
-</div>
+  <div *ngIf="bookingAppointment"
+    class="booking-popup card rounded-4 shadow p-4 position-fixed top-50 start-50 translate-middle bg-white"
+    style="width: 95vw; max-width: 480px; z-index: 1050;">
+    <h3 class="fw-bold mb-4 text-center">Available Slots</h3>
+    <div class="row g-3 mb-4">
+      <ng-container *ngFor="let slot of availabilitySlots">
+        <div *ngIf="!slot.isBooked" class="col-12 col-md-6">
+          <div class="d-flex justify-content-center">
+            <div class="card slot-card rounded-3 shadow-sm p-3 h-100 d-flex flex-column justify-content-between">
+              <p class="mb-3 fs-6 fw-semibold">{{ slot.date }} - {{ slot.time }}</p>
+              <button (click)="open(slot.id)" class="btn btn-outline-primary w-100">Book This Slot</button>
+              <p *ngIf="message[slot.id]" class="mb-3 fs-6 fw-semibold text-success text-center" style="margin-top: 5px;">{{ message[slot.id] }}</p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
 
-<!-- Booking Popup -->
-  <h3>Book Appointment</h3>
-  <label>Reason for Appointment:</label>
-  <input type="text" [(ngModel)]="bookingReason" />
-  <br />
-  <button (click)="confirmBooking()">Confirm</button>
-  <button (click)="bookingAppointment = false">Cancel</button>
+    </div>
+
+    <h3 class="fw-bold mb-3 text-center">Book Appointment</h3>
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+      <label for="bookingReason" class="form-label fw-semibold">Reason for Appointment:</label>
+      <input id="bookingReason" type="text" formControlName="reason" class="form-control mb-4"
+        placeholder="Enter your reason for appointment" />
+
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success px-4 shadow">Confirm</button>
+        <button (click)="bookingAppointment = false" class="btn btn-secondary px-4 shadow">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>

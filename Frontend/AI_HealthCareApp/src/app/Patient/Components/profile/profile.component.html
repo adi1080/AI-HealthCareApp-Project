@@ -56,8 +56,14 @@
       <div class="metric">
         <i class="bi bi-calendar-check"></i>
         <span class="metric-label">Upcoming Appointments</span>
-        <span class="metric-value">{{Patient.upcomingAppointments || 0}}</span>
-      </div>
+        <ng-container *ngIf="Patient?.appointments?.length">
+  <div *ngFor="let upcomingAppointment of Patient.appointments" class="metric-value">
+    Date: {{upcomingAppointment.date}}, 
+    Time: {{upcomingAppointment.time}}, 
+    Doctor: {{upcomingAppointment.doctor?.name}}
+  </div>
+</ng-container>
+</div>
       <div class="metric">
         <i class="bi bi-clock-history"></i>
         <span class="metric-label">Last Visit</span>
@@ -82,3 +88,8 @@
     </section>
   </div>
 
+  <p style="text-align: center; color: gray;">Your Health details are shared with the doctor you choose to book an appointment with. 
+    Please ensure that the information is accurate and up-to-date to facilitate better healthcare services. 
+    For any assistance, please contact our support team.
+</p>
+<app-footer></app-footer>

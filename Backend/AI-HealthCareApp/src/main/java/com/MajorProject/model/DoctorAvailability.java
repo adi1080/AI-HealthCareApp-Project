@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class DoctorAvailability {
@@ -19,7 +20,6 @@ public class DoctorAvailability {
 
     private LocalDate date;
     private LocalTime time;
-
 
     private boolean isBooked = false; // Marked true once a patient books this slot
 
@@ -63,7 +63,7 @@ public class DoctorAvailability {
 		this.time = time;
 	}
 
-
+	@JsonProperty("isBooked")
 	public boolean isBooked() {
 		return isBooked;
 	}

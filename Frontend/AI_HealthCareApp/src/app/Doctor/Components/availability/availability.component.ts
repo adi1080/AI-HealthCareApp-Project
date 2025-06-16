@@ -42,9 +42,10 @@ export class AvailabilityComponent implements OnInit {
         isBooked: false
       };
 
+      console.log("availability =>",availability);
       this.docService.addAvailability(this.doctorId, availability).subscribe(
         response => {
-          console.log('Availability added successfully:',response);
+          console.log(response);
         },
         error => {
           console.error('Error adding availability:', error);
@@ -54,6 +55,7 @@ export class AvailabilityComponent implements OnInit {
     
     this.setAvailability = false;
     window.location.reload();
+    this.findAllAvailability();
   }
 
   findAllAvailability() {
@@ -68,6 +70,7 @@ export class AvailabilityComponent implements OnInit {
           time: item.time,
           isBooked: item.isBooked
         }));
+        console.log("availabilityList =>",this.availabilityList);
 
         // Sort the availabilityList by date and time
         this.availabilityList.sort((a, b) => {

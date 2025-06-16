@@ -1,35 +1,65 @@
-<div class="app-container">
-  <form [formGroup]="searchForm" (ngSubmit)="search()" class="search-panel">
-    <h1 class="title">Find Your Specialist Doctor</h1>
-    <div class="inputs-wrapper">
-      <div class="input-group">
-        <input type="text" placeholder="Enter City Name" formControlName="city" required />
-        <span class="input-icon">📍</span>
+<app-navbar></app-navbar>
+
+<main class="bg-light" style="min-height: 100vh;">
+  <div class="container pt-16 pb-20" style="max-width: 1200px;">
+    <!-- Hero Section -->
+    <section class="text-center mb-5">
+      <h1 class="display-1 fw-extrabold lh-sm mb-3 headline-gradient" style="font-weight: 800;">
+        Find Your Specialist Doctor
+      </h1>
+      <p class="lead text-secondary fs-5 mx-auto" style="max-width: 600px; color: #6b7280;">
+        Quickly search and book appointments with trusted doctors in your city and specialty.
+      </p>
+    </section>
+
+    <!-- Search Form Section -->
+    <section class="mb-5">
+      <form [formGroup]="searchForm" (ngSubmit)="search()" class="search-panel bg-white rounded-3 shadow-sm p-4">
+        <div class="row g-4 align-items-center">
+          <div class="col-12 col-md-4 position-relative">
+            <input type="text" placeholder="Enter City Name" formControlName="city" required
+              class="form-control form-control-lg ps-5 border-2 rounded-3" />
+            <span class="input-icon position-absolute top-50 start-0 translate-middle-y ps-3 accent-color" aria-hidden="true">📍</span>
+          </div>
+          <div class="col-12 col-md-4 position-relative">
+            <input type="text" placeholder="Enter Speciality of Doctor" formControlName="speciality" required
+              class="form-control form-control-lg ps-5 border-2 rounded-3" />
+            <span class="input-icon position-absolute top-50 start-0 translate-middle-y ps-3 accent-color" aria-hidden="true">🔎</span>
+          </div>
+          <div class="col-12 col-md-4 position-relative">
+            <input type="text" placeholder="Enter Doctor Name" formControlName="doctorname"
+              class="form-control form-control-lg ps-5 border-2 rounded-3" />
+            <span class="input-icon position-absolute top-50 start-0 translate-middle-y ps-3 accent-color" aria-hidden="true">👨‍⚕️</span>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-3 shadow-sm transition-hover">
+            Find
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Doctors Grid Section -->
+    <section>
+      <div class="row g-5">
+        <div *ngFor="let doctor of doctors" class="col-12 col-md-6 col-lg-4">
+          <article class="doctor-card card shadow-sm rounded-3 h-100 border-0 cursor-pointer transition-hover" (click)="openInfo(doctor.id)" tabindex="0" role="button" aria-pressed="false">
+            <div class="image-wrapper rounded-top overflow-hidden" style="height: 220px;">
+              <img [src]="'data:image/jpeg;base64,' + doctor.image" alt="Doctor Image" class="card-img-top object-fit-cover h-100 w-100" />
+            </div>
+            <div class="card-body px-4 pt-3 pb-4">
+              <h3 class="doctor-name card-title fs-4 fw-semibold accent-color-dark mb-2">{{doctor.name}}</h3>
+              <p class="text-muted mb-1 body-text"><strong>Experience:</strong> {{doctor.experience}} years</p>
+              <p class="text-muted mb-1 body-text"><strong>Clinic:</strong> {{doctor.clinicName}}</p>
+              <p class="text-muted mb-1 text-truncate body-text" title="{{doctor.clinicAddress}}"><strong>Address:</strong> {{doctor.clinicAddress}}</p>
+              <p class="text-muted mb-1 body-text"><strong>Mobile:</strong> {{doctor.mobileno}}</p>
+              <p class="text-muted mb-0 body-text"><strong>Consultation Fees:</strong> ${{doctor.consultationFees}}</p>
+            </div>
+          </article>
+        </div>
       </div>
-      <div class="input-group">
-        <input type="text" placeholder="Enter Speciality of Doctor" formControlName="speciality" required />
-        <span class="input-icon">🔎</span>
-      </div>
-      <div class="input-group">
-        <input type="text" placeholder="Enter Doctor Name (optional)" formControlName="doctorname" />
-        <span class="input-icon">👨‍⚕️</span>
-      </div>
-      <button type="submit" class="btn-find">Find</button>
-    </div>
-  </form>
-  <div class="doctors-grid">
-    <div *ngFor="let doctor of doctors" class="doctor-card" (click)="openInfo(doctor.id)">
-      <div class="image-wrapper">
-        <img [src]="'data:image/jpeg;base64,' + doctor.image" alt="Doctor Image" />
-      </div>
-      <div class="doctor-info">
-        <h3 class="doctor-name">{{doctor.name}}</h3>
-        <p><strong>Experience:</strong> {{doctor.experience}} years</p>
-        <p><strong>Clinic:</strong> {{doctor.clinicName}}</p>
-        <p><strong>Address:</strong> {{doctor.clinicAddress}}</p>
-        <p><strong>Mobile:</strong> {{doctor.mobileno}}</p>
-        <p><strong>Consultation Fees:</strong> ${{doctor.consultationFees}}</p>
-      </div>
-    </div>
+    </section>
   </div>
-</div>
+</main>
+

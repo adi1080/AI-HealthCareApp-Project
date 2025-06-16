@@ -21,4 +21,7 @@ baseUrl = "http://localhost:9090/Patient";
     return this.http.put(`${this.baseUrl}/updateprofile/${id}`,patientProfile);
    }
 
+   BookAppointment(appointment:any){
+    return this.http.post(`${this.baseUrl}/BookAppointment`, appointment , {responseType:'text'});
+   }
 }
