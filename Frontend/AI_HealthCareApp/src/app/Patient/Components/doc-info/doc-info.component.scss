@@ -47,3 +47,21 @@
 .star.filled {
   color: gold;
 }
+
+.reviews{
+  margin-top: 10px;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-1{
+  grid-column: 1;
+}
+
+.grid-2{
+  grid-column: 2;
+  justify-self: end;
+}

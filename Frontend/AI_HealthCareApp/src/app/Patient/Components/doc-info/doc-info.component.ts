@@ -24,7 +24,7 @@ availabilitySlots:{id:any , date: string, time: string, isBooked: boolean }[] = 
 selectedtime:any;
 message: {[slotId: string]: string } = {}
 
-reviews:any[] =[];
+reviews!:any;
 addFeedback:boolean = false;
 feedbackForm!:FormGroup;
 stars:any = [1 , 2 , 3 , 4 , 5];
@@ -74,7 +74,13 @@ constructor(private doctorService:DoctorService , private _router:Router , priva
     });
 
     this.feedbackForm = this.fb.group({
-      comment: ['', Validators.required]
+      FeedbackComment: ['', Validators.required]
+    });
+
+    this.patientService.GetDoctorReviews(this.DoctorId).subscribe(
+      response => {
+        this.reviews = response,
+          console.log(this.reviews);
     });
   }
 
@@ -135,7 +141,7 @@ const FeedbackFormValue = this.feedbackForm.value;
 
     const feedback = {
       rating: this.currentRating,
-      FeedbackComment: FeedbackFormValue.comment,
+      FeedbackComment: FeedbackFormValue.FeedbackComment,
       doctor: { id: this.doctorInfo.id },
       patient: { id: Number(this.LoggedInPatient) },
     }
@@ -143,9 +149,10 @@ const FeedbackFormValue = this.feedbackForm.value;
     console.log(feedback);
 
     this.patientService.saveFeedback(feedback).subscribe(
-      response => console.log(response)
+      response => console.log("feedback sent")
     );
 
+    window.location.reload();
   }
 
 }

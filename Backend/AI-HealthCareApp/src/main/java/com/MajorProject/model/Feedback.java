@@ -2,6 +2,8 @@ package com.MajorProject.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +24,10 @@ public class Feedback {
 	private Doctor doctor;
 	
 	private int rating;//1-5
+
+    @JsonProperty("FeedbackComment")
 	private String FeedbackComment;
+    
 	private LocalDate Date;
 	
 	

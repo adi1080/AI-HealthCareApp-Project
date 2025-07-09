@@ -1,6 +1,7 @@
 package com.MajorProject.Controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.MajorProject.Repository.PatientRepository;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
+import com.MajorProject.dto.FeedbackDTO;
+import com.MajorProject.dto.PatientDTO;
 import com.MajorProject.model.Appointment;
 import com.MajorProject.model.Doctor;
 import com.MajorProject.model.DoctorAvailability;
@@ -49,12 +52,17 @@ public class PatientController {
 	}
 
 	@GetMapping("FindById/{id}")
-	public Optional<Patient> showProfileDetails(@PathVariable long id) {
-        System.out.println(id);
-		Optional<Patient> patient = ps.FindById(id);
-		System.out.println(patient);
-		return patient;
+	public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {
+	    Optional<Patient> optionalPatient = ps.FindById(id);
+
+	    if (optionalPatient.isPresent()) {
+	        PatientDTO dto = ps.convertToDTO(optionalPatient.get());
+	        return ResponseEntity.ok(dto);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
+
 
 	@PutMapping("/updateprofile/{id}")
 	public ResponseEntity<?> updateprofile(@PathVariable long id , @RequestBody Patient incomingDataPatient){
@@ -125,7 +133,17 @@ public class PatientController {
 		     addFb.setDoctor(doctor);
 		     addFb.setPatient(patient);
 		     addFb.setDate(LocalDate.now());
-		return ResponseEntity.ok(null);
+		     
+//		     System.out.println(addFb);
+		     ps.addFeedback(addFb);
+		return ResponseEntity.ok("saved!");
 	}
+	
+	@GetMapping("getAllFeedbacks/{doctorId}")
+	public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks(@PathVariable long doctorId){
+	    List<FeedbackDTO> list = ps.getFeedbacks(doctorId); 
+	    return ResponseEntity.ok(list);
+	}
+
 
 }

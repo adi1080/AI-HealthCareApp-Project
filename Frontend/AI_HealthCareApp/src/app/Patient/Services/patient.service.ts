@@ -30,6 +30,6 @@ export class PatientService {
   }
 
   GetDoctorReviews(doctorId: number) {
-    return this.http.get(`${this.baseUrl}/getAllFeedbacks/doctor/${doctorId}`);
+    return this.http.get(`${this.baseUrl}/getAllFeedbacks/${doctorId}`);
   }
 }

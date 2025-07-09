@@ -4,7 +4,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import com.MajorProject.dto.DoctorDTO;
 import com.MajorProject.model.Doctor;
 import com.MajorProject.model.DoctorAvailability;
 import com.MajorProject.model.Patient;
-
 import jakarta.transaction.Transactional;
 
 @Service
