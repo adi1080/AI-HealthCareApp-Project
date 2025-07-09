@@ -1,7 +1,86 @@
-$success : purple;
+.chat-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f4f4f9;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
+.chat-form {
+  display: flex;
+  margin-bottom: 0.5rem;
 
-.chatresponse{
-    font-size: 20px;
+  .input-group {
+    display: flex;
+    width: 100%;
+
+    input {
+      flex: 1;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      background: #28a745;
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 0 1rem;
+      cursor: pointer;
+
+      &.mic-btn {
+        background: #007bff;
+        border-radius: 0 4px 4px 0;
+      }
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.message {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.spinner {
+  display: flex;
+  align-items: center;
+  .loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
+  span {
+    font-size: 0.9rem;
+    color: #333;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.response-box {
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+  }
+  
 }

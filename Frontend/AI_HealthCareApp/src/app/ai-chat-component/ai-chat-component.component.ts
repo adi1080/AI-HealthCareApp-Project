@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AiServiceService } from '../Services/ai-service.service';
-import { Router } from '@angular/router';
+
+declare var webkitSpeechRecognition: any;
 
 @Component({
   selector: 'app-ai-chat-component',
@@ -8,53 +9,79 @@ import { Router } from '@angular/router';
   styleUrls: ['./ai-chat-component.component.scss']
 })
 export class AiChatComponentComponent implements OnInit {
-  userQuery: string = ''; // For capturing user input
-  response: string = ''; // To display the response from AI
-  loading!: boolean;
+  userQuery = '';
+  response = '';
+  loading = false;
+  message = '';
 
-  constructor(private aiService: AiServiceService, private router: Router) {}
+  constructor(private aiService: AiServiceService ,   private cdRef: ChangeDetectorRef // Inject it
+    ) {}
 
   ngOnInit() {
-    // Check if there is saved data in localStorage
-    var savedQuery = localStorage.getItem('userQuery');
-    var savedResponse = localStorage.getItem('aiResponse');
-    var savedLoading = localStorage.getItem('loadingState');
-
-    if (savedQuery && savedResponse) {
-      this.userQuery = savedQuery;
-      this.response = savedResponse;
-      this.loading = savedLoading === 'true';
-    }
-
+    const sq = localStorage.getItem('userQuery');
+    const sr = localStorage.getItem('aiResponse');
+    const sl = localStorage.getItem('loadingState');
+    if (sq) this.userQuery = sq;
+    if (sr) this.response = sr;
+    this.loading = sl === 'true';
   }
 
   onSubmit() {
-    this.loading = true;
-    this.response = "I'm thinking..."; // Immediate placeholder response
+    const q = this.userQuery.trim();
+    if (!q) {
+      this.message = 'Please type or speak a question.';
+      return;
+    }
 
-    // Save the query in localStorage
-    localStorage.setItem('userQuery', this.userQuery);
+    this.loading = true;
+    this.message = '';
+    this.response = "I'm thinking...";
+    localStorage.setItem('userQuery', q);
     localStorage.setItem('loadingState', 'true');
 
-    if (this.userQuery.trim()) {
-      this.aiService.getAiResponse(this.userQuery).subscribe(
-        (data: string) => {
-          this.loading = false;
-          this.response = data;  // Update the response with AI's reply
-          // Save the AI response to localStorage
-          localStorage.setItem('aiResponse', data);
-          localStorage.setItem('loadingState', 'false');
-        },
-        (error) => {
-          this.loading = false;
-          console.error('Error details:', error);
-          this.response = `Error: ${error.message || 'Unable to get response from the AI'}`;
-          // Save the error in localStorage
-          localStorage.setItem('aiResponse', this.response);
-          localStorage.setItem('loadingState', 'false');
-        }
-      );
-    }
+    this.aiService.getAiResponse(q).subscribe({
+      next: (data: string) => {
+        this.loading = false;
+        this.response = data;
+        localStorage.setItem('aiResponse', data);
+        localStorage.setItem('loadingState', 'false');
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Error:', err);
+        this.response = `Error: ${err.message || 'Something went wrong'}`;
+        localStorage.setItem('aiResponse', this.response);
+        localStorage.setItem('loadingState', 'false');
+      }
+    });
   }
 
+  startSpeechToText() {
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => this.message = '🎤 Listening...';
+    recognition.onerror = (e: any) => {
+      console.error(e);
+      this.message = `Speech error: ${e.error}`;
+    };
+
+    recognition.onresult = (e: any) => {
+      const transcript = e.results[0][0].transcript;
+      this.userQuery = transcript;
+      this.cdRef.detectChanges(); // 👈 This will force Angular to update the UI
+      this.message = `You said: "${transcript}"`;
+      // this.onSubmit(); // auto-submit after speech
+    };
+
+    recognition.onend = () => {
+      if (!this.message.startsWith('You said')) {
+        this.message = '🎤 Speech ended.';
+      }
+    };
+
+    recognition.start();
+  }
 }

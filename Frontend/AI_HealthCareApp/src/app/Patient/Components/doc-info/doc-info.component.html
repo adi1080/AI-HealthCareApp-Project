@@ -18,7 +18,7 @@
           <div class="col-6 col-md-4"><strong>Clinic Name:</strong> {{doctorInfo.clinicName}}</div>
           <div class="col-12 col-md-8"><strong>Clinic Address:</strong> {{doctorInfo.clinicAddress}}</div>
           <div class="col-6 col-md-4"><strong>Consultation Fees:</strong> {{doctorInfo.consultationFees |
-            currency:'RUPEES'}}</div>
+            currency:'INR'}}</div>
         </div>
       </div>
     </div>
@@ -39,12 +39,12 @@
             <div class="card slot-card rounded-3 shadow-sm p-3 h-100 d-flex flex-column justify-content-between">
               <p class="mb-3 fs-6 fw-semibold">{{ slot.date }} - {{ slot.time }}</p>
               <button (click)="open(slot.id)" class="btn btn-outline-primary w-100">Book This Slot</button>
-              <p *ngIf="message[slot.id]" class="mb-3 fs-6 fw-semibold text-success text-center" style="margin-top: 5px;">{{ message[slot.id] }}</p>
+              <p *ngIf="message[slot.id]" class="mb-3 fs-6 fw-semibold text-success text-center"
+                style="margin-top: 5px;">{{ message[slot.id] }}</p>
             </div>
           </div>
         </div>
       </ng-container>
-
     </div>
 
     <h3 class="fw-bold mb-3 text-center">Book Appointment</h3>
@@ -58,5 +58,39 @@
         <button (click)="bookingAppointment = false" class="btn btn-secondary px-4 shadow">Cancel</button>
       </div>
     </form>
+  </div>
+
+  <h3 style="display: inline;">Reviews</h3>
+  <button (click)="feedbackPopup()" class="btn btn-outline-success add-reviewbtn">add Review</button>
+  <ng-container *ngFor="let review of reviews">
+
+  </ng-container>
+
+  <div *ngIf="addFeedback"
+    class="booking-popup card rounded-4 shadow p-4 position-fixed top-50 start-50 translate-middle bg-white"
+    style="width: 95vw; max-width: 480px; z-index: 1050;">
+    <h3 class="fw-bold mb-3 text-center">Add Feedback</h3>
+
+    <form [formGroup]="feedbackForm" (ngSubmit)="SubmitFeedback()">
+      <div>
+        <label for="star">Rating :-</label>
+        <span *ngFor="let star of stars; let i = index" (click) ="setRating(i+1)"
+         (mouseover) = "hoverRating = i+1" (mouseleave)="hoverRating = 0"
+        [ngClass]="{'filled': (hoverRating || currentRating) > i}"
+        class="star" id="star">
+          ★
+        </span>
+      </div>
+
+      <label for="FeedbackComment" class="form-label fw-semibold">Enter Comment</label>
+      <textarea id="FeedbackComment" formControlName="comment" class="form-control mb-4" placeholder="Comment Here"
+        rows="4" cols="50"></textarea>
+
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success px-4 shadow confirmbtn">Confirm</button>
+        <button (click)="addFeedback = false" class="btn btn-danger px-4 shadow">Cancel</button>
+      </div>
+    </form>
+
   </div>
 </div>

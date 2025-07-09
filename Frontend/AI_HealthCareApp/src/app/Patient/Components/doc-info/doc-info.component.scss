@@ -24,3 +24,26 @@
   .card {
     border-radius: 0.75rem;
   }
+
+  .confirmbtn{
+    background-color: rgb(31, 18, 123);
+    border: 0;
+  }
+
+  .add-reviewbtn{
+    background-color: limegreen;
+    color: black;
+    display: flex;
+    justify-self: flex-end;
+  }
+
+  .star {
+  font-size: 2rem;
+  color: lightgray;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: gold;
+}

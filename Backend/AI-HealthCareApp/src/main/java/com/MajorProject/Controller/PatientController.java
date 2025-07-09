@@ -1,5 +1,6 @@
 package com.MajorProject.Controller;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.MajorProject.Service.PatientService;
 import com.MajorProject.model.Appointment;
 import com.MajorProject.model.Doctor;
 import com.MajorProject.model.DoctorAvailability;
+import com.MajorProject.model.Feedback;
 import com.MajorProject.model.Patient;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -105,6 +107,25 @@ public class PatientController {
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 	    }
+	}
+	
+	@PostMapping("add-feedback")
+	public ResponseEntity<?> addFeedback(@RequestBody Feedback fb){
+		System.out.println(fb);
+        // You receive doctor, patient, and availability as nested objects with only IDs
+        Doctor doctor = ds.FindDoctorById(fb.getDoctor().getId())
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        Patient patient = ps.FindById(fb.getPatient().getId())
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+		
+		     Feedback addFb = new Feedback();
+		     addFb.setRating(fb.getRating());
+		     addFb.setFeedbackComment(fb.getFeedbackComment());
+		     addFb.setDoctor(doctor);
+		     addFb.setPatient(patient);
+		     addFb.setDate(LocalDate.now());
+		return ResponseEntity.ok(null);
 	}
 
 }

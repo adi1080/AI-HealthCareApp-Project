@@ -14,9 +14,10 @@ export class ProfileComponent implements OnInit{
 constructor(private router:Router , private patientSevice:PatientService){}
 
   ngOnInit(): void {
-       console.log(this.loggedInUser);
+    console.log(this.loggedInUser);
     this.patientSevice.FindPatientById(this.loggedInUser).subscribe(
       (response)=>{
+        console.log(response);
         this.Patient = response;
         localStorage.setItem('PatientId', this.Patient.id);
       },

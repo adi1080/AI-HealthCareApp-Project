@@ -95,7 +95,7 @@ public class DoctorService {
 	}
 
 	 @Transactional
-	    public void deleteAvailability(Long availabilityId) {
+	 public void deleteAvailability(Long availabilityId) {
 	        // 1. Delete all appointments with this availability
 	        appointmentRepository.deleteByAvailabilityId(availabilityId);
 

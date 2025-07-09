@@ -1,27 +1,23 @@
-
-<div class="container">
+<div class="chat-container">
   <h2>AI Chat</h2>
-  <form (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" class="chat-form">
     <div class="input-group">
-      <!-- Input field -->
-      <input class="form-control" type="text" [(ngModel)]="userQuery" name="userQuery" placeholder="Ask a question" aria-label="default input example" required>
-      
-      <!-- Button with arrow -->
-      <button type="submit" class="bi bi-arrow-right btn btn-success"></button>
+<input type="text" [(ngModel)]="userQuery" name="userQuery" placeholder="Ask a question"/>
+
+      <button type="submit" class="submit-btn bi bi-arrow-return-right"></button>
+      <button type="button" class="mic-btn" (click)="startSpeechToText()">🎤</button>
     </div>
   </form>
 
-  <!-- <b>Note:-</b> We are using an open source model, so it takes 3 to 4 minutes to generate a response<br>
-  You can explore the app until then if you want. <a >Explore</a> <br><br> -->
+  <p class="message" *ngIf="message">{{ message }}</p>
 
-  <div *ngIf="loading" class="spinner-border" role="status">
+  <div class="spinner" *ngIf="loading">
+    <div class="loader"></div>
+    <span>Loading...</span>
   </div>
-  <div *ngIf="loading">
-    <span>Loading Response...</span>
-  </div>
-  
-  <div *ngIf="response" class="chatresponse">
+
+  <div class="response-box" *ngIf="response">
     <h3>AI Response:</h3>
     <pre>{{ response }}</pre>
   </div>
-
+</div>

@@ -9,7 +9,6 @@ import { UpdateComponent as DoctorProfileUpdateComponent} from './Doctor/Compone
 import { AddInfoComponent as AddPatientProfileComponent} from './Patient/Components/profile/add-info/add-info.component';
 import { UpdateComponent as PatientProfileUpdateComponent} from './Patient/Components/profile/update/update.component';
 import { DocInfoComponent } from './Patient/Components/doc-info/doc-info.component';
-import { BookAppointmentComponent } from './Patient/Components/book-appointment/book-appointment.component';
 import { SearchDoctorComponent } from './Patient/Components/search-doctor/search-doctor.component';
 
 
@@ -27,7 +26,6 @@ const routes: Routes = [
   {path: 'patient/profile/addInfo' , component:AddPatientProfileComponent},
   {path: 'patient/profile/update' , component:PatientProfileUpdateComponent},
   {path:'doc-info/:id' , component:DocInfoComponent},
-  {path:'book-appointment' , component:BookAppointmentComponent},
 
   {path:'admin' , loadChildren:() =>import('./Admin/admin.module').then((m) => m.AdminModule)},
   {path:'doctor' , loadChildren:()=>import('./Doctor/doctor.module').then((m)=>m.DoctorModule)},

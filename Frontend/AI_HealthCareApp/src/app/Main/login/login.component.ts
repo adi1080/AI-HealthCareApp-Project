@@ -15,7 +15,7 @@ export class LoginComponent {
     private router: Router,
     private fb: FormBuilder,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -24,31 +24,36 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.userService.login(this.loginForm.value).subscribe(
-        (response: string) => {
-          // Redirect based on the response
-          if (response === "admin") {
-            this.router.navigateByUrl('/admin');
-          } else if (response === "patient") {
-            this.router.navigateByUrl('/patient');
-          } else if (response.startsWith("doctor")) {
-            const userId = response.replace('doctor', '');
-            // Store the user ID in localStorage
-            localStorage.setItem('userId', userId);
-
-            this.router.navigateByUrl('/doctor');
-          }
-        },
-        error => {
-          console.error('Login failed', error);
-          alert('Invalid credentials');
+onSubmit() {
+  if (this.loginForm.valid) {
+    this.userService.login(this.loginForm.value).subscribe(
+      (response: string) => {
+        if (response === "admin") {
+          this.router.navigateByUrl('/admin');
+        } 
+        else if (response.startsWith("patient")) {
+          const userId = response.replace("patient", "");
+          localStorage.setItem('userId', userId);
+          this.router.navigateByUrl('/patient');
+        } 
+        else if (response.startsWith("doctor")) {
+          const userId = response.replace("doctor", "");
+          localStorage.setItem('userId', userId);
+          this.router.navigateByUrl('/doctor');
+        } 
+        else {
+          alert('Unknown response from server');
         }
-      );
-    }
+      },
+      error => {
+        console.error('Login failed', error);
+        alert('Invalid credentials');
+      }
+    );
   }
-  
+}
+
+
   teleport() {
     this.router.navigateByUrl("Register");
   }

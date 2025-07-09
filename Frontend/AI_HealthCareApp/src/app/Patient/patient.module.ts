@@ -10,8 +10,6 @@ import { UpdateComponent } from './Components/profile/update/update.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchDoctorComponent } from './Components/search-doctor/search-doctor.component';
 import { DocInfoComponent } from './Components/doc-info/doc-info.component';
-import { BookAppointmentComponent } from './Components/book-appointment/book-appointment.component';
-import { DocFeedbackComponent } from './Components/doc-feedback/doc-feedback.component';
 import { PreSearchComponent } from './Components/pre-search/pre-search.component';
 
 const routes: Routes = [
@@ -25,7 +23,8 @@ const routes: Routes = [
     {path:'pre-search' , component:PreSearchComponent},
 
   ]                             
-}
+},
+
 ];
 
 @NgModule({
@@ -37,8 +36,6 @@ const routes: Routes = [
     UpdateComponent,
     SearchDoctorComponent,
     DocInfoComponent,
-    BookAppointmentComponent,
-    DocFeedbackComponent,
     PreSearchComponent
   ],
   imports: [
@@ -47,12 +44,16 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
-
   ],
   exports: [
     NavbarComponent,
-    ProfileComponent
-
+    ProfileComponent,
+    HomeComponent,
+    AddInfoComponent,
+    UpdateComponent,
+    SearchDoctorComponent,
+    DocInfoComponent,
+    PreSearchComponent
   ],
 })
 export class PatientModule {}

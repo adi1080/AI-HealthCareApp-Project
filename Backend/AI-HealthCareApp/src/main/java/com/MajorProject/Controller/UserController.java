@@ -24,7 +24,6 @@ public class UserController {
 	  public UserController(UserRepository userRepository) {
 	        this.userRepository = userRepository;
 	    }
-	  
 
 	  @PostMapping("/login")
 	    public ResponseEntity<?> login(@RequestBody User user) {
@@ -47,7 +46,8 @@ public class UserController {
 	            if (foundUser.getPassword().equals(user.getPassword())) {
 	                // Depending on the role, return appropriate response
 	                  if (foundUser.getRole().equals("Patient")) {
-	                    return ResponseEntity.ok("patient");
+	                	  long uid = foundUser.getId();
+	                    return ResponseEntity.ok("patient"+uid);
 	                } else if (foundUser.getRole().equals("Doctor")) {
 	                	      long uid = foundUser.getId();
 //	                	      System.out.println(foundUser.getId());

@@ -13,13 +13,23 @@ export class DocInfoComponent implements OnInit{
 DoctorId:any;
 doctorInfo:any;
 doctorImage:any;
+
 appointmentForm!:FormGroup;
 bookingAppointment:boolean = false;
-LoggedInPatient:any = localStorage.getItem("PatientId");
-availabilitySlots:{id:any , date: string, time: string, isBooked: boolean }[] = [];
 bookingReason:string = "";
+
+LoggedInPatient:any = localStorage.getItem("PatientId");
+
+availabilitySlots:{id:any , date: string, time: string, isBooked: boolean }[] = [];
 selectedtime:any;
 message: {[slotId: string]: string } = {}
+
+reviews:any[] =[];
+addFeedback:boolean = false;
+feedbackForm!:FormGroup;
+stars:any = [1 , 2 , 3 , 4 , 5];
+currentRating:number = 0;
+hoverRating:number = 0;
 
 constructor(private doctorService:DoctorService , private _router:Router , private fb:FormBuilder , private patientService:PatientService){}
 
@@ -62,6 +72,10 @@ constructor(private doctorService:DoctorService , private _router:Router , priva
     this.appointmentForm = this.fb.group({
       reason: []
     });
+
+    this.feedbackForm = this.fb.group({
+      comment: ['', Validators.required]
+    });
   }
 
   popup(){
@@ -86,7 +100,7 @@ constructor(private doctorService:DoctorService , private _router:Router , priva
     console.log("Appointment details:", appointment);
 
     this.patientService.BookAppointment(appointment).subscribe({
-      next: res => {
+      next: response => {
         alert('Appointment booked!');
         this.bookingAppointment = false;
         this.appointmentForm.reset();
@@ -106,4 +120,32 @@ constructor(private doctorService:DoctorService , private _router:Router , priva
   // Set message only for selected slot
   this.message[TimeSlotId] = 'Slot selected';
   }
+
+  feedbackPopup(){
+    this.addFeedback = true;
+  }
+
+  setRating(rating:number){
+    this.currentRating = rating;
+    console.log("Rated: "+rating);
+  }
+
+  SubmitFeedback(){
+const FeedbackFormValue = this.feedbackForm.value;
+
+    const feedback = {
+      rating: this.currentRating,
+      FeedbackComment: FeedbackFormValue.comment,
+      doctor: { id: this.doctorInfo.id },
+      patient: { id: Number(this.LoggedInPatient) },
+    }
+
+    console.log(feedback);
+
+    this.patientService.saveFeedback(feedback).subscribe(
+      response => console.log(response)
+    );
+
+  }
+
 }
