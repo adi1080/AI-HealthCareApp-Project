@@ -12,11 +12,13 @@ Features appointment booking, doctor search, feedback, scheduling, reminders, an
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/65ad4d80-26d8-419c-a0c9-57d4da109301" width="45%"/>
+  <img src=https://github.com/user-attachments/assets/165d3c03-c8b5-46ca-bd56-188f987ebf18) width="45%"/>
   <img src="https://github.com/user-attachments/assets/a422c4fa-081d-4cdf-8e6a-7fbbc26796cb" width="45%"/>
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/337c8f9b-e225-4e73-8c73-3ac4b0bffa4a" width="45%"/>
-  <img src="https://github.com/user-attachments/assets/9130a6c9-06ec-44a1-898d-c61bcd6a0471" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/337c8f9b-e225-4e73-8c73-3ac4b0bffa4a" width="30%"/>
+  <img src=https://github.com/user-attachments/assets/a7cc5eda-fe0a-4690-aa66-97614ba981a4) width="30%"/>
+  <img src=https://github.com/user-attachments/assets/506a2052-6fc8-46f0-99dc-9c7762baee37) width="30%"/>
 </p>
+
