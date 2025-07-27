@@ -25,7 +25,7 @@ public class AIController {
         }
         
         query = "You are an AI to help any basic healthrelated or other queries on the healthcare website "
-        		+ "so respond to the use request accordingly : "+ query;
+        		+ "so respond to the user request accordingly : "+ query;
         String response = client.call(query);  // Process the query with the AI model
         return response;  // Return plain text response , can also give json response using responsebody
     }
