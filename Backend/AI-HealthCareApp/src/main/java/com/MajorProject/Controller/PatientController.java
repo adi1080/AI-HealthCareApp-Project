@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.MajorProject.Repository.PatientRepository;
+import com.MajorProject.Repository.UserRepository;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
 import com.MajorProject.dto.FeedbackDTO;
@@ -26,6 +27,8 @@ import com.MajorProject.model.Doctor;
 import com.MajorProject.model.DoctorAvailability;
 import com.MajorProject.model.Feedback;
 import com.MajorProject.model.Patient;
+import com.MajorProject.model.User;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -39,18 +42,34 @@ public class PatientController {
 	@Autowired
 	DoctorService ds;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@PostMapping("addProfile")
 	public String createProfile(@RequestBody Patient patient) {
-		System.out.println(patient);
-		boolean exist = ps.checkprofileExistsOrNot(patient.getId());
-		if (exist == true) {
-			System.out.println("profile already exists");
-			return "profile already exists";
-		} else {
-			ps.saveProfile(patient);
-			return "profile added Successfully";
-		}
+	    // patient.id is expected to be user.id
+	    Optional<User> optionalUser = userRepository.findById(patient.getId());
+	    if (!optionalUser.isPresent()) {
+	        return "User not found with ID: " + patient.getId();
+	    }
+
+	    // Check if profile already exists
+	    if (ps.checkprofileExistsOrNot(patient.getId())) {
+	        return "Profile already exists";
+	    }
+
+	    // 🔗 Link user to patient
+	    patient.setUser(optionalUser.get());
+
+	    // 🛠 OPTIONAL: Set patient.id = user.id to maintain same identity
+	    patient.setId(optionalUser.get().getId());
+
+	    // ✅ Save properly linked patient
+	    ps.saveProfile(patient);
+	    return "Profile added successfully";
 	}
+
+
 
 	@GetMapping("FindById/{id}")
 	public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {

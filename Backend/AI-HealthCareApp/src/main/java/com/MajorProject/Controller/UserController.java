@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.MajorProject.Repository.UserRepository;
+import com.MajorProject.Service.DoctorService;
+import com.MajorProject.Service.PatientService;
+import com.MajorProject.model.Doctor;
+import com.MajorProject.model.Patient;
 import com.MajorProject.model.User;
 
 @RestController
@@ -19,6 +23,12 @@ public class UserController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private DoctorService ds;
+	
+	@Autowired
+	private PatientService ps;
 	
 	//constructor for user repository
 	  public UserController(UserRepository userRepository) {
@@ -60,10 +70,13 @@ public class UserController {
 	        
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
 	    }
-	
-	@PostMapping("/register")
-	public User registerUser(@RequestBody User user) {
-		return userRepository.save(user);
+		
+		@PostMapping("/register")
+		public ResponseEntity<?> registerUser(@RequestBody User user) {
+		    User savedUser = userRepository.save(user);
+		    return ResponseEntity.ok(savedUser);
+		}
+
 	}
 	
-}
+

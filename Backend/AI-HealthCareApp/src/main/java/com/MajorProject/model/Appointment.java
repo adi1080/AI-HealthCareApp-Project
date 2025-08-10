@@ -1,5 +1,6 @@
 package com.MajorProject.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,6 +35,9 @@ public class Appointment {
                            // Date and time of the appointment
     
     private String reason; // Reason for the appointment
+    
+    @Column(name = "reminder_sent")
+    private boolean reminderSent = false;
    
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status; // Status of the appointment (e.g., PENDING, CONFIRMED, CANCELLED)
@@ -104,14 +108,20 @@ public class Appointment {
 	public void setAvailability(DoctorAvailability availability) {
 		this.availability = availability;
 	}
+	
+	public boolean isReminderSent() {
+	    return reminderSent;
+	}
+
+	public void setReminderSent(boolean reminderSent) {
+	    this.reminderSent = reminderSent;
+	}
 
 	@Override
 	public String toString() {
-	    return "Appointment [appointmentId=" + appointmentId 
-	            + ", patientId=" + (patient != null ? patient.getId() : null) 
-	            + ", doctorId=" + (doctor != null ? doctor.getId() : null) 
-	            + ", availabilityId=" + (availability != null ? availability.getId() : null) 
-	            + ", reason=" + reason + ", status=" + status + "]";
+		return "Appointment [appointmentId=" + appointmentId + ", patient=" + patient + ", doctor=" + doctor
+				+ ", availability=" + availability + ", reason=" + reason + ", reminderSent=" + reminderSent
+				+ ", status=" + status + "]";
 	}
  
 }

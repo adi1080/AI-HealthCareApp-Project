@@ -71,6 +71,10 @@ public class PatientService {
 		return fb.save(feedback);
 	}
 	
+	public List<Appointment> getAllAppointments() {
+	    return appointmentRepository.findAll();
+	}
+	
 	public List<FeedbackDTO> getFeedbacks(long doctorId) {
 	    Optional<Doctor> doctor = doctorRepository.findById(doctorId);
 	    if (doctor.isEmpty()) {

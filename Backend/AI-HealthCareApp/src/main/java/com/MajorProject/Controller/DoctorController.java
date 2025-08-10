@@ -16,10 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.MajorProject.Repository.UserRepository;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.dto.DoctorDTO;
 import com.MajorProject.model.Doctor;
 import com.MajorProject.model.DoctorAvailability;
+import com.MajorProject.model.User;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/doctor")
@@ -28,45 +30,58 @@ public class DoctorController {
 
 	@Autowired
 	DoctorService doctorService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
-	@PostMapping("/addprofile")
-	public String AddDoctorProfile(@RequestParam("id") long id, @RequestParam String name, @RequestParam String about,
-			@RequestParam("mobileNo") long mobileno, // matchinig values of angular needed in () if u give different
-														// names here
-			@RequestParam String gender, @RequestParam int age, @RequestParam String city,
-			@RequestParam MultipartFile image, @RequestParam String speciality, @RequestParam String experience,
-			@RequestParam String clinicName, @RequestParam String clinicAddress, @RequestParam double consultationFees)
-			throws IOException {
+@PostMapping("/addprofile")
+public ResponseEntity<String> AddDoctorProfile(
+        @RequestParam("id") long id,
+        @RequestParam String name,
+        @RequestParam String about,
+        @RequestParam("mobileNo") long mobileNo,
+        @RequestParam String gender,
+        @RequestParam int age,
+        @RequestParam String city,
+        @RequestParam MultipartFile image,
+        @RequestParam String speciality,
+        @RequestParam String experience,
+        @RequestParam String clinicName,
+        @RequestParam String clinicAddress,
+        @RequestParam double consultationFees) throws IOException {
 
-		boolean exist = doctorService.checkprofileExistsOrNot(id);
-		if (exist == true) {
-			System.out.println("profile already exists");
-			return "profile already exists";
-		} else {
-			// Create a Doctor object and populate it with the incoming data
-			Doctor doctor = new Doctor();
-			doctor.setId(id);
-			doctor.setName(name);
-			doctor.setAbout(about);
-			doctor.setMobileNo(mobileno);
-			doctor.setAge(age);
-			doctor.setGender(gender);
-			doctor.setCity(city);
-			doctor.setImage(image.getBytes()); // convert image file to byte array (stored as blob in db)
-			doctor.setExperience(experience);
-			doctor.setSpeciality(speciality);
-			doctor.setClinicName(clinicName);
-			doctor.setClinicAddress(clinicAddress);
-			doctor.setConsultationFees(consultationFees);
+    // ✅ Step 1: Check if doctor profile already exists
+    if (doctorService.checkprofileExistsOrNot(id)) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Doctor profile already exists for ID: " + id);
+    }
 
-			System.out.println(doctor);
+    // ✅ Step 2: Fetch the User by ID
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found for ID: " + id));
 
-			// Save the doctor profile
-			doctorService.saveProfile(doctor);
+    // ✅ Step 3: Create and populate Doctor entity
+    Doctor doctor = new Doctor();
+    doctor.setId(id); // Must match user.id
+    doctor.setUser(user); // 🔗 Link to user
 
-			return "profile saved Successfully";
-		}
-	}
+    doctor.setName(name);
+    doctor.setAbout(about);
+    doctor.setMobileNo(mobileNo);
+    doctor.setAge(age);
+    doctor.setGender(gender);
+    doctor.setCity(city);
+    doctor.setImage(image.getBytes()); // convert image to byte[]
+    doctor.setExperience(experience);
+    doctor.setSpeciality(speciality);
+    doctor.setClinicName(clinicName);
+    doctor.setClinicAddress(clinicAddress);
+    doctor.setConsultationFees(consultationFees);
+
+    // ✅ Step 4: Save doctor profile
+    doctorService.saveProfile(doctor);
+
+    return ResponseEntity.ok("Doctor profile saved successfully");
+}
 
 	@GetMapping("profile/{id}")
 	public ResponseEntity<Map<String, Object>> showprofile(@PathVariable long id) {
