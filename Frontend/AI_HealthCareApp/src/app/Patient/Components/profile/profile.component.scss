@@ -1,199 +1,281 @@
+/* Base styles */
+body {
+  background-color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #6b7280;
+  margin: 0;
+  padding: 3rem 1rem;
+  min-height: 100vh;
+}
 
-    /* Base styles */
-    body {
-      background-color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      color: #6b7280;
-      margin: 0;
-      padding: 3rem 1rem;
-      min-height: 100vh;
-    }
+.container {
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: stretch;
+  padding: 0 1rem;
+  position: relative;
+}
 
-    .container {
-      max-width: 1200px;
-      margin-inline: auto;
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      padding: 0 1rem;
-      position: relative;
-    }
+/* Profile Card */
+.profile-card,
+.overview-card {
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 12px rgba(100, 116, 139, 0.12);
+  padding: 3rem 2.5rem;
+  user-select: none;
+  transition: box-shadow 0.3s ease;
+  background-clip: padding-box;
+  overflow: hidden;
+  width: 100%;
+  max-width: 600px;
+  flex: 1 1 500px;
+  min-width: 320px;
+}
 
-    /* Profile Card */
-    .profile-card,
-    .overview-card {
-      border-radius: 0.75rem;
-      box-shadow: 0 2px 12px rgba(100, 116, 139, 0.12);
-      padding: 3rem 2.5rem;
-      user-select: none;
-      transition: box-shadow 0.3s ease;
-      flex: 1 1 400px;
-      position: relative;
-      background-clip: padding-box;
-      min-width: 320px;
-    }
-    .profile-card {
-      background-color: #f1f1f1;
-      z-index: 2;
-      box-shadow: 0 8px 24px rgba(17,24,39, 0.12);
-      border: 1px solid #ecdf6a; /* subtle border */
-    }
-    .profile-card:hover {
-      box-shadow: 0 12px 30px rgba(17,24,39, 0.18);
-    }
+.profile-card {
+  background-color: #f1f1f1;
+  z-index: 2;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.12);
+  border: 1px solid #ecdf6a;
+}
+.profile-card:hover {
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.18);
+}
 
-    .overview-card {
-      background-color: #f0f9ff; /* very light blue */
-      margin-left: -6rem; /* overlap the profile card */
-      z-index: 1;
-      border: 1px solid #bafdbd; /* subtle blue border */
-      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.15);
-    }
-    .overview-card:hover {
-      box-shadow: 0 12px 36px rgba(59, 130, 246, 0.25);
-    }
+.overview-card {
+  background-color: #f0f9ff;
+  z-index: 1;
+  border: 1px solid #bafdbd;
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.15);
+}
+.overview-card:hover {
+  box-shadow: 0 12px 36px rgba(59, 130, 246, 0.25);
+}
 
-    /* Responsive - no overlap on small */
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-        gap: 3rem;
-        padding: 0 1rem;
-      }
-      .overview-card {
-        margin-left: 0;
-        z-index: 0;
-      }
-      .profile-card {
-        z-index: 0;
-      }
-    }
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    gap: 3rem;
+  }
+}
 
-    /* Headers */
-    .profile-header,
-    .overview-header {
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      font-size: 2.75rem;
-      user-select: text;
-    }
+/* Headers */
+.profile-header,
+.overview-header {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2.5rem;
+  user-select: text;
+}
 
-    /* Profile Item */
-    .profile-item {
-      display: flex;
-      align-items: center;
-      font-weight: 500;
-      font-size: 1.125rem;
-      color: #374151;
-      line-height: 1.4;
-      margin-bottom: 1.3rem;
-    }
-    .profile-item i {
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      color: #9ca3af;
-      margin-right: 1rem;
-      user-select: none;
-    }
-    .profile-label {
-      flex: 1;
-    }
-    .profile-value {
-      font-weight: 600;
-      color: #2563eb;
-      user-select: text;
-    }
+/* Profile Item */
+.profile-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
+}
+.profile-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.profile-item i {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: #9ca3af;
+  margin-right: 1rem;
+  user-select: none;
+}
+.profile-label {
+  flex: 1;
+}
+.profile-value {
+  font-weight: 600;
+  color: #2563eb;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  user-select: text;
+}
 
-    /* Edit Button */
-    .edit-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #9ca3af;
-      transition: color 0.25s ease, transform 0.25s ease;
-      font-size: 1.4rem;
-      padding: 0;
-      margin-left: 1.25rem;
-      display: flex;
-      align-items: center;
-      user-select: none;
-    }
-    .edit-btn:hover,
-    .edit-btn:focus {
-      color: #2563eb;
-      transform: scale(1.15);
-      outline: none;
-    }
+/* Edit Button */
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: color 0.25s ease, transform 0.25s ease;
+  font-size: 1.4rem;
+  padding: 0;
+  margin-left: 1.25rem;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+.edit-btn:hover,
+.edit-btn:focus {
+  color: #2563eb;
+  transform: scale(1.15);
+  outline: none;
+}
 
-    /* Health Overview metrics */
-    .metric {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-weight: 600;
-      font-size: 1.25rem;
-      color: #374151;
-      border-radius: 0.5rem;
-      padding: 1rem 1.5rem;
-      background-color: #dbeafe;
-      box-shadow: inset 0 0 8px rgba(37, 99, 235, 0.08);
-      transition: background-color 0.3s ease;
-      user-select: none;
-      margin-bottom: 1.2rem;
-    }
-    .metric i {
-      color: #2563eb;
-      font-size: 1.75rem;
-      flex-shrink: 0;
-      user-select: none;
-    }
-    .metric-label {
-      flex-grow: 1;
-    }
-    .metric-value {
-      font-weight: 700;
-      color: #1e40af;
-      user-select: text;
-    }
+/* Overview Grid */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
 
-    /* New User Section */
-    .new-user {
-      text-align: center;
-      padding: 6rem 1rem;
-      max-width: 600px;
-      margin-inline: auto;
-    }
-    .new-user h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: #111827;
-      margin: 0 0 1rem 0;
-      user-select: text;
-    }
-    .new-user p {
-      font-size: 1.25rem;
-      color: #6b7280;
-      margin: 0 0 2rem 0;
-      user-select: text;
-    }
-    .btn-add-details {
-      background-color: #111827;
-      border: none;
-      color: white;
-      font-weight: 700;
-      font-size: 1.125rem;
-      padding: 1rem 2.5rem;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    .btn-add-details:hover,
-    .btn-add-details:focus {
-      background-color: #2563eb;
-      outline: none;
-    }
+/* Health Overview metrics */
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #374151;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  background-color: #dbeafe;
+  box-shadow: inset 0 0 8px rgba(37, 99, 235, 0.08);
+  transition: background-color 0.3s ease, transform 0.25s ease;
+  user-select: none;
+  cursor: pointer;
+  margin-top: 10%;
+}
+.metric:hover {
+  background-color: #c7e0ff;
+  transform: translateY(-4px);
+}
+.metric i {
+  color: #2563eb;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+.metric-label {
+  flex-grow: 1;
+}
+.metric-value {
+  font-weight: 700;
+  color: #1e40af;
+  font-size: medium;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+/* New User Section */
+.new-user {
+  text-align: center;
+  padding: 6rem 1rem;
+  max-width: 600px;
+  margin-inline: auto;
+}
+.new-user h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  user-select: text;
+}
+.new-user p {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+  user-select: text;
+}
+.btn-add-details {
+  background-color: #111827;
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.125rem;
+  padding: 1rem 2.5rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+.btn-add-details:hover,
+.btn-add-details:focus {
+  background-color: #2563eb;
+  outline: none;
+}
+
+/* Modal styles */
+.modal-body {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.profile-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+  margin-top: 20px;
+}
+
+.profile-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-item i {
+  font-size: 1.5rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+/* Wrap label and value together */
+.profile-label {
+  font-weight: 600;
+  color: #374151;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+.profile-value {
+  font-weight: 500;
+  color: #2563eb;
+  flex: 1;
+  min-width: 50%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Keep the edit button at the end */
+.edit-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  margin-left: auto;
+  align-self: flex-start;
+  padding: 0;
+}
+
+.edit-btn:hover,
+.edit-btn:focus {
+  color: #2563eb;
+  transform: scale(1.1);
+}

@@ -19,7 +19,7 @@ export class DoctorService {
   }
 
   updateDoctor(id: string, data: FormData) {
-    return this.http.put(`${this.baseUrl}/update/${id}`, data);
+    return this.http.put(`${this.baseUrl}/update/${id}`, data ,  {responseType: 'text' as 'json'});
   }
 
 FindAllByAddressAndName(params: any) {

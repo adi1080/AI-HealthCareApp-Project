@@ -13,7 +13,6 @@ import { AdminModule } from './Admin/admin.module';
 import { DoctorModule } from './Doctor/doctor.module';
 import { PatientModule } from './Patient/patient.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -35,7 +34,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DoctorModule,
     PatientModule,
     BrowserAnimationsModule,
-    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

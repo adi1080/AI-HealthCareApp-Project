@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.MajorProject.Repository.AppointmentRepository;
+import com.MajorProject.Repository.DoctorAvailabilityRepository;
 import com.MajorProject.Repository.DoctorRepository;
 import com.MajorProject.Repository.FeedbackRepository;
 import com.MajorProject.Repository.PatientRepository;
@@ -36,6 +38,9 @@ public class PatientService {
 	
 	@Autowired
 	AppointmentRepository appointmentRepository;
+	
+	@Autowired
+	DoctorAvailabilityRepository availabilityRepository;
 	
 	public Patient saveProfile(Patient patient) {
 		return pr.save(patient);
@@ -106,32 +111,47 @@ public class PatientService {
 	}
 
 	
-	public PatientDTO convertToDTO(Patient patient) {
-	    PatientDTO dto = new PatientDTO();
-	    dto.setId(patient.getId());
-	    dto.setName(patient.getName()); // capitalized field, but getter is correct
-	    dto.setAge(patient.getAge());
-	    dto.setGender(patient.getGender());
-	    dto.setAddress(patient.getAddress());
-	    dto.setMobileno(patient.getMobileno());
-	    dto.setHistory(patient.getHistory());
+public PatientDTO convertToDTO(Patient patient) {
+    PatientDTO dto = new PatientDTO();
+    dto.setId(patient.getId());
+    dto.setName(patient.getName());
+    dto.setAge(patient.getAge());
+    dto.setGender(patient.getGender());
+    dto.setAddress(patient.getAddress());
+    dto.setMobileno(patient.getMobileno());
+    dto.setHistory(patient.getHistory());
 
-	    List<AppointmentDTO> appointmentDTOs = new ArrayList<>();
-	    if (patient.getAppointments() != null) {
-	        for (Appointment appointment : patient.getAppointments()) {
-	            AppointmentDTO aDto = new AppointmentDTO();
-	            aDto.setAppointmentId(appointment.getAppointmentId());
-	            aDto.setDoctorId(appointment.getDoctor() != null ? appointment.getDoctor().getId() : null);
-	            aDto.setAvailabilityId(appointment.getAvailability() != null ? appointment.getAvailability().getId() : null);
-	            aDto.setReason(appointment.getReason());
-	            aDto.setStatus(appointment.getStatus() != null ? appointment.getStatus().getStatus() : null);
-	            appointmentDTOs.add(aDto);
-	        }
-	    }
+    List<AppointmentDTO> appointmentDTOs = patient.getAppointments().stream().map(appointment -> {
+        AppointmentDTO appointmentDTO = new AppointmentDTO();
+        appointmentDTO.setAppointmentId(appointment.getAppointmentId());
+        appointmentDTO.setDoctorCity(appointment.getDoctor().getCity());
+        appointmentDTO.setReason(appointment.getReason());
+        appointmentDTO.setStatus(appointment.getStatus().getStatus());
 
-	    dto.setAppointments(appointmentDTOs);
-	    return dto;
-	}
+        // Fetch doctor info
+        Doctor doctor = appointment.getDoctor();
+        appointmentDTO.setDoctorId(doctor.getId());
+        appointmentDTO.setDoctorName(doctor.getName());
+        appointmentDTO.setClinicAddress(doctor.getClinicAddress());
 
+        // Fetch availability info
+        DoctorAvailability availability = appointment.getAvailability();
+        appointmentDTO.setAvailabilityId(availability.getId());
+        appointmentDTO.setAvailabilityDatetime(availability.getDatetime());
+
+        return appointmentDTO;
+    }).collect(Collectors.toList());
+
+    dto.setAppointments(appointmentDTOs);
+
+    return dto;
+}
+
+public void deleteAppointment(long id) {
+	Optional<Appointment> appointment = appointmentRepository.findById(id);
+	DoctorAvailability bookedTimeSlot = appointment.get().getAvailability();
+	appointmentRepository.deleteById(id);
+	availabilityRepository.delete(bookedTimeSlot);
+}
 
 }

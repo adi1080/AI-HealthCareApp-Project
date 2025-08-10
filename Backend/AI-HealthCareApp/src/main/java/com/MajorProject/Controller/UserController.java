@@ -45,9 +45,9 @@ public class UserController {
 	            // Check if the passwords match
 	            if (foundUser.getPassword().equals(user.getPassword())) {
 	                // Depending on the role, return appropriate response
-	                  if (foundUser.getRole().equals("Patient")) {
+	                  if (foundUser.getRole().equals("User")) {
 	                	  long uid = foundUser.getId();
-	                    return ResponseEntity.ok("patient"+uid);
+	                    return ResponseEntity.ok("user"+uid);
 	                } else if (foundUser.getRole().equals("Doctor")) {
 	                	      long uid = foundUser.getId();
 //	                	      System.out.println(foundUser.getId());

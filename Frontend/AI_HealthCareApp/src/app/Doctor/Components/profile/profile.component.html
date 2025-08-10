@@ -45,12 +45,10 @@
     </h4>
   </div>
 
-  <div *ngIf="!Doctor" class="newuser text-center mt-5">
-    <i>
-      <h1>Welcome New User!</h1>
-      <p>Add Your Details From Here</p>
-    </i>
-    <button class="btn btn-outline-danger btnedit" (click)="addDetails()">Add Details</button>
-  </div>
 </div>
+<section *ngIf="!Doctor" class="new-user" role="region" aria-label="New User Welcome">
+ <h1>Welcome New User!</h1>
+ <p>Add Your Details From Here</p>
+ <button class="btn-add-details" (click)="addDetails()">Add Details</button>
+</section>
 

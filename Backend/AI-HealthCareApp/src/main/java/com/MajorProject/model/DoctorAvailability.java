@@ -2,6 +2,7 @@ package com.MajorProject.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -78,6 +79,11 @@ public class DoctorAvailability {
 	public String toString() {
 	    return "DoctorAvailability [id=" + id + ", doctorId=" + (doctor != null ? doctor.getId() : null)
 	            + ", date=" + date + ", time=" + time + ", isBooked=" + isBooked + "]";
+	}
+	
+	@Transient
+	public LocalDateTime getDatetime() {
+	    return LocalDateTime.of(this.date, this.time);
 	}
   
 }

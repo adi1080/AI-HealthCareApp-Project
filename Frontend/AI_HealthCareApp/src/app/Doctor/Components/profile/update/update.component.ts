@@ -15,6 +15,10 @@ export class UpdateComponent implements OnInit {
   selectedFile: File | null = null;
   updateForm!: FormGroup;
   msg: string = '';
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  rotation = 0;
+  isGrayscale = false;
 
   constructor(private docService: DoctorService, private router: Router, private fb: FormBuilder) { }
 
@@ -95,11 +99,6 @@ export class UpdateComponent implements OnInit {
       }
     );
   }
-
-  imageChangedEvent: any = '';
-croppedImage: any = '';
-rotation = 0;
-isGrayscale = false;
 
 onFileChange(event: any): void {
   this.imageChangedEvent = event;

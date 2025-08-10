@@ -22,7 +22,6 @@ const routes: Routes = [
 
   {path:'patient/search', component:SearchDoctorComponent},
 
-  
   {path: 'patient/profile/addInfo' , component:AddPatientProfileComponent},
   {path: 'patient/profile/update' , component:PatientProfileUpdateComponent},
   {path:'doc-info/:id' , component:DocInfoComponent},

@@ -31,8 +31,8 @@ onSubmit() {
         if (response === "admin") {
           this.router.navigateByUrl('/admin');
         } 
-        else if (response.startsWith("patient")) {
-          const userId = response.replace("patient", "");
+        else if (response.startsWith("user")) {
+          const userId = response.replace("user", "");
           localStorage.setItem('userId', userId);
           this.router.navigateByUrl('/patient');
         } 

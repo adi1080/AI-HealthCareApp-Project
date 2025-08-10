@@ -32,4 +32,8 @@ export class PatientService {
   GetDoctorReviews(doctorId: number) {
     return this.http.get(`${this.baseUrl}/getAllFeedbacks/${doctorId}`);
   }
+
+  cancelAppointment(appointmentId:number){
+    return this.http.delete(`${this.baseUrl}/deleteAppointment/${appointmentId}` , {responseType: 'text'});
+  }
 }

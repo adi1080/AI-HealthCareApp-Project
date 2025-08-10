@@ -28,3 +28,41 @@
   .newuser p {
     font-size: 1.2rem;
   }
+
+      /* New User Section */
+    .new-user {
+      text-align: center;
+      padding: 6rem 1rem;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+    .new-user h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #111827;
+      margin: 0 0 1rem 0;
+      user-select: text;
+    }
+    .new-user p {
+      font-size: 1.25rem;
+      color: #6b7280;
+      margin: 0 0 2rem 0;
+      user-select: text;
+    }
+    .btn-add-details {
+      background-color: #111827;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.125rem;
+      padding: 1rem 2.5rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .btn-add-details:hover,
+    .btn-add-details:focus {
+      background-color: #2563eb;
+      outline: none;
+    }

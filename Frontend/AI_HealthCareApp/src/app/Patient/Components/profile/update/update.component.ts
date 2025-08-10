@@ -18,12 +18,12 @@ export class UpdateComponent implements OnInit{
 
 ngOnInit(): void {
     this.updateForm = this.fb.group({
-      Name:[],
-      Mobileno:[],
-      Gender:[],
-      Age:[],
-      Address:[],
-      History:[]
+      name:[],
+      mobileno:[],
+      gender:[],
+      age:[],
+      address:[],
+      history:[]
     });
 
     this.patientService.FindPatientById(this.loggedInUserId).subscribe(
@@ -31,12 +31,12 @@ ngOnInit(): void {
       this.Patient = response;
 
      this.updateForm.patchValue({
-       Name:this.Patient.Name,
-       Mobileno:this.Patient.Mobileno,
-       Gender:this.Patient.Gender,
-       Age:this.Patient.Age,
-       Address:this.Patient.Address,
-       History:this.Patient.History
+       name:this.Patient.name,
+       mobileno:this.Patient.mobileno,
+       gender:this.Patient.gender,
+       age:this.Patient.age,
+       address:this.Patient.address,
+       history:this.Patient.history
      });
 });
 
