@@ -22,6 +22,10 @@ export class HeaderComponent {
   }
 
   returntologin(){
-      this._router.navigateByUrl('login');
+    localStorage.removeItem('userQuery');
+    localStorage.removeItem('aiResponse');
+    localStorage.removeItem('loadingState');
+    localStorage.removeItem('sessionActive');
+    this._router.navigateByUrl('login');
   }
 }

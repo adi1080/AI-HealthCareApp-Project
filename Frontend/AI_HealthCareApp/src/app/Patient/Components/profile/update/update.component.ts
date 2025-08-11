@@ -46,5 +46,8 @@ ngOnInit(): void {
      this.patientService.updateprofile(this.loggedInUserId , this.updateForm.value).subscribe();
     // this.router.navigateByUrl("/patient/profile");
       this.router.navigate(['/patient/profile']);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
   }
 }

@@ -12,8 +12,12 @@ export class AddProfileComponent implements OnInit {
   uid!: any;
   AddProfileForm!: FormGroup;
   selectedFile: File | null = null;
-  checkProfileExistance!:any;
-  msg:string ='';
+  checkProfileExistance!: any;
+  msg: string = '';
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  rotation = 0;
+  isGrayscale = false;
 
   constructor(
     private router: Router,
@@ -26,13 +30,13 @@ export class AddProfileComponent implements OnInit {
     console.log(this.uid);
 
     this.AddProfileForm = this.formBuilder.group({
-      id:[this.uid],
+      id: [this.uid],
       name: [],
-      about:[],
+      about: [],
       mobileNo: [],
       gender: [],
       age: [],
-      city:[],
+      city: [],
       image: [],
       experience: [],
       speciality: [],
@@ -46,10 +50,69 @@ export class AddProfileComponent implements OnInit {
   //   this.selectedFile = event.target.files[0];
   // }
 
-  addDetails() {
+  showMessage(message: string, duration: number) {
+    // Create overlay background
+    const overlayDiv = document.createElement('div');
+    overlayDiv.className = `
+    position-fixed top-0 start-0 w-100 h-100
+    bg-dark bg-opacity-50 d-flex justify-content-center align-items-center
+    fade show
+  `;
+    overlayDiv.style.zIndex = '1050'; // Like Bootstrap modals
 
+    // Create message card
+    const popup = document.createElement('div');
+    popup.className = `
+    card text-center shadow border-primary animate__animated animate__fadeIn
+  `;
+    popup.style.width = '22rem';
+    popup.style.zIndex = '1060';
+    popup.style.position = 'relative';
+
+    // Header with close button
+    const header = document.createElement('div');
+    header.className =
+      'card-header bg-primary text-white d-flex justify-content-between align-items-center';
+
+    const title = document.createElement('span');
+    title.textContent = 'Message';
+
+    const closeButton = document.createElement('button');
+    closeButton.innerHTML = '&times;';
+    closeButton.className = 'btn-close btn-close-white';
+    closeButton.style.fontSize = '1.4rem';
+    closeButton.onclick = () => {
+      overlayDiv.remove();
+    };
+
+    header.appendChild(title);
+    header.appendChild(closeButton);
+
+    // Body with message
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const messageEl = document.createElement('p');
+    messageEl.textContent = message;
+    messageEl.className = 'card-text fs-5 fw-semibold text-dark';
+    body.appendChild(messageEl);
+
+    popup.appendChild(header);
+    popup.appendChild(body);
+    overlayDiv.appendChild(popup);
+    document.body.appendChild(overlayDiv);
+
+    // Auto-dismiss after duration
+    setTimeout(() => {
+      if (overlayDiv.parentNode) {
+        overlayDiv.remove();
+      }
+    }, duration);
+  }
+
+  addDetails() {
     if (this.AddProfileForm.invalid) {
-      this.msg = 'Please fill out all required fields.';
+      this.showMessage('Please fill out all required fields.', 3000);
       this.AddProfileForm.markAllAsTouched(); // Highlights all invalid fields
       return;
     }
@@ -67,81 +130,81 @@ export class AddProfileComponent implements OnInit {
     formData.append('speciality', this.AddProfileForm.get('speciality')?.value);
     formData.append('image', this.selectedFile as File);
     formData.append('clinicName', this.AddProfileForm.get('clinicName')?.value);
-    formData.append('clinicAddress', this.AddProfileForm.get('clinicAddress')?.value);
-    formData.append('consultationFees', this.AddProfileForm.get('consultationFees')?.value);
+    formData.append(
+      'clinicAddress',
+      this.AddProfileForm.get('clinicAddress')?.value
+    );
+    formData.append(
+      'consultationFees',
+      this.AddProfileForm.get('consultationFees')?.value
+    );
 
     this.docService.addDoctorProfile(formData).subscribe(
-      response => {
+      (response) => {
         console.log(response);
-        if(response == "profile already exists"){
-          this.msg = "profile already exists";
+        if (response == 'profile already exists') {
+          this.showMessage('profile already exists', 3000);
           this.router.navigateByUrl('doctor/profile/addInfo');
-        }
-        else{
-          this.msg = "Profile Added Successfully";
+        } else {
+          this.showMessage('Profile Added Successfully', 3000);
           this.router.navigateByUrl('doctor/profile/addInfo');
         }
       },
-      error => {
+      (error) => {
         console.error('Error adding profile:', error);
-      } 
+      }
     );
   }
 
-imageChangedEvent: any = '';
-croppedImage: any = '';
-rotation = 0;
-isGrayscale = false;
-
-onFileChange(event: any): void {
-  this.imageChangedEvent = event;
-}
-
-onImageCropped(event: any): void {
-  this.croppedImage = event.base64;
-
-  // Convert base64 to file for upload
-  const file = this.dataURLtoFile(event.base64, 'cropped-image.png');
-  this.selectedFile = file;
-}
-
-onImageLoaded(): void {
-  console.log('Image loaded');
-}
-
-onCropperReady(): void {
-  console.log('Cropper ready');
-}
-
-onLoadImageFailed(): void {
-  console.error('Load failed');
-}
-
-rotateImage(): void {
-  this.rotation = (this.rotation + 90) % 360;
-  document.querySelector('image-cropper')?.setAttribute('style', `transform: rotate(${this.rotation}deg);`);
-}
-
-toggleGrayscale(): void {
-  this.isGrayscale = !this.isGrayscale;
-}
-
-get imageFilter(): string {
-  return this.isGrayscale ? 'grayscale(100%)' : 'none';
-}
-
-// Helper to convert base64 to File
-dataURLtoFile(dataurl: string, filename: string): File {
-  const arr = dataurl.split(',');
-  const mime = arr[0].match(/:(.*?);/)![1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+  onFileChange(event: any): void {
+    this.imageChangedEvent = event;
   }
-  return new File([u8arr], filename, { type: mime });
-}
 
-  
+  onImageCropped(event: any): void {
+    this.croppedImage = event.base64;
+
+    // Convert base64 to file for upload
+    const file = this.dataURLtoFile(event.base64, 'cropped-image.png');
+    this.selectedFile = file;
+  }
+
+  onImageLoaded(): void {
+    console.log('Image loaded');
+  }
+
+  onCropperReady(): void {
+    console.log('Cropper ready');
+  }
+
+  onLoadImageFailed(): void {
+    console.error('Load failed');
+  }
+
+  rotateImage(): void {
+    this.rotation = (this.rotation + 90) % 360;
+    document
+      .querySelector('image-cropper')
+      ?.setAttribute('style', `transform: rotate(${this.rotation}deg);`);
+  }
+
+  toggleGrayscale(): void {
+    this.isGrayscale = !this.isGrayscale;
+  }
+
+  get imageFilter(): string {
+    return this.isGrayscale ? 'grayscale(100%)' : 'none';
+  }
+
+  // Helper to convert base64 to File
+  dataURLtoFile(dataurl: string, filename: string): File {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
 }

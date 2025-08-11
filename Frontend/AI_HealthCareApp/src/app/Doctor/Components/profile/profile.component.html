@@ -1,49 +1,59 @@
 <div class="container mt-5">
-  <div *ngIf="Doctor" class="profile-card p-4 rounded shadow">
-    <h3 class="text-center mb-4">Your Profile</h3>
-    <div class="text-center mb-3">
-      <img [src]="doctorImage" alt="Profile Image" class="img-fluid rounded-circle shadow-sm" width="250"/>
+<div *ngIf="Doctor" class="container my-5">
+  <div class="card shadow-lg border-0 rounded-4 p-4 bg-light">
+    
+    <!-- Profile Header -->
+    <div class="text-center mb-4">
+      <img [src]="doctorImage" alt="Doctor Image" class="rounded-circle shadow" width="150" height="150">
+      <h2 class="mt-3 fw-bold text-primary">{{Doctor.name}}</h2>
+      <p class="text-muted fst-italic">{{Doctor.speciality}}</p>
+      <button class="btn btn-outline-primary btn-sm mt-2" (click)="EditDetails()">
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      </button>
     </div>
-    <div class="row">
+
+    <!-- Information Sections -->
+    <div class="row gy-4">
+      <!-- Left Column -->
       <div class="col-md-6">
-        <h4><i class="bi bi-person-fill"></i> Name: <span class="text-success">{{Doctor.name}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-info-circle-fill"></i> About Me: <span class="text-success">{{Doctor.about}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-telephone-fill"></i> Mobile No: <span class="text-success">{{Doctor.mobileNo}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-gender-ambiguous"></i> Gender: <span class="text-success">{{Doctor.gender}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
+        <div class="bg-white rounded p-3 shadow-sm h-100">
+          <h5 class="text-secondary"><i class="bi bi-person-fill text-primary me-2"></i>About</h5>
+          <p class="mb-2"><strong>About Me:</strong> <span class="text-dark">{{Doctor.about}}</span></p>
+          <p><strong>Gender:</strong> <span class="text-dark">{{Doctor.gender}}</span></p>
+        </div>
       </div>
+
+      <!-- Right Column -->
       <div class="col-md-6">
-        <h4><i class="bi bi-calendar-fill"></i> Age: <span class="text-success">{{Doctor.age}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-geo-alt-fill"></i> City: <span class="text-success">{{Doctor.city}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-star-fill"></i> Speciality: <span class="text-success">{{Doctor.speciality}}</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
-        <h4><i class="bi bi-briefcase-fill"></i> Experience: <span class="text-success">{{Doctor.experience}} years</span>
-          <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-        </h4>
+        <div class="bg-white rounded p-3 shadow-sm h-100">
+          <h5 class="text-secondary"><i class="bi bi-info-circle-fill text-primary me-2"></i>Basic Info</h5>
+          <p class="mb-2"><strong>Age:</strong> {{Doctor.age}}</p>
+          <p class="mb-2"><strong>Mobile No:</strong> {{Doctor.mobileNo}}</p>
+          <p class="mb-2"><strong>City:</strong> {{Doctor.city}}</p>
+          <p><strong>Experience:</strong> {{Doctor.experience}} years</p>
+        </div>
       </div>
     </div>
-    <h4><i class="bi bi-hospital-fill"></i> Clinic Name: <span class="text-success">{{Doctor.clinicName}}</span>
-      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-    </h4>
-    <h4><i class="bi bi-house-fill"></i> Clinic Address: <span class="text-success">{{Doctor.clinicAddress}}</span>
-      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-    </h4>
-    <h4><i class="bi bi-cash-stack"></i> Consultation Fees: <span class="text-success">{{Doctor.consultationFees}}</span>
-      <button class="bi bi-pencil mod float-end" (click)="EditDetails()"></button>
-    </h4>
+
+    <!-- Clinic Section -->
+    <div class="mt-5">
+      <div class="bg-white rounded p-4 shadow-sm">
+        <h5 class="text-secondary mb-4"><i class="bi bi-hospital-fill text-primary me-2"></i>Clinic Information</h5>
+        <div class="row gy-3">
+          <div class="col-md-6">
+            <p><strong>Clinic Name:</strong> {{Doctor.clinicName}}</p>
+            <p><strong>Clinic Address:</strong> {{Doctor.clinicAddress}}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Consultation Fees:</strong> ₹{{Doctor.consultationFees}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
+
 
 </div>
 <section *ngIf="!Doctor" class="new-user" role="region" aria-label="New User Welcome">

@@ -54,7 +54,9 @@ export class AvailabilityComponent implements OnInit {
     }
     
     this.setAvailability = false;
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
     this.findAllAvailability();
   }
 

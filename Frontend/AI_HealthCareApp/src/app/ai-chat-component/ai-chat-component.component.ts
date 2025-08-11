@@ -13,17 +13,18 @@ export class AiChatComponentComponent implements OnInit {
   response = '';
   loading = false;
   message = '';
+  isLoggedIn = false;
 
-  constructor(private aiService: AiServiceService ,   private cdRef: ChangeDetectorRef // Inject it
-    ) {}
+  constructor(private aiService: AiServiceService, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit() {
-    const sq = localStorage.getItem('userQuery');
-    const sr = localStorage.getItem('aiResponse');
-    const sl = localStorage.getItem('loadingState');
-    if (sq) this.userQuery = sq;
-    if (sr) this.response = sr;
-    this.loading = sl === 'true';
+    const session = localStorage.getItem('sessionActive');
+    if (session === 'true') {
+      this.isLoggedIn = true;
+      this.userQuery = localStorage.getItem('userQuery') || '';
+      this.response = localStorage.getItem('aiResponse') || '';
+      this.loading = localStorage.getItem('loadingState') === 'true';
+    }
   }
 
   onSubmit() {
@@ -36,6 +37,10 @@ export class AiChatComponentComponent implements OnInit {
     this.loading = true;
     this.message = '';
     this.response = "I'm thinking...";
+    
+    // Save session
+    this.isLoggedIn = true;
+    localStorage.setItem('sessionActive', 'true');
     localStorage.setItem('userQuery', q);
     localStorage.setItem('loadingState', 'true');
 
@@ -57,28 +62,42 @@ export class AiChatComponentComponent implements OnInit {
   }
 
   startSpeechToText() {
+    if (!('webkitSpeechRecognition' in window)) {
+      this.message = 'Speech recognition not supported in this browser.';
+      return;
+    }
+
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'en-US';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => this.message = '🎤 Listening...';
+    let speechCaptured = false;
+
+    recognition.onstart = () => {
+      this.message = '🎤 Listening...';
+      this.cdRef.detectChanges();
+    };
+
     recognition.onerror = (e: any) => {
-      console.error(e);
+      console.error('Speech error:', e);
       this.message = `Speech error: ${e.error}`;
+      recognition.stop();
+      this.cdRef.detectChanges();
     };
 
     recognition.onresult = (e: any) => {
       const transcript = e.results[0][0].transcript;
       this.userQuery = transcript;
-      this.cdRef.detectChanges(); // 👈 This will force Angular to update the UI
+      speechCaptured = true;
       this.message = `You said: "${transcript}"`;
-      // this.onSubmit(); // auto-submit after speech
+      this.cdRef.detectChanges();
     };
 
     recognition.onend = () => {
-      if (!this.message.startsWith('You said')) {
-        this.message = '🎤 Speech ended.';
+      if (!speechCaptured) {
+        this.message = '🎤 No speech detected or cancelled.';
+        this.cdRef.detectChanges();
       }
     };
 
