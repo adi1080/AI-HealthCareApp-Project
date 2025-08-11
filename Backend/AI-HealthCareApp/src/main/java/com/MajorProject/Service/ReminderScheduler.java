@@ -63,7 +63,7 @@ public class ReminderScheduler {
 
 		        // Optional: message for doctor
 		        String doctorMessage = "Reminder: You have an upcoming appointment with patient " + patient.getName() 
-		                + " at " + formattedTime + " at " + doctor.getClinicAddress() + ", " + doctor.getCity() + ".";
+		                + " on " + formattedTime + " on location " + doctor.getClinicAddress() + ", " + doctor.getCity() + ".";
 
 				User patientUser = patient.getUser();
 				User doctorUser = doctor.getUser();
