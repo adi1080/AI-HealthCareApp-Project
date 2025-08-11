@@ -8,7 +8,7 @@ import { DoctorService } from '../../Services/doctor.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit{
-  loggedInUserId:any = localStorage.getItem('userId');
+  loggedInUserId:any = localStorage.getItem('DoctorUserId');
   Doctor:any;
   doctorImage!:string;
   StoreLoggedInDoctorId:any;
@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit{
   constructor(private router:Router , private docService:DoctorService){}
 
 ngOnInit(): void {
+  console.log(this.loggedInUserId)
      this.docService.FindById(this.loggedInUserId).subscribe(
         (doctor) =>{
             this.Doctor = doctor;

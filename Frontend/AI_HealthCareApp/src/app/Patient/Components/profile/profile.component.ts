@@ -11,7 +11,7 @@ declare var bootstrap: any;
 })
 export class ProfileComponent implements OnInit {
   Patient: any;
-  loggedInUser: any = localStorage.getItem('userId');
+  loggedInUser: any = localStorage.getItem('PatientUserId');
 
   constructor(private router: Router, private patientSevice: PatientService) {}
 

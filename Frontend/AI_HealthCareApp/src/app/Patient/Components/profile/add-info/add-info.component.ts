@@ -10,7 +10,7 @@ import { PatientService } from 'src/app/Patient/Services/patient.service';
 })
 export class AddInfoComponent implements OnInit{
   AddProfileForm!:FormGroup; 
-  loggedInUserId:any = localStorage.getItem('userId');
+  loggedInUserId:any = localStorage.getItem('PatientUserId');
   msg:string = '';
 
   constructor(private fb:FormBuilder , private patientService:PatientService , private router:Router){}

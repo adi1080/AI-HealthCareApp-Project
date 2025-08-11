@@ -9,7 +9,7 @@ import { PatientService } from 'src/app/Patient/Services/patient.service';
   styleUrls: ['./update.component.scss']
 })
 export class UpdateComponent implements OnInit{
-  loggedInUserId:any = localStorage.getItem('userId');
+  loggedInUserId:any = localStorage.getItem('PatientUserId');
   Patient:any;
   updateForm!:FormGroup;
   msg!:any;

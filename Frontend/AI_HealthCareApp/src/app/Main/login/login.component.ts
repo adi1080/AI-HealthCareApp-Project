@@ -33,12 +33,12 @@ onSubmit() {
         } 
         else if (response.startsWith("user")) {
           const userId = response.replace("user", "");
-          localStorage.setItem('userId', userId);
+          localStorage.setItem('PatientUserId', userId);
           this.router.navigateByUrl('/patient');
         } 
         else if (response.startsWith("doctor")) {
           const userId = response.replace("doctor", "");
-          localStorage.setItem('userId', userId);
+          localStorage.setItem('DoctorUserId', userId);
           this.router.navigateByUrl('/doctor');
         } 
         else {

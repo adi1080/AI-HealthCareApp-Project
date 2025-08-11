@@ -9,7 +9,7 @@ import { DoctorService } from 'src/app/Doctor/Services/doctor.service';
   styleUrls: ['./update.component.scss']
 })
 export class UpdateComponent implements OnInit {
-  loggedInUserId: any = localStorage.getItem('userId');
+  loggedInUserId: any = localStorage.getItem('DoctorUserId');
   Doctor: any;
   doctorImage: any;
   selectedFile: File | null = null;

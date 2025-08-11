@@ -22,7 +22,7 @@ export class AddProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.uid = localStorage.getItem('userId');
+    this.uid = localStorage.getItem('DoctorUserId');
     console.log(this.uid);
 
     this.AddProfileForm = this.formBuilder.group({
