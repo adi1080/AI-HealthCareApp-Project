@@ -20,7 +20,7 @@ export class AvailabilityComponent implements OnInit {
     this.availabilityForm = this.fb.group({
       dateTime: ['', Validators.required]
     });
-  console.log(this.doctorId);
+    console.log(this.doctorId);
     // Fetch all availability when the component initializes/opens
     this.findAllAvailability();
   }
