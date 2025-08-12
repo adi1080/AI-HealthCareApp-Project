@@ -24,7 +24,6 @@ import com.MajorProject.model.DoctorAvailability;
 import com.MajorProject.model.User;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/doctor")
 @RequestMapping("/Doctor")
 public class DoctorController {
 

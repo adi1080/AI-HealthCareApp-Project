@@ -161,11 +161,51 @@ export class AddProfileComponent implements OnInit {
   }
 
   onImageCropped(event: any): void {
-    this.croppedImage = event.base64;
+    const base64 = event.base64;
+    this.applyTransformations(base64).then((transformedBase64) => {
+      this.croppedImage = transformedBase64;
+      this.selectedFile = this.dataURLtoFile(
+        transformedBase64,
+        'transformed-image.png'
+      );
+    });
+  }
 
-    // Convert base64 to file for upload
-    const file = this.dataURLtoFile(event.base64, 'cropped-image.png');
-    this.selectedFile = file;
+  applyTransformations(base64: string): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d')!;
+        const angle = this.rotation;
+
+        // Set canvas size based on rotation
+        if (angle % 180 === 0) {
+          canvas.width = img.width;
+          canvas.height = img.height;
+        } else {
+          canvas.width = img.height;
+          canvas.height = img.width;
+        }
+
+        // Move origin to center and rotate
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((angle * Math.PI) / 180);
+
+        // Apply grayscale filter if needed
+        if (this.isGrayscale) {
+          ctx.filter = 'grayscale(100%)';
+        }
+
+        // Draw image rotated
+        ctx.drawImage(img, -img.width / 2, -img.height / 2);
+
+        // Return new base64
+        resolve(canvas.toDataURL('image/png'));
+      };
+    });
   }
 
   onImageLoaded(): void {
@@ -182,13 +222,24 @@ export class AddProfileComponent implements OnInit {
 
   rotateImage(): void {
     this.rotation = (this.rotation + 90) % 360;
-    document
-      .querySelector('image-cropper')
-      ?.setAttribute('style', `transform: rotate(${this.rotation}deg);`);
+    this.applyTransformations(this.croppedImage).then((transformedBase64) => {
+      this.croppedImage = transformedBase64;
+      this.selectedFile = this.dataURLtoFile(
+        transformedBase64,
+        'rotated-image.png'
+      );
+    });
   }
 
   toggleGrayscale(): void {
     this.isGrayscale = !this.isGrayscale;
+    this.applyTransformations(this.croppedImage).then((transformedBase64) => {
+      this.croppedImage = transformedBase64;
+      this.selectedFile = this.dataURLtoFile(
+        transformedBase64,
+        'filtered-image.png'
+      );
+    });
   }
 
   get imageFilter(): string {

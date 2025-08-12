@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/Services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,7 @@ export class HeaderComponent {
   @Input() 
   navItems: any;
   subscription: Subscription | undefined;
-  constructor(private _router: Router) { }
+  constructor(private _router: Router , private userService:UserService) { }
 
   ngOnInit(): void {
   }
@@ -22,6 +23,7 @@ export class HeaderComponent {
   }
 
   returntologin(){
+    this.userService.removeToken();
     localStorage.removeItem('userQuery');
     localStorage.removeItem('aiResponse');
     localStorage.removeItem('loadingState');

@@ -1,5 +1,7 @@
 package com.MajorProject.Controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.MajorProject.Repository.UserRepository;
+import com.MajorProject.Security.JwtUtil;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
 import com.MajorProject.model.Doctor;
@@ -30,47 +33,37 @@ public class UserController {
 	@Autowired
 	private PatientService ps;
 	
+	@Autowired
+	private JwtUtil jwtUtil;
+
+	
 	//constructor for user repository
 	  public UserController(UserRepository userRepository) {
 	        this.userRepository = userRepository;
 	    }
 
 	  @PostMapping("/login")
-	    public ResponseEntity<?> login(@RequestBody User user) {
-		  
-//          System.out.println(user.getUsername());  just checking if data is being received
-//          System.out.println(user.getPassword());
-          
-          if (user.getUsername().equals("admin") && user.getPassword().equals("admin")) {
-              return ResponseEntity.ok("admin");
-          }
-          
-	        // Find user by username (or email)
-	        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
-	        
-	        if (existingUser.isPresent()) {
-	            User foundUser = existingUser.get();
-//	            System.out.println(foundUser.getRole());  just checking if data is being received
-	            
-	            // Check if the passwords match
-	            if (foundUser.getPassword().equals(user.getPassword())) {
-	                // Depending on the role, return appropriate response
-	                  if (foundUser.getRole().equals("User")) {
-	                	  long uid = foundUser.getId();
-	                    return ResponseEntity.ok("user"+uid);
-	                } else if (foundUser.getRole().equals("Doctor")) {
-	                	      long uid = foundUser.getId();
-//	                	      System.out.println(foundUser.getId());
-	                    return ResponseEntity.ok("doctor"+uid);
-	                }
-	            } else {
-	                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
-	            }
-	        }
-	        
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
-	    }
-		
+	  public ResponseEntity<?> login(@RequestBody User user) {
+	      Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+
+	      if (existingUser.isPresent()) {
+	          User foundUser = existingUser.get();
+	          if (foundUser.getPassword().equals(user.getPassword())) {
+	              String token = jwtUtil.generateToken(foundUser);
+
+	              Map<String, Object> response = new HashMap<>();
+	              response.put("token", token);
+	              response.put("id", foundUser.getId());
+	              response.put("role", foundUser.getRole());
+
+	              return ResponseEntity.ok(response);
+	          }
+	          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+	      }
+
+	      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username");
+	  }
+	
 		@PostMapping("/register")
 		public ResponseEntity<?> registerUser(@RequestBody User user) {
 		    User savedUser = userRepository.save(user);

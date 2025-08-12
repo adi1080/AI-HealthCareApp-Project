@@ -45,28 +45,51 @@
       <input type="file" id="Image" class="form-control" accept="image/*" (change)="onFileChange($event)">
     </div>
 
-    <!-- Image cropper -->
-    <div class="col-md-12 mb-3" *ngIf="imageChangedEvent">
-      <image-cropper
-        [imageChangedEvent]="imageChangedEvent"
-        [maintainAspectRatio]="true"
-        [aspectRatio]="1"
-        [resizeToWidth]="300"
-        format="png"
-        (imageCropped)="onImageCropped($event)"
-        (imageLoaded)="onImageLoaded()"
-        (cropperReady)="onCropperReady()"
-        (loadImageFailed)="onLoadImageFailed()"
-      ></image-cropper>
-    </div>
+ <div
+      class="col-md-12 mb-3 d-flex align-items-start gap-3"
+      *ngIf="imageChangedEvent"
+    >
+      <!-- Cropper container with fixed width -->
+      <div style="width: 320px">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1"
+          [resizeToWidth]="300"
+          format="png"
+          (imageCropped)="onImageCropped($event)"
+          (imageLoaded)="onImageLoaded()"
+          (cropperReady)="onCropperReady()"
+          (loadImageFailed)="onLoadImageFailed()"
+          style="max-width: 100%"
+        ></image-cropper>
+      </div>
 
-    <!-- Cropped image preview -->
-    <div class="col-md-12 text-center" *ngIf="croppedImage">
-      <p class="mb-1">Preview:</p>
-      <img [src]="croppedImage" [style.filter]="imageFilter" class="img-thumbnail" style="max-width: 200px;">
-      <div class="mt-2">
-        <button type="button" class="btn btn-sm btn-secondary me-2" (click)="rotateImage()">Rotate</button>
-        <button type="button" class="btn btn-sm btn-secondary" (click)="toggleGrayscale()">Toggle Grayscale</button>
+      <!-- Preview container -->
+      <div class="text-center" *ngIf="croppedImage" style="width: 220px">
+        <p class="mb-1">Preview:</p>
+        <img
+          [src]="croppedImage"
+          [style.filter]="imageFilter"
+          class="img-thumbnail"
+          style="max-width: 200px"
+        />
+        <div class="mt-2">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary me-2"
+            (click)="rotateImage()"
+          >
+            Rotate
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            (click)="toggleGrayscale()"
+          >
+            Toggle Grayscale
+          </button>
+        </div>
       </div>
     </div>
 

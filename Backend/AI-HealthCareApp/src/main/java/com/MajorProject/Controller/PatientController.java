@@ -1,5 +1,6 @@
 package com.MajorProject.Controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("Patient")
-@CrossOrigin(origins = "http://localhost:4200/patient")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class PatientController {
 
 	@Autowired
@@ -46,8 +47,9 @@ public class PatientController {
 	private UserRepository userRepository;
 
 	@PostMapping("addProfile")
-	public String createProfile(@RequestBody Patient patient) {
-	    // patient.id is expected to be user.id
+	public String createProfile(@RequestBody Patient patient , Principal principal) {
+		String username = principal.getName();
+		// patient.id is expected to be user.id
 	    Optional<User> optionalUser = userRepository.findById(patient.getId());
 	    if (!optionalUser.isPresent()) {
 	        return "User not found with ID: " + patient.getId();

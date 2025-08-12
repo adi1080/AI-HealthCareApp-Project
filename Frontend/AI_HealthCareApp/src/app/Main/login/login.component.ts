@@ -87,24 +87,36 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.userService.login(this.loginForm.value).subscribe(
-        (response: string) => {
-          if (response === 'admin') {
-            this.router.navigateByUrl('/admin');
-          } else if (response.startsWith('user')) {
-            const userId = response.replace('user', '');
-            localStorage.setItem('PatientUserId', userId);
-            this.router.navigateByUrl('/patient');
-          } else if (response.startsWith('doctor')) {
-            const userId = response.replace('doctor', '');
-            localStorage.setItem('DoctorUserId', userId);
-            this.router.navigateByUrl('/doctor');
+        (response: any) => {
+          if (response.token) {
+            this.userService.storeToken(response.token);
+
+            const userInfo = this.userService.getUserInfoFromToken();
+
+            if (!userInfo) {
+              this.showMessage('Invalid token data', 3000);
+              return;
+            }
+
+            // Optional: if you still want to store userId separately
+            if (userInfo.role === 'Doctor') {
+              localStorage.setItem('DoctorUserId', userInfo.id);
+              this.router.navigateByUrl('/doctor');
+            } else if (userInfo.role === 'User') {
+              localStorage.setItem('PatientUserId', userInfo.id);
+              this.router.navigateByUrl('/patient');
+            } else if (userInfo.role === 'Admin') {
+              this.router.navigateByUrl('/admin');
+            } else {
+              this.showMessage('Unknown user role', 3000);
+            }
           } else {
-            this.showMessage('Unknown response from server',3000);
+            this.showMessage('No token received', 3000);
           }
         },
         (error) => {
           console.error('Login failed', error);
-          this.showMessage('Invalid credentials',3000);
+          this.showMessage('Invalid credentials', 3000);
         }
       );
     }

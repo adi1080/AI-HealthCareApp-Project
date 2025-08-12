@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AiChatComponentComponent } from './ai-chat-component/ai-chat-component.component';
@@ -13,6 +13,7 @@ import { AdminModule } from './Admin/admin.module';
 import { DoctorModule } from './Doctor/doctor.module';
 import { PatientModule } from './Patient/patient.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthInterceptor } from './auth.interceptor';
 
 
 @NgModule({
@@ -35,7 +36,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PatientModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
