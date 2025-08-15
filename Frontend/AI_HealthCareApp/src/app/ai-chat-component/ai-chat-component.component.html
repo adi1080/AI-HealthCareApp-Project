@@ -1,5 +1,5 @@
 <div class="chat-container">
-  <h2>AI Chat</h2>
+  <h2 style="text-align: center;">AI Health Assistant</h2>
   <form (ngSubmit)="onSubmit()" class="chat-form">
     <div class="input-group">
 <input type="text" [(ngModel)]="userQuery" name="userQuery" placeholder="Ask a question"/>
@@ -13,11 +13,11 @@
 
   <div class="spinner" *ngIf="loading">
     <div class="loader"></div>
-    <span>Loading...</span>
+    <span>Thinking...</span>
   </div>
 
   <div class="response-box" *ngIf="response">
-    <h3>AI Response:</h3>
+    <h3>Response:</h3>
     <pre>{{ response }}</pre>
   </div>
 </div>

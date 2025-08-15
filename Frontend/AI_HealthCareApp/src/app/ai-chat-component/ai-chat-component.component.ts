@@ -15,7 +15,7 @@ export class AiChatComponentComponent implements OnInit {
   message = '';
   isLoggedIn = false;
 
-  constructor(private aiService: AiServiceService, private cdRef: ChangeDetectorRef) {}
+  constructor(private aiService: AiServiceService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     const session = localStorage.getItem('sessionActive');
@@ -35,28 +35,41 @@ export class AiChatComponentComponent implements OnInit {
     }
 
     this.loading = true;
-    this.message = '';
-    this.response = "I'm thinking...";
-    
-    // Save session
-    this.isLoggedIn = true;
+    this.response = '';
+    this.message = 'Responding...';
     localStorage.setItem('sessionActive', 'true');
     localStorage.setItem('userQuery', q);
     localStorage.setItem('loadingState', 'true');
 
-    this.aiService.getAiResponse(q).subscribe({
-      next: (data: string) => {
-        this.loading = false;
-        this.response = data;
-        localStorage.setItem('aiResponse', data);
-        localStorage.setItem('loadingState', 'false');
+    let lastLength = 0;  // Track length of the last received token string
+
+    this.aiService.getAiResponseStream(q).subscribe({
+      next: (token: string) => {
+        if (token === '__END__') {
+          this.loading = false;
+          localStorage.setItem('loadingState', 'false');
+          return;
+        }
+
+        // Append only the new part after lastLength if token is cumulative
+        if (token.length > lastLength) {
+          this.response += token.substring(lastLength);
+          lastLength = token.length;
+        }
+
+        localStorage.setItem('aiResponse', this.response);
+        this.cdRef.detectChanges();
+        this.message = "";
       },
       error: (err) => {
         this.loading = false;
-        console.error('Error:', err);
-        this.response = `Error: ${err.message || 'Something went wrong'}`;
+        if (!this.response) {
+          this.response = 'Error receiving AI response' + err;
+        }
+        this.message = "";
         localStorage.setItem('aiResponse', this.response);
         localStorage.setItem('loadingState', 'false');
+        this.cdRef.detectChanges();
       }
     });
   }

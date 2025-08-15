@@ -1,21 +1,40 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AiServiceService {
+ private apiUrl = 'http://localhost:9090/ai/message_stream';  // Ensure correct port & URL
 
-  private apiUrl = 'http://localhost:9090/ai/message_response';  // Spring Boot backend URL
+  constructor(private ngZone: NgZone) { }
 
-  constructor(private http: HttpClient) {}
+  getAiResponseStream(userQuery: string): Observable<string> {
+    return new Observable<string>(observer => {
+      const url = `${this.apiUrl}?query=${encodeURIComponent(userQuery)}`;
 
-  getAiResponse(userQuery: string): Observable<string> {
-    const encodedQuery = encodeURIComponent(userQuery);  // Ensure the query is URL-encoded
-    return this.http.get<string>(`${this.apiUrl}?query=${encodedQuery}`, { responseType: 'text' as 'json' });
+      const eventSource = new EventSource(url);
+
+      eventSource.onmessage = (event) => {
+        this.ngZone.run(() => {
+          observer.next(event.data);
+        });
+      };
+
+      eventSource.onerror = (error) => {
+        this.ngZone.run(() => {
+          console.error("Error receiving AI response: Maximum pool size: undefined/unknown" , error);
+          observer.error('EventSource error');
+        });
+        eventSource.close();
+      };
+
+      return () => {
+        eventSource.close();
+      };
+    });
   }
-  
-  
-  
 }
+
+

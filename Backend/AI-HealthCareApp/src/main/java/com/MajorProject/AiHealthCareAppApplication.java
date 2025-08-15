@@ -11,9 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories
 @SpringBootApplication
 public class AiHealthCareAppApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(AiHealthCareAppApplication.class, args);
 	}
-
 }
