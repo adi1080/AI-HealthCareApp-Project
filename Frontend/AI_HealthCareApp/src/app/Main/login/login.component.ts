@@ -22,6 +22,8 @@ export class LoginComponent {
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
+
+    this.userService.removeToken();
   }
 
   showMessage(message: string, duration: number) {

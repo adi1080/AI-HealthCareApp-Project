@@ -14,7 +14,7 @@ export class UserService {
      return this.http.post("http://localhost:9090/register",user);
   }
 
-login(user: any): Observable<any> {
+  login(user: any): Observable<any> {
     return this.http.post("http://localhost:9090/login", user);
   }
 
