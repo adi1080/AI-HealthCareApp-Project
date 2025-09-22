@@ -1,11 +1,5 @@
 <div class="container" style="margin-top: 25px">
-  <section
-    *ngIf="Patient"
-    role="region"
-    aria-label="Patient Profile"
-    class="profile-card"
-    tabindex="0"
-  >
+  <section *ngIf="Patient" role="region" aria-label="Patient Profile" class="profile-card" tabindex="0">
     <header class="profile-header" id="profile-title">
       <h3>Your Profile</h3>
     </header>
@@ -21,11 +15,7 @@
       <i class="bi bi-telephone"></i>
       <span class="profile-label">Mobile No:</span>
       <span class="profile-value">{{ Patient.mobileno }}</span>
-      <button
-        class="edit-btn"
-        aria-label="Edit Mobile No"
-        (click)="EditDetails()"
-      >
+      <button class="edit-btn" aria-label="Edit Mobile No" (click)="EditDetails()">
         <i class="bi bi-pencil"></i>
       </button>
     </div>
@@ -49,11 +39,7 @@
       <i class="bi bi-house"></i>
       <span class="profile-label">Address:</span>
       <span class="profile-value">{{ Patient.address }}</span>
-      <button
-        class="edit-btn"
-        aria-label="Edit Address"
-        (click)="EditDetails()"
-      >
+      <button class="edit-btn" aria-label="Edit Address" (click)="EditDetails()">
         <i class="bi bi-pencil"></i>
       </button>
     </div>
@@ -61,27 +47,37 @@
       <i class="bi bi-heart"></i>
       <span class="profile-label">Health Status:</span>
       <span class="profile-value">{{ Patient.history }}
-      <button class="edit-btn" aria-label="Edit Health Status" (click)="EditDetails()">
-        <i class="bi bi-pencil"></i>
-      </button>
+        <button class="edit-btn" aria-label="Edit Health Status" (click)="EditDetails()">
+          <i class="bi bi-pencil"></i>
+        </button>
       </span>
+    </div>
+    <div class="profile-item" style="grid-column: 1 / -1">
+      <i class="bi bi-file-earmark-medical"></i>
+      <span class="profile-label">Health Report:</span>
+      <div class="d-flex align-items-center mt-2">
+        <button *ngIf="Patient?.reportFilePath" (click)="downloadReport()" class="btn btn-sm btn-outline-primary me-2"
+          [disabled]="!Patient?.reportFilePath">
+          <i class="bi bi-download"></i> Download Report
+        </button>
+        <span class="text-muted small" *ngIf="Patient?.reportFilePath">
+          {{ getReportFileName() }}
+        </span>
+        <span class="text-muted small" *ngIf="!Patient?.reportFilePath">
+          No report available
+        </span>
+      </div>
     </div>
   </section>
 
-  <section
-    *ngIf="Patient"
-    role="region"
-    aria-label="Health Overview"
-    class="overview-card"
-    tabindex="0"
-  >
+  <section *ngIf="Patient" role="region" aria-label="Health Overview" class="overview-card" tabindex="0">
     <h4 class="overview-header">Health Overview</h4>
     <div class="metric">
       <!-- Trigger Button -->
       <span class="metric-label" (click)="openAppointmentsModal()">
-        <i class="bi bi-calendar-check"></i>  Upcoming Appointments</span>
+        <i class="bi bi-calendar-check"></i> Upcoming Appointments</span>
 
-<!-- <ng-container *ngIf="Patient?.appointments?.length">
+      <!-- <ng-container *ngIf="Patient?.appointments?.length">
   <div *ngFor="let upcomingAppointment of Patient.appointments, index as i" class="metric-value"> 
     <h6 style="color: black;">Appointment {{ i + 1 }}</h6> 
     <span style="color: darkgoldenrod;">Date & Time:</span>
@@ -93,21 +89,16 @@
 </ng-container> -->
     </div>
     <div class="metric">
-      <span class="metric-label"><i class="bi bi-capsule"></i>  Active Medications</span>
+      <span class="metric-label"><i class="bi bi-capsule"></i> Active Medications</span>
       <span class="metric-value">{{ Patient.medications?.length || 0 }}</span>
     </div>
     <div class="metric">
-      <span class="metric-label"><i class="bi bi-capsule"></i>  Health Score</span>
+      <span class="metric-label"><i class="bi bi-capsule"></i> Health Score</span>
       <span class="metric-value">{{ Patient.healthScore || "N/A" }}</span>
     </div>
   </section>
 
-  <section
-    *ngIf="!Patient"
-    class="new-user"
-    role="region"
-    aria-label="New User Welcome"
-  >
+  <section *ngIf="!Patient" class="new-user" role="region" aria-label="New User Welcome">
     <h1>Welcome New User!</h1>
     <p>Add Your Details From Here</p>
     <button class="btn-add-details" (click)="addDetails()">Add Details</button>
@@ -122,32 +113,20 @@
 </p>
 
 <!-- Appointments Modal -->
-<div
-  class="modal fade"
-  id="appointmentsModal"
-  tabindex="-1"
-  aria-labelledby="appointmentsModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="appointmentsModal" tabindex="-1" aria-labelledby="appointmentsModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="appointmentsModalLabel">
           Your Upcoming Appointments
         </h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body" *ngIf="Patient?.appointments?.length">
-        <div
-          *ngFor="let appointment of Patient.appointments; let i = index"
-          class="mb-4 p-3 border rounded shadow-sm bg-light"
-        >
+        <div *ngFor="let appointment of Patient.appointments; let i = index"
+          class="mb-4 p-3 border rounded shadow-sm bg-light">
           <h6>Appointment {{ i + 1 }}</h6>
           <p>
             <strong>Date:</strong>
@@ -158,10 +137,7 @@
           <p><strong>Doctor:</strong> {{ appointment.doctorName }}</p>
           <p><strong>Clinic Address:</strong> {{ appointment.clinicAddress }}</p>
           <p><strong>Location:</strong> {{ appointment.doctorCity }}</p>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="cancelAppointment(appointment.appointmentId)"
-          >
+          <button class="btn btn-danger btn-sm" (click)="cancelAppointment(appointment.appointmentId)">
             Cancel
           </button>
         </div>

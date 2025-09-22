@@ -37,4 +37,9 @@ FindAllAvailability(id: any): Observable<any> {
 DeleteAvailabilityById(availabilityId: any): Observable<any> {
   return this.http.delete(`${this.baseUrl}/schedule/delete/${availabilityId}`, { responseType: 'text' });
 }
+
+getAppointmentsWithPatients(doctorId: number): Observable<any> {
+  return this.http.get(`${this.baseUrl}/appointments-with-patients/${doctorId}`);
+}
+
 }

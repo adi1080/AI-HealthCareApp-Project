@@ -23,7 +23,9 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
 
+    if (!this.userService.isLoggedIn()) {
     this.userService.removeToken();
+  }
   }
 
   showMessage(message: string, duration: number) {
@@ -90,6 +92,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.userService.login(this.loginForm.value).subscribe(
         (response: any) => {
+          console.log(response);
           if (response.token) {
             this.userService.storeToken(response.token);
 

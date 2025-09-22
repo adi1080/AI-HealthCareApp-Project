@@ -1,19 +1,11 @@
 package com.MajorProject.model;
 
+import java.nio.file.Path;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "patient")
@@ -41,6 +33,17 @@ public class Patient {
    @OneToOne
    @JoinColumn(name = "user_id")
    private User user;
+
+    @Column(name = "report_file_path")
+    private String reportFilePath;
+
+    public String getReportFilePath() {
+        return reportFilePath;
+    }
+
+    public void setReportFilePath(String reportFilePath) {
+        this.reportFilePath = reportFilePath;
+    }
 
    public User getUser() {
        return user;

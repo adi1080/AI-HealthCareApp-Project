@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from 'src/app/Patient/Services/patient.service';
 
@@ -11,7 +11,11 @@ import { PatientService } from 'src/app/Patient/Services/patient.service';
 export class AddInfoComponent implements OnInit {
   AddProfileForm!: FormGroup;
   loggedInUserId: any = localStorage.getItem('PatientUserId');
-  msg: string = '';
+  file: File | null = null;
+  fileError: string = '';
+  message: string = '';
+  errorMessage: boolean = false;
+  isSubmitting: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -22,95 +26,67 @@ export class AddInfoComponent implements OnInit {
   ngOnInit(): void {
     this.AddProfileForm = this.fb.group({
       id: [this.loggedInUserId],
-      Name: [],
-      Age: [],
-      Gender: [],
-      Mobileno: [],
-      History: [],
-      Address: [],
+      Name: ['', [Validators.required, Validators.minLength(3)]],
+      Age: [null, [Validators.required, Validators.min(1), Validators.max(120)]],
+      Gender: ['', Validators.required],
+      Mobileno: [
+        '',
+        [Validators.required, Validators.pattern(/^[0-9]{10}$/)],
+      ],
+      Address: ['', Validators.required],
+      History: ['', Validators.required],
     });
   }
 
-  showMessage(message: string, duration: number) {
-    // Create overlay background
-    const overlayDiv = document.createElement('div');
-    overlayDiv.className = `
-    position-fixed top-0 start-0 w-100 h-100
-    bg-dark bg-opacity-50 d-flex justify-content-center align-items-center
-    fade show
-  `;
-    overlayDiv.style.zIndex = '1050'; // Like Bootstrap modals
+  onFileSelected(event: any): void {
+    const selectedFile: File = event.target.files[0];
+    const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/csv'];
 
-    // Create message card
-    const popup = document.createElement('div');
-    popup.className = `
-    card text-center shadow border-primary animate__animated animate__fadeIn
-  `;
-    popup.style.width = '22rem';
-    popup.style.zIndex = '1060';
-    popup.style.position = 'relative';
+    if (selectedFile && selectedFile.size > 5 * 1024 * 1024) {
+      this.fileError = 'File size should not exceed 5MB';
+      this.file = null;
+    } else if (selectedFile && !allowedTypes.includes(selectedFile.type)) {
+      this.fileError = 'Invalid file type. Only PDF, DOCX, CSV are allowed.';
+      this.file = null;
+    } else {
+      this.file = selectedFile;
+      this.fileError = '';
+    }
+  }
 
-    // Header with close button
-    const header = document.createElement('div');
-    header.className =
-      'card-header bg-primary text-white d-flex justify-content-between align-items-center';
-
-    const title = document.createElement('span');
-    title.textContent = 'Message';
-
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '&times;';
-    closeButton.className = 'btn-close btn-close-white';
-    closeButton.style.fontSize = '1.4rem';
-    closeButton.onclick = () => {
-      overlayDiv.remove();
-    };
-
-    header.appendChild(title);
-    header.appendChild(closeButton);
-
-    // Body with message
-    const body = document.createElement('div');
-    body.className = 'card-body';
-
-    const messageEl = document.createElement('p');
-    messageEl.textContent = message;
-    messageEl.className = 'card-text fs-5 fw-semibold text-dark';
-    body.appendChild(messageEl);
-
-    popup.appendChild(header);
-    popup.appendChild(body);
-    overlayDiv.appendChild(popup);
-    document.body.appendChild(overlayDiv);
-
-    // Auto-dismiss after duration
+  showMessage(message: string, duration: number): void {
+    this.message = message;
+    this.errorMessage = message.toLowerCase().includes('already');
     setTimeout(() => {
-      if (overlayDiv.parentNode) {
-        overlayDiv.remove();
-      }
+      this.message = '';
     }, duration);
   }
 
-  addDetails() {
-    console.log(this.AddProfileForm.value);
-    if (this.AddProfileForm.invalid) {
-      this.showMessage('please fill out all the fields',3000);
-      this.AddProfileForm.markAllAsTouched(); // Highlights all invalid fields
+  addDetails(): void {
+    if (this.AddProfileForm.invalid || this.fileError) {
+      this.AddProfileForm.markAllAsTouched();
+      this.showMessage('Please correct the form errors', 3000);
+      return;
     }
 
-    this.patientService.AddPatientProfile(this.AddProfileForm.value).subscribe(
-      (response) => {
-        if (response == 'profile already exists') {
-          this.showMessage('profile already exists',3000);
-          this.router.navigateByUrl('patient/profile/addInfo');
-        } else {
-          this.showMessage('Profile Added Successfully',3000);
-          this.router.navigateByUrl('patient/profile/addInfo');
+    this.isSubmitting = true;
+
+    console.log("sending value to save profile in backend : ",this.AddProfileForm.value , this.file);
+    this.patientService.addPatientProfile(this.AddProfileForm.value, this.file).subscribe(
+        (response) => {
+          this.isSubmitting = false;
+          if (response === 'Profile already exists') {
+            this.showMessage('Profile already exists', 3000);
+          } else {
+            this.showMessage('Profile Added Successfully', 3000);
+            this.router.navigateByUrl('patient/profile/addInfo');
+          }
+        },
+        (error) => {
+          console.error('Error adding profile:', error);
+          this.isSubmitting = false;
+          this.showMessage('Something went wrong', 3000);
         }
-      },
-      (error) => {
-        console.error('Error adding profile:', error);
-      }
-    );
+      );
   }
 }

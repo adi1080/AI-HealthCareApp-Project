@@ -11,9 +11,14 @@ public class PatientDTO {
     private long mobileno;
     private String history;
     private List<AppointmentDTO> appointments;
+    private String reportFilePath;
 
-    // Getters and Setters
-
+    public String getReportFilePath() {
+        return reportFilePath;
+    }
+    public void setReportFilePath(String reportFilePath) {
+        this.reportFilePath = reportFilePath;
+    }
     public long getId() {
         return id;
     }

@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,22 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-  AddPatientProfile(patient: any) {
-    return this.http.post(`${this.baseUrl}/addProfile`, patient, { responseType: 'text' });
+  addPatientProfile(patientData: any, file?: File | null): Observable<any>{
+  const formData = new FormData();
+  formData.append('patient', JSON.stringify(patientData));
+   if (file) {
+    formData.append('report', file, file.name);
+   }
+   return this.http.post(`${this.baseUrl}/addProfile`, formData, {
+    responseType: 'text',
+   });
+ }
+
+  downloadReport(filename: string) {
+    const url = `${this.baseUrl}/download-report/${filename}`;
+    return this.http.get(url, {
+      responseType: 'blob' 
+    });
   }
 
   FindPatientById(id: any) {
@@ -33,7 +48,7 @@ export class PatientService {
     return this.http.get(`${this.baseUrl}/getAllFeedbacks/${doctorId}`);
   }
 
-  cancelAppointment(appointmentId:number){
-    return this.http.delete(`${this.baseUrl}/deleteAppointment/${appointmentId}` , {responseType: 'text'});
+  cancelAppointment(appointmentId: number) {
+    return this.http.delete(`${this.baseUrl}/deleteAppointment/${appointmentId}`, { responseType: 'text' });
   }
 }

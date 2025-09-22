@@ -34,6 +34,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register").permitAll()
                 .requestMatchers("/ai/message_stream").permitAll()
+                    .requestMatchers("Patient/download-report/**").permitAll()
                 .requestMatchers("/ai/**").authenticated()
                 .anyRequest().authenticated()
             )

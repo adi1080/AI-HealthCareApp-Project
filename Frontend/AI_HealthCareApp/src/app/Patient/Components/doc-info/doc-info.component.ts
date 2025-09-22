@@ -18,7 +18,7 @@ appointmentForm!:FormGroup;
 bookingAppointment:boolean = false;
 bookingReason:string = "";
 
-LoggedInPatient:any = localStorage.getItem("PatientId");
+LoggedInPatient:any = localStorage.getItem("PatientUserId");
 
 availabilitySlots:{id:any , date: string, time: string, isBooked: boolean }[] = [];
 selectedtime:any;

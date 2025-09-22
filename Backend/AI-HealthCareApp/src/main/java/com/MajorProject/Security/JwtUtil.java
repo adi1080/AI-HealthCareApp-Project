@@ -23,7 +23,7 @@ public class JwtUtil {
     // 🔒 Ensure it's at least 32 characters for HS256
     private static final String SECRET_KEY = "my_super_secret_key_which_is_very_secure_12345";
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
+    private static final long EXPIRATION_TIME = 1000 * 60 * 5; // 5 minutes
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
@@ -78,6 +78,16 @@ public class JwtUtil {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractAllClaims(token).getExpiration().before(new Date());
+        Date expiration = extractAllClaims(token).getExpiration();
+        Date now = new Date();
+
+        System.out.println("Token expiration time: " + expiration + " (" + expiration.getTime() + ")");
+        System.out.println("Current system time: " + now + " (" + now.getTime() + ")");
+
+        boolean expired = expiration.before(now);
+        System.out.println("Is token expired? " + expired);
+
+        return expired;
     }
+
 }

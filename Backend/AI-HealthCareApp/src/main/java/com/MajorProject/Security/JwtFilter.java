@@ -26,44 +26,48 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-	        throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-	    String token = null;
-	    String username = null;
+        String token = null;
+        String username = null;
 
-	    // 1. Try header
-	    String authHeader = request.getHeader("Authorization");
-	    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-	        token = authHeader.substring(7);
-	    }
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+        }
 
-	    // 2. If not in header, check query param (for SSE)
-	    if (token == null) {
-	        token = request.getParameter("token");
-	    }
+        if (token == null) {
+            token = request.getParameter("token");
+        }
 
-	    // 🔽 LOGGING STARTS HERE
-	    if (token != null) {
-	        try {
-	            username = jwtUtil.extractUsername(token);
-	            System.out.println("✅ Token is valid. Extracted username: " + username);
-	        } catch (Exception e) {
-	            System.err.println("❌ Failed to parse JWT token: " + e.getMessage());
-	        }
-	    }
+        if (token != null) {
+            try {
+                username = jwtUtil.extractUsername(token);
 
-	    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-	        User user = userRepository.findByUsername(username).orElse(null);
-	        if (user != null && jwtUtil.validateToken(token, username)) {
-	            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, null);
-	            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-	            SecurityContextHolder.getContext().setAuthentication(authToken);
-	        }
-	    }
+                // Check if token is valid and not expired
+                if (!jwtUtil.validateToken(token, username)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Token expired or invalid\"}");
+                    return;
+                }
 
-	    filterChain.doFilter(request, response);
-	}
-
+                User user = userRepository.findByUsername(username).orElse(null);
+                if (user != null) {
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(user, null, null);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid token\"}");
+                return;  // Stop further processing
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 }

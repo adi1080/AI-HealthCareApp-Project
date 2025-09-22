@@ -4,6 +4,10 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.MajorProject.dto.DoctorAppointmentWithPatientDTO;
+import com.MajorProject.model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,6 +34,32 @@ public class DoctorService {
 	@Autowired
     DoctorService(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
+    }
+
+    public List<DoctorAppointmentWithPatientDTO> getAppointmentsWithPatients(Long doctorId) {
+        List<Appointment> appointments = appointmentRepository.findByDoctorId(doctorId);
+
+        return appointments.stream().map(appt -> {
+            DoctorAppointmentWithPatientDTO dto = new DoctorAppointmentWithPatientDTO();
+            dto.setAppointmentId(appt.getAppointmentId());
+            dto.setReason(appt.getReason());
+            dto.setStatus(appt.getStatus().getStatus());
+
+            if (appt.getAvailability() != null) {
+                dto.setAvailabilityId(appt.getAvailability().getId());
+            }
+
+            Patient p = appt.getPatient();
+            dto.setPatientId(p.getId());
+            dto.setPatientName(p.getName());
+            dto.setPatientAge(p.getAge());
+            dto.setPatientGender(p.getGender());
+            dto.setPatientMobile(p.getMobileno());
+            dto.setPatientHistory(p.getHistory());
+            dto.setReportFilePath(p.getReportFilePath());
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 	  // Find doctor by ID
@@ -81,7 +111,6 @@ public class DoctorService {
         }
         return dto;
     }
-
 	
 	public DoctorAvailability saveAvailability(DoctorAvailability availability) {
 		return availabilityRepo.save(availability);

@@ -114,42 +114,45 @@ public class PatientService {
 	    return feedbackDTOs;
 	}
 
-	
-public PatientDTO convertToDTO(Patient patient) {
-    PatientDTO dto = new PatientDTO();
-    dto.setId(patient.getId());
-    dto.setName(patient.getName());
-    dto.setAge(patient.getAge());
-    dto.setGender(patient.getGender());
-    dto.setAddress(patient.getAddress());
-    dto.setMobileno(patient.getMobileno());
-    dto.setHistory(patient.getHistory());
+    public PatientDTO convertToDTO(Patient patient) {
+        PatientDTO dto = new PatientDTO();
+        dto.setId(patient.getId());
+        dto.setName(patient.getName());
+        dto.setAge(patient.getAge());
+        dto.setGender(patient.getGender());
+        dto.setAddress(patient.getAddress());
+        dto.setMobileno(patient.getMobileno());
+        dto.setHistory(patient.getHistory());
 
-    List<AppointmentDTO> appointmentDTOs = patient.getAppointments().stream().map(appointment -> {
-        AppointmentDTO appointmentDTO = new AppointmentDTO();
-        appointmentDTO.setAppointmentId(appointment.getAppointmentId());
-        appointmentDTO.setDoctorCity(appointment.getDoctor().getCity());
-        appointmentDTO.setReason(appointment.getReason());
-        appointmentDTO.setStatus(appointment.getStatus().getStatus());
+        List<AppointmentDTO> appointmentDTOs = patient.getAppointments().stream().map(appointment -> {
+            AppointmentDTO appointmentDTO = new AppointmentDTO();
+            appointmentDTO.setAppointmentId(appointment.getAppointmentId());
+            appointmentDTO.setDoctorCity(appointment.getDoctor().getCity());
+            appointmentDTO.setReason(appointment.getReason());
+            appointmentDTO.setStatus(appointment.getStatus().getStatus());
 
-        // Fetch doctor info
-        Doctor doctor = appointment.getDoctor();
-        appointmentDTO.setDoctorId(doctor.getId());
-        appointmentDTO.setDoctorName(doctor.getName());
-        appointmentDTO.setClinicAddress(doctor.getClinicAddress());
+            // Fetch doctor info
+            Doctor doctor = appointment.getDoctor();
+            appointmentDTO.setDoctorId(doctor.getId());
+            appointmentDTO.setDoctorName(doctor.getName());
+            appointmentDTO.setClinicAddress(doctor.getClinicAddress());
 
-        // Fetch availability info
-        DoctorAvailability availability = appointment.getAvailability();
-        appointmentDTO.setAvailabilityId(availability.getId());
-        appointmentDTO.setAvailabilityDatetime(availability.getDatetime());
+            // Fetch availability info
+            DoctorAvailability availability = appointment.getAvailability();
+            appointmentDTO.setAvailabilityId(availability.getId());
+            appointmentDTO.setAvailabilityDatetime(availability.getDatetime());
 
-        return appointmentDTO;
-    }).collect(Collectors.toList());
+            return appointmentDTO;
+        }).collect(Collectors.toList());
 
-    dto.setAppointments(appointmentDTOs);
+        dto.setAppointments(appointmentDTOs);
 
-    return dto;
-}
+        // Add this line:
+        dto.setReportFilePath(patient.getReportFilePath());
+
+        return dto;
+    }
+
 
 public void deleteAppointment(long id) {
 	Optional<Appointment> appointment = appointmentRepository.findById(id);

@@ -1,27 +1,20 @@
 package com.MajorProject.Controller;
 
-import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
+import com.MajorProject.Repository.AppointmentRepository;
+import com.MajorProject.Repository.UserRepository;
+import com.MajorProject.Service.DoctorService;
+import com.MajorProject.dto.DoctorAppointmentWithPatientDTO;
+import com.MajorProject.dto.DoctorDTO;
+import com.MajorProject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.MajorProject.Repository.UserRepository;
-import com.MajorProject.Service.DoctorService;
-import com.MajorProject.dto.DoctorDTO;
-import com.MajorProject.model.Doctor;
-import com.MajorProject.model.DoctorAvailability;
-import com.MajorProject.model.User;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Doctor")
@@ -32,6 +25,10 @@ public class DoctorController {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
 @PostMapping("/addprofile")
 public ResponseEntity<String> AddDoctorProfile(
@@ -175,7 +172,7 @@ public ResponseEntity<String> AddDoctorProfile(
 		avail.setDate(availability.getDate());
 		avail.setTime(availability.getTime());
 		avail.setBooked(false);
-		avail.setDoctor(doctor); // or load doctor using doctorId
+		avail.setDoctor(doctor);
 
 		DoctorAvailability savedavail = doctorService.saveAvailability(avail);
 //        System.out.println(savedavail);
@@ -195,4 +192,36 @@ public ResponseEntity<String> AddDoctorProfile(
 		doctorService.deleteAvailability(availabilityId);
 		return "availability deleted";
 	}
+
+    @GetMapping("/appointments-with-patients/{doctorId}")
+    public ResponseEntity<List<DoctorAppointmentWithPatientDTO>> getAppointmentsWithPatients(@PathVariable Long doctorId) {
+        List<Appointment> appointments = appointmentRepository.findByDoctorId(doctorId);
+
+        List<DoctorAppointmentWithPatientDTO> response = appointments.stream().map(appt -> {
+            DoctorAppointmentWithPatientDTO dto = new DoctorAppointmentWithPatientDTO();
+            dto.setAppointmentId(appt.getAppointmentId());
+            dto.setReason(appt.getReason());
+            dto.setStatus(appt.getStatus().getStatus());
+
+            // Set availabilityId safely
+            if (appt.getAvailability() != null) {
+                dto.setAvailabilityId(appt.getAvailability().getId());
+            }
+
+            Patient p = appt.getPatient();
+            dto.setPatientId(p.getId());
+            dto.setPatientName(p.getName());
+            dto.setPatientAge(p.getAge());
+            dto.setPatientGender(p.getGender());
+            dto.setPatientMobile(p.getMobileno());
+            dto.setPatientHistory(p.getHistory());
+            dto.setReportFilePath(p.getReportFilePath());
+
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }

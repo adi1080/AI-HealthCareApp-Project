@@ -8,10 +8,10 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class UserService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  addUser(user:any){
-     return this.http.post("http://localhost:9090/register",user);
+  addUser(user: any) {
+    return this.http.post("http://localhost:9090/register", user);
   }
 
   login(user: any): Observable<any> {
@@ -31,8 +31,12 @@ export class UserService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    return !this.isTokenExpired();
   }
+
 
   getUserInfoFromToken() {
     const token = this.getToken();
@@ -46,4 +50,16 @@ export class UserService {
     }
     return null;
   }
+
+  isTokenExpired(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) return true;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const exp = payload.exp; // in seconds
+    const now = Math.floor(Date.now() / 1000); // current time in seconds
+
+    return exp < now;
+  }
+
 }

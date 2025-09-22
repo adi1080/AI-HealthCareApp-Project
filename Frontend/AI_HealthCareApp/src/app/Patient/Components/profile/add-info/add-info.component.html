@@ -1,42 +1,91 @@
 <app-navbar></app-navbar>
 <h3 class="heading">Add Details</h3>
-<form [formGroup]="AddProfileForm" (ngSubmit)="addDetails()" class="container">
+<form [formGroup]="AddProfileForm" (ngSubmit)="addDetails()" class="container" enctype="multipart/form-data">
   <div class="row">
     <div class="col-md-6 mb-3">
       <label for="Name" class="form-label">Name</label>
       <input type="text" id="Name" class="form-control" formControlName="Name">
+      <div *ngIf="AddProfileForm.get('Name')?.invalid && AddProfileForm.get('Name')?.touched"
+           class="text-danger">
+        <small *ngIf="AddProfileForm.get('Name')?.errors?.['required']">Name is required</small>
+        <small *ngIf="AddProfileForm.get('Name')?.errors?.['minlength']">Name should be at least 3 characters</small>
+      </div>
     </div>
 
     <div class="col-md-6 mb-3">
       <label for="Mobileno" class="form-label">Mobile number</label>
       <input type="text" id="Mobileno" class="form-control" formControlName="Mobileno">
+      <div *ngIf="AddProfileForm.get('Mobileno')?.invalid && AddProfileForm.get('Mobileno')?.touched"
+           class="text-danger">
+        <small *ngIf="AddProfileForm.get('Mobileno')?.errors?.['required']">Mobile number is required</small>
+        <small *ngIf="AddProfileForm.get('Mobileno')?.errors?.['pattern']">Please enter a valid 10-digit mobile number</small>
+      </div>
     </div>
 
     <div class="col-md-6 mb-3">
       <label for="Gender" class="form-label">Gender</label>
-      <input type="text" id="Gender" class="form-control" formControlName="Gender">
+      <select id="Gender" class="form-select" formControlName="Gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <div *ngIf="AddProfileForm.get('Gender')?.invalid && AddProfileForm.get('Gender')?.touched"
+           class="text-danger">
+        <small>Please select a gender</small>
+      </div>
     </div>
 
     <div class="col-md-6 mb-3">
       <label for="Age" class="form-label">Age</label>
-      <input type="number" id="Age" class="form-control" formControlName="Age">
+      <input type="number" id="Age" class="form-control" formControlName="Age" min="1" max="120">
+      <div *ngIf="AddProfileForm.get('Age')?.invalid && AddProfileForm.get('Age')?.touched"
+           class="text-danger">
+        <small *ngIf="AddProfileForm.get('Age')?.errors?.['required']">Age is required</small>
+        <small *ngIf="AddProfileForm.get('Age')?.errors?.['min']">Age must be at least 1</small>
+        <small *ngIf="AddProfileForm.get('Age')?.errors?.['max']">Age must be less than 120</small>
+      </div>
     </div>
 
-    <div class="col-md-6 mb-3">
+    <div class="col-12 mb-3">
       <label for="address" class="form-label">Address</label>
       <input type="text" id="address" class="form-control" formControlName="Address">
+      <div *ngIf="AddProfileForm.get('Address')?.invalid && AddProfileForm.get('Address')?.touched"
+           class="text-danger">
+        <small>Address is required</small>
+      </div>
+    </div>
+
+    <div class="col-12 mb-3">
+      <label for="history" class="form-label">Health Status</label>
+      <textarea type="text" rows="4" id="history" class="form-control" formControlName="History"></textarea>
+      <div *ngIf="AddProfileForm.get('History')?.invalid && AddProfileForm.get('History')?.touched"
+           class="text-danger">
+        <small>Health status is required</small>
+      </div>
+    </div>
+
+    <div class="col-12 mb-4">
+      <label for="healthReport" class="form-label">Health Report (PDF, DOCX, or CSV)</label>
+      <input type="file" 
+             id="healthReport" 
+             class="form-control" 
+             (change)="onFileSelected($event)"
+             accept=".pdf,.docx,.csv">
+      <div class="form-text">Upload your health report (Max size: 5MB)</div>
+      <div *ngIf="fileError" class="text-danger">
+        <small>{{ fileError }}</small>
+      </div>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <label for="history" class="form-label">Health Status</label>
-      <textarea type="text" rows="8" id="history" class="form-control" formControlName="History"></textarea>
-    </div>
-    </div>
-
-   <button type="submit" class="btn btn-danger btn-block mt-3">Add Details</button>
+  <button type="submit" class="btn btn-danger btn-block mt-3" [disabled]="AddProfileForm.invalid || isSubmitting">
+    <span *ngIf="!isSubmitting">Add Details</span>
+    <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span *ngIf="isSubmitting"> Saving...</span>
+  </button>
 </form>
 
-<h3 class="mt-3 text-warning" style="text-align: center;">{{msg}}</h3>
-
+<div class="mt-3 text-center">
+  <h3 [ngClass]="{'text-success': !errorMessage, 'text-danger': errorMessage}">{{ message }}</h3>
+</div>

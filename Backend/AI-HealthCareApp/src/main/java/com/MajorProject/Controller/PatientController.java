@@ -1,36 +1,28 @@
 package com.MajorProject.Controller;
 
-import java.security.Principal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import com.MajorProject.Repository.PatientRepository;
 import com.MajorProject.Repository.UserRepository;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
 import com.MajorProject.dto.FeedbackDTO;
 import com.MajorProject.dto.PatientDTO;
-import com.MajorProject.model.Appointment;
-import com.MajorProject.model.Doctor;
-import com.MajorProject.model.DoctorAvailability;
-import com.MajorProject.model.Feedback;
-import com.MajorProject.model.Patient;
-import com.MajorProject.model.User;
+import com.MajorProject.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("Patient")
@@ -46,34 +38,62 @@ public class PatientController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@PostMapping("addProfile")
-	public String createProfile(@RequestBody Patient patient , Principal principal) {
-		String username = principal.getName();
-		// patient.id is expected to be user.id
-	    Optional<User> optionalUser = userRepository.findById(patient.getId());
-	    if (!optionalUser.isPresent()) {
-	        return "User not found with ID: " + patient.getId();
-	    }
+    @PostMapping("/addProfile")
+    public ResponseEntity<?> createProfile(
+            @RequestParam("patient") String patientJson,
+            @RequestParam(value = "report", required = false) MultipartFile reportFile) {
 
-	    // Check if profile already exists
-	    if (ps.checkprofileExistsOrNot(patient.getId())) {
-	        return "Profile already exists";
-	    }
+        ObjectMapper mapper = new ObjectMapper();
+        Patient patient;
 
-	    // 🔗 Link user to patient
-	    patient.setUser(optionalUser.get());
+        try {
+            patient = mapper.readValue(patientJson, Patient.class);  // JSON to Patient
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid patient data: " + e.getMessage());
+        }
 
-	    // 🛠 OPTIONAL: Set patient.id = user.id to maintain same identity
-	    patient.setId(optionalUser.get().getId());
+        // Handle file
+        if (reportFile != null && !reportFile.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + reportFile.getOriginalFilename();
 
-	    // ✅ Save properly linked patient
-	    ps.saveProfile(patient);
-	    return "Profile added successfully";
-	}
+                // ✅ Absolute path instead of relative one
+                String uploadDir = "F:/Pendrive Stuff/Major-Project/reports/";
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                reportFile.transferTo(filePath.toFile());
 
 
+                patient.setReportFilePath(fileName);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving file: " + e.getMessage());
+            }
+        }
 
-	@GetMapping("FindById/{id}")
+        Optional<User> optionalUser = userRepository.findById(patient.getId());
+
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: " + patient.getId());
+        }
+
+        // Check if profile exists
+        if (ps.checkprofileExistsOrNot(patient.getId())) {
+            return ResponseEntity.ok("Profile already exists");
+        }
+
+        patient.setUser(optionalUser.get());  // set the relationship
+
+        ps.saveProfile(patient);
+
+        return ResponseEntity.ok("Profile added successfully");
+    }
+
+    @GetMapping("/FindById/{id}")
 	public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {
 	    Optional<Patient> optionalPatient = ps.FindById(id);
 
@@ -172,4 +192,26 @@ public class PatientController {
 		ps.deleteAppointment(id);
 		return "Appointment Canceled!";
 	}
+
+    @GetMapping("/download-report/{filename:.+}")
+    public ResponseEntity<Resource> downloadReport(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get("F:/Pendrive Stuff/Major-Project/reports/").resolve(filename).normalize();
+            UrlResource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body((Resource) resource);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

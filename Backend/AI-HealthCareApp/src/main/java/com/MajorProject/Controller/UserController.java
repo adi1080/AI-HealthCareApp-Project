@@ -56,6 +56,7 @@ public class UserController {
 	              response.put("id", foundUser.getId());
 	              response.put("role", foundUser.getRole());
 
+                  System.out.println("response being sent : "+response);
 	              return ResponseEntity.ok(response);
 	          }
 	          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");

@@ -31,7 +31,6 @@ public class ReminderScheduler {
 
 	@Scheduled(fixedRate = 60000) // every 1 minute
 	public void sendAppointmentReminders() {
-		System.out.println("Reminder check running...");
 		List<Appointment> upcomingAppointments = ps.getAllAppointments();
 		LocalDateTime now = LocalDateTime.now();
 		System.out.println("Found " + upcomingAppointments.size() + " total appointments.");

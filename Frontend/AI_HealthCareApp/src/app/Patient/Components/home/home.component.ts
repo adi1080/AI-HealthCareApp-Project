@@ -19,4 +19,7 @@ export class HomeComponent {
     this.router.navigateByUrl('login');
   }
 
+  scrolltobottom(){
+     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
 }

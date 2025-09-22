@@ -13,21 +13,29 @@
         <div *ngFor="let avail of availabilityList; let i = index" class="availability-list">
             <article class="availability-item" role="listitem">
                 <time>Date :- {{ avail.date }} Time :- {{ avail.time }}</time>
-                <span *ngIf="!avail.isBooked" class="booked-label" style="color: crimson;">Not Booked</span>
-                <span *ngIf="avail.isBooked" class="booked-label" style="color: greenyellow;">Booked</span>
+
+                <!-- Show clickable Booked label -->
+                <span *ngIf="avail.isBooked" class="booked-label" style="color: greenyellow; cursor: pointer;"
+                    (click)="openPatientDetails(avail.id)">
+                    Booked (View)
+                </span>
+
+                <!-- Not Booked label -->
+                <span *ngIf="!avail.isBooked" class="booked-label" style="color: crimson;">
+                    Not Booked
+                </span>
+
                 <button class="btn-remove bi bi-trash3" (click)="removeAvailability(i)" type="button"></button>
             </article>
         </div>
     </section>
-</div> 
+</div>
 
-
-<!-- Modal -->
-<div class="modal-backdrop" *ngIf="setAvailability" (click)="setAvailability = false" role="dialog" aria-modal="true"
-    aria-labelledby="modal-title">
+<!-- Add Availability Modal -->
+<div class="modal-backdrop" *ngIf="setAvailability" (click)="setAvailability = false" role="dialog" aria-modal="true">
     <div class="modal-content" (click)="$event.stopPropagation()">
         <form [formGroup]="availabilityForm" (ngSubmit)="addAvailability()">
-            <h4 id="modal-title" class="modal-header">Add Availability</h4>
+            <h4 class="modal-header">Add Availability</h4>
 
             <input type="datetime-local" formControlName="dateTime" class="datetime-input"
                 aria-label="Select date and time" required />
@@ -37,5 +45,33 @@
                 <button type="button" class="btn btn-secondary" (click)="setAvailability = false">Cancel</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Patient Details Modal -->
+<div class="modal-backdrop" *ngIf="showPatientDetailsModal" (click)="closePatientDetails()" role="dialog"
+    aria-modal="true">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <h4 class="modal-header">Patient Details</h4>
+
+        <div *ngIf="selectedPatient">
+            <p><strong>Name:</strong> {{ selectedPatient.name }}</p>
+            <p><strong>Age:</strong> {{ selectedPatient.age }}</p>
+            <p><strong>Gender:</strong> {{ selectedPatient.gender }}</p>
+            <p><strong>Mobile No:</strong> {{ selectedPatient.mobileno }}</p>
+            <p><strong>Health Status:</strong> {{ selectedPatient.history }}</p>
+            <p><strong>Reason for Visit:</strong> {{ selectedPatient.reason }}</p>
+
+            <ng-container *ngIf="selectedPatient.reportFilePath">
+                <p><strong>Health Reports: </strong>{{selectedPatient.reportFilePath.split('_').slice(1).join('_')}}</p>
+                <button (click)="downloadFile(getFileNameFromPath(selectedPatient.reportFilePath))" class="btn btn-primary">
+                    Download Report
+                </button>
+            </ng-container>
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn btn-secondary" (click)="closePatientDetails()">Close</button>
+        </div>
     </div>
 </div>
