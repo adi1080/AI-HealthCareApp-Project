@@ -12,6 +12,7 @@ declare var bootstrap: any;
 export class ProfileComponent implements OnInit {
   Patient: any;
   loggedInUser: any = localStorage.getItem('PatientUserId');
+  file_Name:string = '';
 
   constructor(private router: Router, private patientSevice: PatientService) {}
 
@@ -90,7 +91,8 @@ export class ProfileComponent implements OnInit {
     if (!this.Patient?.reportFilePath) return '';
     const fullPath = this.Patient.reportFilePath;
     const filename = fullPath.split(/[/\\]/).pop() || '';
-    return filename.split('_').slice(1).join('_');
+    this.file_Name = filename.split('_').slice(1).join('_');
+    return filename;
   }
 
   showMessage(message: string, duration: number) {

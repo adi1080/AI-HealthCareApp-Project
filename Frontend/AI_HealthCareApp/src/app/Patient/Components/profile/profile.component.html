@@ -54,13 +54,13 @@
     </div>
     <div class="profile-item" style="grid-column: 1 / -1">
       <i class="bi bi-file-earmark-medical"></i>
-      <span class="profile-label">Health Report:</span>
+      <span class="profile-label">Health Report: {{file_Name}}</span>
       <div class="d-flex align-items-center mt-2">
         <button *ngIf="Patient?.reportFilePath" (click)="downloadReport()" class="btn btn-sm btn-outline-primary me-2"
           [disabled]="!Patient?.reportFilePath">
           <i class="bi bi-download"></i> Download Report
         </button>
-        <span class="text-muted small" *ngIf="Patient?.reportFilePath">
+        <span class="text-muted small" *ngIf="Patient?.reportFilePath" hidden>
           {{ getReportFileName() }}
         </span>
         <span class="text-muted small" *ngIf="!Patient?.reportFilePath">
