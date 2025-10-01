@@ -16,7 +16,7 @@
   <groupId>com.MajorProject</groupId>
   <artifactId>AI-HealthCareApp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <name>AI-HealthCareApp</name>
   <description>Making the healthcare app with AI chatbot for college project</description>
@@ -89,7 +89,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
     </dependency>
 
     <!-- Spring AI - Ollama -->
