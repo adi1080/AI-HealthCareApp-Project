@@ -12,10 +12,11 @@ export class AvailabilityComponent implements OnInit {
   availabilityList: { id: any, date: string, time: string, isBooked: boolean }[] = [];
   availabilityForm!: FormGroup;
   setAvailability = false;
-  doctorId: any = localStorage.getItem("DocId");
+  doctorId: any = localStorage.getItem("DoctorUserId");
   appointments: any;
   showPatientDetailsModal = false;
   selectedPatient: any = null;
+  isHovered:boolean= false;
 
   constructor(private fb: FormBuilder, private docService: DoctorService, private patientService: PatientService) { }
 
@@ -128,6 +129,7 @@ export class AvailabilityComponent implements OnInit {
   }
 
   findAllAvailability() {
+    console.log("finding availability for doctor id : " , this.doctorId);
     this.docService.FindAllAvailability(this.doctorId).subscribe(
       response => {
         console.log('Fetched availability:', response);

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AiServiceService {
- private apiUrl = 'http://localhost:9090/ai/message_stream';  // Ensure correct port & URL
+ private apiUrl = 'http://localhost:8081/ai/message_stream';  // Ensure correct port & URL
 
   constructor(private ngZone: NgZone) { }
 

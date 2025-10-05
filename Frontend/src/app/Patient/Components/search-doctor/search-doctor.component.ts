@@ -19,22 +19,33 @@ image:any;
       this.searchForm = this.fb.group({
         city:['',Validators.required],
         speciality:['',Validators.required],
-        doctorname:[null],
+        name:[null],
       })
   }
 
   search(){
-    console.log(this.searchForm.value);
-     this.docService.FindAllByAddressAndName(this.searchForm.value).subscribe(
-     (response) =>{
-        console.log(response); 
-        this.doctors = response;
-     },
-     (error)=>{
+  const formValue = this.searchForm.value;
+
+  // Sanitize: convert empty string or "null" strings to undefined (so params are omitted)
+  const params: any = {};
+  if (formValue.name && formValue.name.trim() !== '' && formValue.name.toLowerCase() !== 'null') {
+    params.name = formValue.name.trim();
+  }
+  if (formValue.city && formValue.city.trim() !== '' && formValue.city.toLowerCase() !== 'null') {
+    params.city = formValue.city.trim();
+  }
+  if (formValue.speciality && formValue.speciality.trim() !== '' && formValue.speciality.toLowerCase() !== 'null') {
+    params.speciality = formValue.speciality.trim();
+  }
+
+  this.docService.FindAllByAddressAndName(params).subscribe(
+    (response) => {
+      this.doctors = response;
+    },
+    (error) => {
       console.log(error);
-     }
-    
-    )
+    }
+  );
   }
 
   openInfo(id:any){

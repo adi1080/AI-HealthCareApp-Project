@@ -15,9 +15,11 @@
                 <time>Date :- {{ avail.date }} Time :- {{ avail.time }}</time>
 
                 <!-- Show clickable Booked label -->
-                <span *ngIf="avail.isBooked" class="booked-label" style="color: greenyellow; cursor: pointer;"
-                    (click)="openPatientDetails(avail.id)">
-                    Booked (View)
+                <span *ngIf="avail.isBooked" class="booked-label" style="color: greenyellow; cursor: pointer;">
+                    Booked => <span [ngStyle]="isHovered ? {'color': 'purple'} : {}" (mouseenter)="isHovered = true"
+                        (mouseleave)="isHovered = false" (click)="openPatientDetails(avail.id)">
+                          View
+                    </span>
                 </span>
 
                 <!-- Not Booked label -->
@@ -64,7 +66,8 @@
 
             <ng-container *ngIf="selectedPatient.reportFilePath">
                 <p><strong>Health Reports: </strong>{{selectedPatient.reportFilePath.split('_').slice(1).join('_')}}</p>
-                <button (click)="downloadFile(getFileNameFromPath(selectedPatient.reportFilePath))" class="btn btn-primary">
+                <button (click)="downloadFile(getFileNameFromPath(selectedPatient.reportFilePath))"
+                    class="btn btn-primary">
                     Download Report
                 </button>
             </ng-container>
