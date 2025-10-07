@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 declare var bootstrap: any; 
 
@@ -8,8 +9,22 @@ declare var bootstrap: any;
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+
+  constructor(private router:Router){}
+
   ngOnInit(): void {
  
   }
 
+  logout(){
+    this.router.navigateByUrl('login');
+  }
+
+  scrolltobottom(){
+   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  navigate(){
+    this.router.navigateByUrl("/doctor/schedule")
+  }
 }

@@ -12,7 +12,35 @@ public class PatientDTO {
     private String history;
     private List<AppointmentDTO> appointments;
     private String reportFilePath;
+    private String healthSummary;
+    private String healthSuggestions;
+    private double healthScore;
+    private boolean aiAnalysisDone;
 
+    public String getHealthSummary() {
+        return healthSummary;
+    }
+    public void setHealthSummary(String healthSummary) {
+        this.healthSummary = healthSummary;
+    }
+    public String getHealthSuggestions() {
+        return healthSuggestions;
+    }
+    public void setHealthSuggestions(String healthSuggestions) {
+        this.healthSuggestions = healthSuggestions;
+    }
+    public double getHealthScore() {
+        return healthScore;
+    }
+    public void setHealthScore(double healthScore) {
+        this.healthScore = healthScore;
+    }
+    public boolean isAiAnalysisDone() {
+        return aiAnalysisDone;
+    }
+    public void setAiAnalysisDone(boolean aiAnalysisDone) {
+        this.aiAnalysisDone = aiAnalysisDone;
+    }
     public String getReportFilePath() {
         return reportFilePath;
     }

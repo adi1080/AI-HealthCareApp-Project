@@ -1,6 +1,7 @@
 package com.MajorProject.Controller;
 
 import com.MajorProject.Repository.UserRepository;
+import com.MajorProject.Service.AIAnalysis;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Service.PatientService;
 import com.MajorProject.Domain.FeedbackDTO;
@@ -37,6 +38,9 @@ public class PatientController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+    @Autowired
+    private AIAnalysis aiAnalysis;
 
     @PostMapping("/addProfile")
     public ResponseEntity<?> createProfile(
@@ -97,12 +101,20 @@ public class PatientController {
 	public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {
 	    Optional<Patient> optionalPatient = ps.FindById(id);
 
-	    if (optionalPatient.isPresent()) {
-	        PatientDTO dto = ps.convertToDTO(optionalPatient.get());
-	        return ResponseEntity.ok(dto);
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
+        if (optionalPatient.isPresent()) {
+            Patient patient = optionalPatient.get();
+
+            // 🚀 Run AI analysis in background if not already done
+            if (Boolean.FALSE.equals(patient.getAiAnalysisDone())) {
+                aiAnalysis.analyzeInBackground(patient);  // ✅ clean and threaded
+            }
+
+            // ✅ Return patient data immediately (without waiting)
+            PatientDTO dto = ps.convertToDTO(patient);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 	}
 
 

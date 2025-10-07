@@ -3,12 +3,7 @@ package com.MajorProject.Entity;
 import java.util.Arrays;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Doctor {
@@ -24,6 +19,7 @@ public class Doctor {
 	private String city;
 	
 	@Lob
+    @Column(columnDefinition = "LONGBLOB")
 	private byte[] image;
 	
 	private String speciality;

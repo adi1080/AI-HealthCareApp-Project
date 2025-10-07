@@ -13,9 +13,11 @@ export class ProfileComponent implements OnInit {
   Patient: any;
   loggedInUser: any = localStorage.getItem('PatientUserId');
   file_Name:string = '';
+  showHealthScorePopup: boolean = false;
 
+  
   constructor(private router: Router, private patientSevice: PatientService) {}
-
+  
   ngOnInit(): void {
     console.log(this.loggedInUser);
     this.patientSevice.FindPatientById(this.loggedInUser).subscribe(
@@ -29,11 +31,19 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-
+  
   EditDetails() {
     this.router.navigateByUrl('patient/profile/update');
   }
+  
+  openHealthScorePopup() {
+    this.showHealthScorePopup = true;
+  }
 
+  closeHealthScorePopup() {
+    this.showHealthScorePopup = false;
+  }
+  
   addDetails() {
     this.router.navigateByUrl('patient/profile/addInfo');
   }

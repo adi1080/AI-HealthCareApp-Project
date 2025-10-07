@@ -25,6 +25,12 @@ public class Patient {
 	private long Mobileno;
 	@JsonProperty("History")
 	private String History;
+    @Column(length = 5000)
+    private String healthSummary;
+    @Column(length = 5000)
+    private String healthSuggestions;
+    private Double healthScore;
+    private Boolean aiAnalysisDone = false;
 	
    @OneToMany(mappedBy = "patient")
    private List<Appointment> appointments;
@@ -52,8 +58,39 @@ public class Patient {
        this.user = user;
    }
 
+    public String getHealthSummary() {
+        return healthSummary;
+    }
 
-	public long getId() {
+    public void setHealthSummary(String healthSummary) {
+        this.healthSummary = healthSummary;
+    }
+
+    public String getHealthSuggestions() {
+        return healthSuggestions;
+    }
+
+    public void setHealthSuggestions(String healthSuggestions) {
+        this.healthSuggestions = healthSuggestions;
+    }
+
+    public Double getHealthScore() {
+        return healthScore;
+    }
+
+    public void setHealthScore(Double healthScore) {
+        this.healthScore = healthScore;
+    }
+
+    public Boolean getAiAnalysisDone() {
+        return aiAnalysisDone;
+    }
+
+    public void setAiAnalysisDone(Boolean aiAnalysisDone) {
+        this.aiAnalysisDone = aiAnalysisDone;
+    }
+
+    public long getId() {
 		return id;
 	}
 

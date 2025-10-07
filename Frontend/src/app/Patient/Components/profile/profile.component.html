@@ -92,9 +92,33 @@
       <span class="metric-label"><i class="bi bi-capsule"></i> Active Medications</span>
       <span class="metric-value">{{ Patient.medications?.length || 0 }}</span>
     </div>
-    <div class="metric">
+    <div class="metric" (click)="openHealthScorePopup()">
       <span class="metric-label"><i class="bi bi-capsule"></i> Health Score</span>
-      <span class="metric-value">{{ Patient.healthScore || "N/A" }}</span>
+      <span class="metric-value">{{ Patient.healthScore || 'N/A' }}</span>
+    </div>
+
+    <!-- Health Score Popup -->
+    <div class="modal-overlay" *ngIf="showHealthScorePopup" (click)="closeHealthScorePopup()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div style="display: inline; margin-top: 10px; margin-bottom: 5px;">
+          <h3 style="display: inline;">Health Analysis</h3>
+          <span style="font-weight: bold; color: gray;"> (FROM AI)</span>
+        </div>
+
+        <p><strong>Health Score:</strong> {{ Patient.healthScore }}</p>
+
+        <p><strong>Health Summary:</strong><br>
+          {{ Patient.healthSummary || 'Not available' }}
+        </p>
+
+        <p><strong>Suggestions:</strong><br>
+          <span *ngFor="let suggestion of Patient.healthSuggestions?.split('\n')">
+            - {{ suggestion }}<br>
+          </span>
+        </p>
+
+        <button (click)="closeHealthScorePopup()" class="btn btn-danger">Close</button>
+      </div>
     </div>
   </section>
 

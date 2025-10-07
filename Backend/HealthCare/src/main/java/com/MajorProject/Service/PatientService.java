@@ -123,6 +123,11 @@ public class PatientService {
         dto.setAddress(patient.getAddress());
         dto.setMobileno(patient.getMobileno());
         dto.setHistory(patient.getHistory());
+        // Use null-safe values for AI fields
+        dto.setHealthSummary(patient.getHealthSummary() != null ? patient.getHealthSummary() : "AI analysis pending...");
+        dto.setHealthSuggestions(patient.getHealthSuggestions() != null ? patient.getHealthSuggestions() : "Suggestions not available yet.");
+        dto.setHealthScore(patient.getHealthScore() != null ? patient.getHealthScore() : 0.0);  // or 0.0 if preferred
+        dto.setAiAnalysisDone(Boolean.TRUE.equals(patient.getAiAnalysisDone()));
 
         List<AppointmentDTO> appointmentDTOs = patient.getAppointments().stream().map(appointment -> {
             AppointmentDTO appointmentDTO = new AppointmentDTO();
