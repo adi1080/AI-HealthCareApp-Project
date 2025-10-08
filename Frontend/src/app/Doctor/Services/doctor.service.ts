@@ -42,4 +42,8 @@ getAppointmentsWithPatients(doctorId: number): Observable<any> {
   return this.http.get(`${this.baseUrl}/appointments-with-patients/${doctorId}`);
 }
 
+getAllFeedbacks(){
+  return this.http.get(`${this.baseUrl}/getAllFeedbacks`);
+}
+
 }

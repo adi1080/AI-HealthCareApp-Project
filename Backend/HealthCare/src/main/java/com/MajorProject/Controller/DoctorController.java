@@ -1,6 +1,7 @@
 package com.MajorProject.Controller;
 
 import com.MajorProject.Repository.AppointmentRepository;
+import com.MajorProject.Repository.FeedbackRepository;
 import com.MajorProject.Repository.UserRepository;
 import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Domain.DoctorAppointmentWithPatientDTO;
@@ -26,6 +27,8 @@ public class DoctorController {
 	@Autowired
 	private UserRepository userRepository;
 
+    @Autowired
+    private FeedbackRepository Fr;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -230,5 +233,8 @@ public ResponseEntity<String> AddDoctorProfile(
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/getAllFeedbacks")
+    public ResponseEntity<List<?>> getAllFeedbacks(){
+        return ResponseEntity.ok(Fr.findAll());
+    }
 }

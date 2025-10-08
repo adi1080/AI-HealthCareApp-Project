@@ -14,24 +14,15 @@ export class NavbarComponent {
 
 
   ngOnInit(): void {
-    // // Reinitialize the carousel when the component is initialized
-    // const myCarouselElement = document.getElementById('hero-carousel');
-    // if (myCarouselElement) {
-    //   const carousel = new bootstrap.Carousel(myCarouselElement, {
-    //     interval: 2000,  // Optional: Controls the interval between auto sliding
-    //     ride: 'carousel' // Optional: Starts the carousel automatically when page loads
-    //   });
-    // }
-
     this.adminNav = [
       {
         name: 'Home',
-        route: '/patient/Home',
+        route: 'admin/Home',
         data: null,
       },
       {
         name: 'Ask AI',
-        route: '/patient/AI',
+        route: '/AI',
         data: null,
       },
     ];
