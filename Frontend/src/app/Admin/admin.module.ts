@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from "../shared/shared.module";
-import { HomeComponent } from './Components/home/home.component';
+import { PatientsComponent } from './Components/patients/patients.component';
+import { DoctorsComponent } from './Components/doctors/doctors.component';
 
 const routes: Routes = [
   {
     path: '',
     component: NavbarComponent,
     children: [
-        {path:'Home', component:HomeComponent}
+      { path: 'DoctorsInfo', component: DoctorsComponent },
+      { path: 'UsersInfo', component: PatientsComponent },
     ],
   },
 ];
@@ -18,13 +20,15 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     NavbarComponent,
-    HomeComponent,
+    PatientsComponent,
+    DoctorsComponent,
   ],
   imports: [
-    CommonModule, 
+    CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
   ],
-  exports: [NavbarComponent,HomeComponent],
+  exports: [NavbarComponent, PatientsComponent,
+    DoctorsComponent,],
 })
-export class AdminModule {}
+export class AdminModule { }

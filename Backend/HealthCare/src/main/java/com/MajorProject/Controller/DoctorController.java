@@ -7,6 +7,7 @@ import com.MajorProject.Service.DoctorService;
 import com.MajorProject.Domain.DoctorAppointmentWithPatientDTO;
 import com.MajorProject.Domain.DoctorDTO;
 import com.MajorProject.Entity.*;
+import com.MajorProject.Service.FeedbackAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class DoctorController {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private FeedbackAnalysisService feedbackAnalysisService;
 
 @PostMapping("/addprofile")
 public ResponseEntity<String> AddDoctorProfile(
@@ -237,4 +241,11 @@ public ResponseEntity<String> AddDoctorProfile(
     public ResponseEntity<List<?>> getAllFeedbacks(){
         return ResponseEntity.ok(Fr.findAll());
     }
+
+    @PostMapping("/analyze/smart")
+    public ResponseEntity<String> analyzeSmartFeedbacks() {
+        feedbackAnalysisService.analyzeMissingOrOutdatedFeedbacks(); // Async
+        return ResponseEntity.ok("Triggered smart feedback analysis.");
+    }
+
 }

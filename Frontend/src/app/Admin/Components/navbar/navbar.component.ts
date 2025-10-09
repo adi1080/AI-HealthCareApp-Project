@@ -16,8 +16,13 @@ export class NavbarComponent {
   ngOnInit(): void {
     this.adminNav = [
       {
-        name: 'Home',
-        route: 'admin/Home',
+        name: 'Doctors',
+        route: 'admin/DoctorsInfo',
+        data: null,
+      },
+      {
+        name: 'Users',
+        route: 'admin/UsersInfo',
         data: null,
       },
       {

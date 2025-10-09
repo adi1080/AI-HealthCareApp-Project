@@ -2,6 +2,7 @@ package com.MajorProject.AI.controller;
 
 import com.MajorProject.AI.Domains.AIRequest;
 import com.MajorProject.AI.Domains.AIResponse;
+import com.MajorProject.AI.Service.AIService;
 import com.MajorProject.AI.Util.helperForAI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.ollama4j.OllamaAPI;
@@ -9,6 +10,7 @@ import io.github.ollama4j.models.chat.OllamaChatMessageRole;
 import io.github.ollama4j.models.chat.OllamaChatRequest;
 import io.github.ollama4j.models.chat.OllamaChatRequestBuilder;
 import io.github.ollama4j.models.generate.OllamaStreamHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,9 @@ public class AIController {
     private final OllamaAPI ollamaAPI;
     private final helperForAI helperForAI;
     private final ObjectMapper objectMapper;
+
+    @Autowired
+    private AIService aiService;
 
     public AIController(@Value("${spring.ai.ollama.base-url}") String ollamaBaseUrl, helperForAI helperForAI,ObjectMapper objectMapper) {
         this.ollamaAPI = new OllamaAPI(ollamaBaseUrl);
@@ -182,5 +187,22 @@ public class AIController {
             return ResponseEntity.status(500)
                     .body(new AIResponse("Internal server error during analysis", Collections.emptyList(), null));
         }
+    }
+
+    @PostMapping("/analyze/feedback")
+    public Map<Long, AIResponse> analyzeFeedbacks(@RequestBody Map<Long, List<String>> doctorFeedbackMap) {
+        Map<Long, AIResponse> results = new HashMap<>();
+
+        for (Map.Entry<Long, List<String>> entry : doctorFeedbackMap.entrySet()) {
+            Long doctorId = entry.getKey();
+            List<String> feedbacks = entry.getValue();
+
+            String joinedFeedback = String.join(". ", feedbacks);
+
+            AIResponse analysis = aiService.analyzeFeedback(joinedFeedback);
+            results.put(doctorId, analysis);
+        }
+
+        return results;
     }
 }

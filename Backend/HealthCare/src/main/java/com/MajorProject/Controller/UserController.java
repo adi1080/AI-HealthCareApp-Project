@@ -43,6 +43,11 @@ public class UserController {
 
         if (existingUser.isPresent()) {
             User foundUser = existingUser.get();
+            if (!foundUser.isPermitted()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Your account has been blocked. Please contact admin.");
+            }
+
+            // ✅ Verify password
             if (foundUser.getPassword().equals(user.getPassword())) {
                 String token = jwtUtil.generateToken(foundUser);
 
@@ -50,10 +55,12 @@ public class UserController {
                 response.put("token", token);
                 response.put("id", foundUser.getId());
                 response.put("role", foundUser.getRole());
+                response.put("permitted", foundUser.isPermitted());
 
                 System.out.println("response being sent : " + response);
                 return ResponseEntity.ok(response);
             }
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
 
@@ -62,13 +69,44 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+
+        if (existingUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists with this email.");
+        }
+        user.setPermitted(true);
+
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(userRepository.findAll());
+    }
+
+    @PostMapping("/permit/{id}")
+    public ResponseEntity<String> permitDoctor(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            user.get().setPermitted(true);
+            userRepository.save(user.get());
+            return ResponseEntity.ok("User blocked.");
+        }
+        return ResponseEntity.ok("User permitted.");
+    }
+
+    @PostMapping("/block/{id}")
+    public ResponseEntity<String> blockDoctor(@PathVariable Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            user.get().setPermitted(false);
+            userRepository.save(user.get());
+            return ResponseEntity.ok("User blocked.");
+        }
+        return ResponseEntity.ok("User blocked.");
     }
 }
 	

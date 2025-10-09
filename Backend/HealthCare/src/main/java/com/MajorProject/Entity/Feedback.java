@@ -29,8 +29,10 @@ public class Feedback {
 	private String FeedbackComment;
     
 	private LocalDate Date;
-	
-	
+
+    public Long getDoctorId() {
+        return doctor != null ? doctor.getId() : null;
+    }
 	public long getFeedbackid() {
 		return Feedbackid;
 	}

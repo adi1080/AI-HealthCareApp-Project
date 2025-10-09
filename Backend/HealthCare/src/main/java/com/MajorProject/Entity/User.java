@@ -1,9 +1,6 @@
 package com.MajorProject.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -16,8 +13,20 @@ public class User {
     private String username;
     private String emailid;
     private String password;
-    private String role; // 'doctor' or 'patient'  
-	public long getId() {
+    private String role; // 'doctor' or 'patient/user'
+    @Column(columnDefinition = "LONGTEXT")
+    private String FeedbackAnalysis; // Doctors only
+    @Column
+    private Long lastAnalyzedFeedbackId;
+    private boolean isPermitted;
+
+    public String getFeedbackAnalysis() {
+        return FeedbackAnalysis;
+    }
+    public void setFeedbackAnalysis(String feedbackAnalysis) {
+        FeedbackAnalysis = feedbackAnalysis;
+    }
+    public long getId() {
 		return id;
 	}
 	public void setId(long id) {
@@ -47,12 +56,30 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", emailid=" + emailid + ", password=" + password
-				+ ", role=" + role + "]";
-	}
- 
-    
-    
+    public Long getLastAnalyzedFeedbackId() {
+        return lastAnalyzedFeedbackId;
+    }
+    public void setLastAnalyzedFeedbackId(Long lastAnalyzedFeedbackId) {
+        this.lastAnalyzedFeedbackId = lastAnalyzedFeedbackId;
+    }
+    public boolean isPermitted() {
+        return isPermitted;
+    }
+    public void setPermitted(boolean permitted) {
+        isPermitted = permitted;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", emailid='" + emailid + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", FeedbackAnalysis='" + FeedbackAnalysis + '\'' +
+                ", lastAnalyzedFeedbackId=" + lastAnalyzedFeedbackId +
+                ", isPermitted=" + isPermitted +
+                '}';
+    }
 }

@@ -170,30 +170,43 @@ public class PatientController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 	    }
 	}
-	
-	@PostMapping("add-feedback")
-	public ResponseEntity<?> addFeedback(@RequestBody Feedback fb){
-		System.out.println(fb);
-        // You receive doctor, patient, and availability as nested objects with only IDs
+
+    @PostMapping("add-feedback")
+    public ResponseEntity<?> addFeedback(@RequestBody Feedback fb) {
+        System.out.println(fb);
+
         Doctor doctor = ds.FindDoctorById(fb.getDoctor().getId())
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
         Patient patient = ps.FindById(fb.getPatient().getId())
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
-		
-		     Feedback addFb = new Feedback();
-		     addFb.setRating(fb.getRating());
-		     addFb.setFeedbackComment(fb.getFeedbackComment());
-		     addFb.setDoctor(doctor);
-		     addFb.setPatient(patient);
-		     addFb.setDate(LocalDate.now());
-		     
-//		     System.out.println(addFb);
-		     ps.addFeedback(addFb);
-		return ResponseEntity.ok("saved!");
-	}
-	
-	@GetMapping("getAllFeedbacks/{doctorId}")
+
+        // Check if feedback already exists for this doctor-patient pair
+        Optional<Feedback> existingFeedbackOpt = ps.findFeedbackByDoctor_IdAndPatient_Id(doctor.getId(), patient.getId());
+
+        Feedback feedbackToSave;
+        if (existingFeedbackOpt.isPresent()) {
+            // Update existing feedback
+            feedbackToSave = existingFeedbackOpt.get();
+            feedbackToSave.setRating(fb.getRating());
+            feedbackToSave.setFeedbackComment(fb.getFeedbackComment());
+            feedbackToSave.setDate(LocalDate.now());
+        } else {
+            // Create new feedback
+            feedbackToSave = new Feedback();
+            feedbackToSave.setRating(fb.getRating());
+            feedbackToSave.setFeedbackComment(fb.getFeedbackComment());
+            feedbackToSave.setDoctor(doctor);
+            feedbackToSave.setPatient(patient);
+            feedbackToSave.setDate(LocalDate.now());
+        }
+
+        ps.addFeedback(feedbackToSave); // This method should be able to save/update depending on whether ID is present
+
+        return ResponseEntity.ok("Feedback saved successfully!");
+    }
+
+    @GetMapping("getAllFeedbacks/{doctorId}")
 	public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks(@PathVariable long doctorId){
 	    List<FeedbackDTO> list = ps.getFeedbacks(doctorId); 
 	    return ResponseEntity.ok(list);

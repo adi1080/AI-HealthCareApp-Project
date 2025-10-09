@@ -1,34 +1,4 @@
-<h3 class="mt-4 mb-3 text-primary">Doctors List</h3>
-
-<div class="table-responsive">
-  <table class="table table-hover table-bordered shadow-sm">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">Doctor Name</th>
-        <th scope="col">Feedback Analysis</th>
-        <th scope="col">Access</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let doctor of DoctorList">
-        <td class="align-middle">{{ doctor.username }}</td>
-        <td class="align-middle text-muted">Analysis (will add later)</td>
-        <td class="align-middle">
-          <button class="btn btn-sm btn-success me-2">Permit</button>
-          <button class="btn btn-sm btn-danger">Block</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<p *ngIf="DoctorList.length === 0" class="text-center text-muted mt-3">
-  No doctors found.
-</p>
-
-
-<h3 class="mt-5 mb-3 text-primary">Patients List</h3>
+<h3 class="mt-5 mb-3 text-primary">Users List</h3>
 
 <div class="table-responsive">
   <table class="table table-hover table-bordered shadow-sm">
@@ -37,7 +7,7 @@
         <th scope="col">Patient Name</th>
         <th scope="col">Misconduct Score</th>
         <th scope="col">Reason</th>
-        <th scope="col">Actions</th>
+        <th scope="col">Access</th>
       </tr>
     </thead>
 

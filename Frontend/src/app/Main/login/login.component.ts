@@ -15,7 +15,7 @@ export class LoginComponent {
     private router: Router,
     private fb: FormBuilder,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -24,8 +24,8 @@ export class LoginComponent {
     });
 
     if (!this.userService.isLoggedIn()) {
-    this.userService.removeToken();
-  }
+      this.userService.removeToken();
+    }
   }
 
   showMessage(message: string, duration: number) {
@@ -93,6 +93,8 @@ export class LoginComponent {
       this.userService.login(this.loginForm.value).subscribe(
         (response: any) => {
           console.log(response);
+
+          // ✅ Token received — user permitted
           if (response.token) {
             this.userService.storeToken(response.token);
 
@@ -103,7 +105,7 @@ export class LoginComponent {
               return;
             }
 
-            // Optional: if you still want to store userId separately
+            // Navigate based on role
             if (userInfo.role === 'Doctor') {
               localStorage.setItem('DoctorUserId', userInfo.id);
               this.router.navigateByUrl('/doctor');
@@ -121,11 +123,21 @@ export class LoginComponent {
         },
         (error) => {
           console.error('Login failed', error);
-          this.showMessage('Invalid credentials', 3000);
+
+          if (error.status === 403 && error.error === 'Your account has been blocked. Please contact admin.') {
+            this.showMessage('You have been blocked temporarily due to misconduct.', 4000);
+          }
+          else if (error.status === 401 && error.error === 'Invalid password') {
+            this.showMessage('Invalid password.', 3000);
+          }
+          else {
+            this.showMessage('Invalid login details.', 3000);
+          }
         }
       );
     }
   }
+
 
   teleport() {
     this.router.navigateByUrl('Register');

@@ -166,4 +166,7 @@ public void deleteAppointment(long id) {
 	availabilityRepository.delete(bookedTimeSlot);
 }
 
+    public Optional<Feedback> findFeedbackByDoctor_IdAndPatient_Id(long id, long id1) {
+        return fb.findByDoctor_IdAndPatient_Id(id, id1);
+    }
 }
