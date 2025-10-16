@@ -248,4 +248,21 @@ public ResponseEntity<String> AddDoctorProfile(
         return ResponseEntity.ok("Triggered smart feedback analysis.");
     }
 
+    /*
+    * Note: To keep the implementation simple, the "report patient" feature allows each doctor to report a patient only once via the UI.
+    *  This is not enforced on the backend and could be bypassed, but was deemed sufficient for the scope of this college project.*/
+    @GetMapping("/reportPatient/{id}")
+    public ResponseEntity<?> reportPatient(@PathVariable long id){
+        userRepository.findById(id).ifPresent(user->{
+            user.setMisconductScore(user.getMisconductScore()+ 40);
+            if(user.getMisconductReason() == null){
+                user.setMisconductReason("Reported by doctor/s");
+            } else{
+                user.setMisconductReason(user.getMisconductReason() +"," + " Reported by doctor/s");
+            }
+            userRepository.save(user);
+        });
+
+        return ResponseEntity.ok().body("Patient reported successfully");
+    }
 }

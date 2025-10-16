@@ -184,24 +184,20 @@ public class PatientController {
         // Check if feedback already exists for this doctor-patient pair
         Optional<Feedback> existingFeedbackOpt = ps.findFeedbackByDoctor_IdAndPatient_Id(doctor.getId(), patient.getId());
 
-        Feedback feedbackToSave;
         if (existingFeedbackOpt.isPresent()) {
-            // Update existing feedback
-            feedbackToSave = existingFeedbackOpt.get();
-            feedbackToSave.setRating(fb.getRating());
-            feedbackToSave.setFeedbackComment(fb.getFeedbackComment());
-            feedbackToSave.setDate(LocalDate.now());
-        } else {
-            // Create new feedback
-            feedbackToSave = new Feedback();
-            feedbackToSave.setRating(fb.getRating());
-            feedbackToSave.setFeedbackComment(fb.getFeedbackComment());
-            feedbackToSave.setDoctor(doctor);
-            feedbackToSave.setPatient(patient);
-            feedbackToSave.setDate(LocalDate.now());
+            // Delete the existing feedback
+            ps.deleteFeedback(existingFeedbackOpt.get());
         }
 
-        ps.addFeedback(feedbackToSave); // This method should be able to save/update depending on whether ID is present
+        // Create and save new feedback
+        Feedback newFeedback = new Feedback();
+        newFeedback.setRating(fb.getRating());
+        newFeedback.setFeedbackComment(fb.getFeedbackComment());
+        newFeedback.setDoctor(doctor);
+        newFeedback.setPatient(patient);
+        newFeedback.setDate(LocalDate.now());
+
+        ps.addFeedback(newFeedback);
 
         return ResponseEntity.ok("Feedback saved successfully!");
     }
@@ -214,6 +210,7 @@ public class PatientController {
 
 	@DeleteMapping("deleteAppointment/{appointmentId}")
 	public String cancelAppointment(@PathVariable("appointmentId") long id) {
+        ps.updateMisconductAndReason(id);
 		ps.deleteAppointment(id);
 		return "Appointment Canceled!";
 	}

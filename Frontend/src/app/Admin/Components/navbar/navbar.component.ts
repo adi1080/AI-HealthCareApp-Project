@@ -26,6 +26,11 @@ export class NavbarComponent {
         data: null,
       },
       {
+        name: 'Blocked',
+        route: 'admin/BlockedInfo',
+        data: null,
+      },
+      {
         name: 'Ask AI',
         route: '/AI',
         data: null,

@@ -25,8 +25,6 @@ public class Appointment {
 
     @OneToOne
     private DoctorAvailability availability;
-// lowercase "date" for proper naming convention
-                           // Date and time of the appointment
     
     private String reason; // Reason for the appointment
     

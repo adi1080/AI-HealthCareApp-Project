@@ -1,36 +1,52 @@
+.navbar {
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-  .navbar {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.nav-link {
+  font-weight: 500;
+  color: #343a40;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+
+  &.active-nav {
+    color: #007bff !important;
+    border-bottom: 3px solid #007bff;
+    background-color: #e9ecef; // subtle blue tint
   }
 
-  .nav-link {
-    transition: color 0.3s ease;
+  &:hover {
+    color: #0056b3;
+    background-color: rgba(0, 123, 255, 0.03); // very light hover tint
   }
+}
 
-  .nav-link:hover {
-    color: #0056b3; /* Darker shade for hover effect */
+// Logout button styling
+.logout {
+  background-color: transparent;
+  border: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #c82333;
   }
+}
 
-  .logout {
-    background-color: transparent;
-    border: none;
-    transition: color 0.3s ease;
+// Logo styling
+.applogo {
+  border-radius: 50%;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.2rem;
   }
+}
 
-  .logout:hover {
-    color: #c82333; /* Darker red for hover effect */
-  }
-
-  .applogo {
-    border-radius: 50%; /* Make logo circular */
-  }
-
-  @media (max-width: 768px) {
-    .navbar-brand {
-      font-size: 1.2rem; /* Adjust font size for mobile */
-    }
-  }
-
-.nav-item:hover{
-   border-bottom: 2px solid black;
+// Remove unnecessary border on nav-item hover
+.nav-item:hover {
+  border-bottom: none;
 }

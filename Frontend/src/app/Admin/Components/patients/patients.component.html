@@ -1,4 +1,4 @@
-<h3 class="mt-5 mb-3 text-primary">Users List</h3>
+<h3 class="mt-5 mb-3 text-primary" style="text-align: center;">Users List</h3>
 
 <div class="table-responsive">
   <table class="table table-hover table-bordered shadow-sm">
@@ -15,14 +15,14 @@
       <tr *ngFor="let patient of PatientList">
         <td class="align-middle">{{ patient.username }}</td>
         <td class="align-middle text-danger fw-bold">
-          <!-- {{ patient.misconductScore || 'N/A' }} -->
+          {{ patient.misconductScore || 'N/A' }}
         </td>
         <td class="align-middle text-muted">
-          <!-- {{ patient.reason || 'No reason provided' }} -->
+          {{ patient.misconductReason || 'No reason provided' }}
         </td>
         <td class="align-middle">
-          <button class="btn btn-sm btn-success me-2">Permit</button>
-          <button class="btn btn-sm btn-danger">Block</button>
+          <button class="btn btn-sm btn-success me-2" (click)="permitPatient(patient.id)">Permit</button>
+          <button class="btn btn-sm btn-danger" (click)="blockPatient(patient.id)">Block</button>
         </td>
       </tr>
     </tbody>

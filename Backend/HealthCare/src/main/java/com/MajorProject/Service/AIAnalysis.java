@@ -12,17 +12,22 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
 public class AIAnalysis {
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
     @Autowired
     private StreamAI aiClient;
@@ -44,14 +49,21 @@ public class AIAnalysis {
                 }
 
                 AIRequest aiRequest = new AIRequest(reportContent);
-                AIResponse aiResponse = aiClient.analyzeReport(aiRequest);
 
+                WebClient webClient = webClientBuilder.build();
+
+                AIResponse aiResponse = webClient.post()
+                        .uri("http://localhost:8081/ai/analyze")
+                        .bodyValue(aiRequest)
+                        .retrieve()
+                        .bodyToMono(AIResponse.class)
+                        .timeout(Duration.ofMinutes(30))  // set to 30 mins
+                        .block(); // Blocking, but safe in executor thread
+
+                // Save result to DB
                 patient.setHealthSummary(aiResponse.getSummary());
-
-                // Convert List<String> to single string with line breaks (or commas, as preferred)
                 String joinedSuggestions = String.join("\n", aiResponse.getSuggestions());
                 patient.setHealthSuggestions(joinedSuggestions);
-
                 patient.setHealthScore(aiResponse.getHealthScore());
                 patient.setAiAnalysisDone(true);
 

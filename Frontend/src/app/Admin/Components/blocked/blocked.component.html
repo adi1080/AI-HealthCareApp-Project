@@ -1,0 +1,25 @@
+<h3 class="mt-4 mb-3 text-primary" style="text-align: center;">Blocked Accounts</h3>
+
+<div class="table-responsive">
+  <table class="table table-hover table-bordered shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Doctor Name</th>
+        <th scope="col">Access</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let folk of BlockedFolks">
+        <td class="align-middle">{{ folk.username }}</td>
+        <td class="align-middle">
+          <button class="btn btn-sm btn-success me-2" (click)="permit(folk.id)">Permit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p *ngIf="BlockedFolks.length === 0" class="text-center text-muted mt-3">
+  No Blocked Accounts Yet.
+</p>

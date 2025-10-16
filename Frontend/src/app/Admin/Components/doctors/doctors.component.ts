@@ -53,7 +53,7 @@ export class DoctorsComponent {
 
   // ✅ Permit doctor (set access = true)
   permitDoctor(doctorId: number): void {
-    this.adminService.permitDoctor(doctorId).subscribe({
+    this.adminService.permit(doctorId).subscribe({
       next: () => {
         console.log(`✅ Doctor ${doctorId} permitted`);
         alert("Doctor permitted");
@@ -65,7 +65,7 @@ export class DoctorsComponent {
 
   // ✅ Block doctor (set access = false)
   blockDoctor(doctorId: number): void {
-    this.adminService.blockDoctor(doctorId).subscribe({
+    this.adminService.block(doctorId).subscribe({
       next: () => {
         console.log(`🚫 Doctor ${doctorId} blocked`);
         alert("Doctor Access Blocked");

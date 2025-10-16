@@ -1,118 +1,115 @@
 package com.MajorProject.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import com.MajorProject.Entity.*;
+import com.MajorProject.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.MajorProject.Repository.AppointmentRepository;
-import com.MajorProject.Repository.DoctorAvailabilityRepository;
-import com.MajorProject.Repository.DoctorRepository;
-import com.MajorProject.Repository.FeedbackRepository;
-import com.MajorProject.Repository.PatientRepository;
 import com.MajorProject.Domain.AppointmentDTO;
 import com.MajorProject.Domain.DoctorDTO;
 import com.MajorProject.Domain.FeedbackDTO;
 import com.MajorProject.Domain.PatientDTO;
-import com.MajorProject.Entity.Appointment;
-import com.MajorProject.Entity.Doctor;
-import com.MajorProject.Entity.DoctorAvailability;
-import com.MajorProject.Entity.Feedback;
-import com.MajorProject.Entity.Patient;
 
 @Service
 public class PatientService {
 
-	@Autowired
-	PatientRepository pr;
-	
-	@Autowired
-	FeedbackRepository fb;
-	
-	@Autowired
-	DoctorRepository doctorRepository;
-	
-	@Autowired
-	AppointmentRepository appointmentRepository;
-	
-	@Autowired
-	DoctorAvailabilityRepository availabilityRepository;
-	
-	public Patient saveProfile(Patient patient) {
-		return pr.save(patient);
-	}
-	
-	  public boolean checkprofileExistsOrNot(long id) {
-	    	if(pr.existsById(id)) {
-	    		return true;
-	    	}
-	    	else {
-	    		return false;
-	    	}
-	  }
-	
-	public Optional<Patient> FindById(long id) {
-		return pr.findById(id);
-	}
+    @Autowired
+    PatientRepository pr;
 
-	public boolean existsByAvailability(DoctorAvailability availability) {
-		return appointmentRepository.existsByAvailability(availability);
-	}
+    @Autowired
+    FeedbackRepository fb;
 
-	public Appointment saveAppointment(Appointment appointment) {
-		return appointmentRepository.save(appointment);
-	}
-	
-	public Feedback addFeedback(Feedback feedback) {
-		return fb.save(feedback);
-	}
-	
-	public List<Appointment> getAllAppointments() {
-	    return appointmentRepository.findAll();
-	}
-	
-	public List<FeedbackDTO> getFeedbacks(long doctorId) {
-	    Optional<Doctor> doctor = doctorRepository.findById(doctorId);
-	    if (doctor.isEmpty()) {
-	        return Collections.emptyList();
-	    }
+    @Autowired
+    UserRepository userRepository;
 
-	    List<Feedback> feedbacks = fb.findByDoctor(doctor.get());
-	    List<FeedbackDTO> feedbackDTOs = new ArrayList<>();
+    @Autowired
+    DoctorRepository doctorRepository;
 
-	    for (Feedback feedback : feedbacks) {
-	        FeedbackDTO dto = new FeedbackDTO();
-	        dto.setFeedbackId(feedback.getFeedbackid());
-	        dto.setFeedbackComment(feedback.getFeedbackComment());
-	        dto.setRating(feedback.getRating());
-	        dto.setDate(feedback.getDate().toString());
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
-	        Doctor doctorEntity = feedback.getDoctor();
-	        DoctorDTO doctorDTO = new DoctorDTO();
-	        doctorDTO.setId(doctorEntity.getId());
-	        doctorDTO.setName(doctorEntity.getName());
-	        doctorDTO.setSpeciality(doctorEntity.getSpeciality());
-	        doctorDTO.setExperience(doctorEntity.getExperience());
-	        
+    @Autowired
+    DoctorAvailabilityRepository availabilityRepository;
 
-	        Patient patientEntity = feedback.getPatient();
-	        if (patientEntity != null) {
-	            PatientDTO patientDTO = new PatientDTO();
-	            patientDTO.setId(patientEntity.getId());
-	            patientDTO.setName(patientEntity.getName());
-	            dto.setPatient(patientDTO);
-	        }
+    public Patient saveProfile(Patient patient) {
+        return pr.save(patient);
+    }
 
-	        dto.setDoctor(doctorDTO);
-	        feedbackDTOs.add(dto);
-	    }
+    public boolean checkprofileExistsOrNot(long id) {
+        if (pr.existsById(id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	    return feedbackDTOs;
-	}
+    public Optional<Patient> FindById(long id) {
+        return pr.findById(id);
+    }
+
+    public boolean existsByAvailability(DoctorAvailability availability) {
+        return appointmentRepository.existsByAvailability(availability);
+    }
+
+    public Appointment saveAppointment(Appointment appointment) {
+        return appointmentRepository.save(appointment);
+    }
+
+    public Feedback addFeedback(Feedback feedback) {
+        return fb.save(feedback);
+    }
+
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
+
+    public List<FeedbackDTO> getFeedbacks(long doctorId) {
+        Optional<Doctor> doctor = doctorRepository.findById(doctorId);
+        if (doctor.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Feedback> feedbacks = fb.findByDoctor(doctor.get());
+        List<FeedbackDTO> feedbackDTOs = new ArrayList<>();
+
+        for (Feedback feedback : feedbacks) {
+            FeedbackDTO dto = new FeedbackDTO();
+            dto.setFeedbackId(feedback.getFeedbackid());
+            dto.setFeedbackComment(feedback.getFeedbackComment());
+            dto.setRating(feedback.getRating());
+            dto.setDate(feedback.getDate().toString());
+
+            Doctor doctorEntity = feedback.getDoctor();
+            DoctorDTO doctorDTO = new DoctorDTO();
+            doctorDTO.setId(doctorEntity.getId());
+            doctorDTO.setName(doctorEntity.getName());
+            doctorDTO.setSpeciality(doctorEntity.getSpeciality());
+            doctorDTO.setExperience(doctorEntity.getExperience());
+
+
+            Patient patientEntity = feedback.getPatient();
+            if (patientEntity != null) {
+                PatientDTO patientDTO = new PatientDTO();
+                patientDTO.setId(patientEntity.getId());
+                patientDTO.setName(patientEntity.getName());
+                dto.setPatient(patientDTO);
+            }
+
+            dto.setDoctor(doctorDTO);
+            feedbackDTOs.add(dto);
+        }
+
+        return feedbackDTOs;
+    }
 
     public PatientDTO convertToDTO(Patient patient) {
         PatientDTO dto = new PatientDTO();
@@ -158,15 +155,62 @@ public class PatientService {
         return dto;
     }
 
-
-public void deleteAppointment(long id) {
-	Optional<Appointment> appointment = appointmentRepository.findById(id);
-	DoctorAvailability bookedTimeSlot = appointment.get().getAvailability();
-	appointmentRepository.deleteById(id);
-	availabilityRepository.delete(bookedTimeSlot);
-}
+    public void deleteAppointment(long id) {
+        Optional<Appointment> appointment = appointmentRepository.findById(id);
+        DoctorAvailability bookedTimeSlot = appointment.get().getAvailability();
+        appointmentRepository.deleteById(id);
+        availabilityRepository.delete(bookedTimeSlot);
+    }
 
     public Optional<Feedback> findFeedbackByDoctor_IdAndPatient_Id(long id, long id1) {
         return fb.findByDoctor_IdAndPatient_Id(id, id1);
+    }
+
+    public void deleteFeedback(Feedback feedback) {
+        fb.delete(feedback);
+    }
+
+    public void updateMisconductAndReason(long id) {
+        Optional<Appointment> appointmentOpt = appointmentRepository.findById(id);
+        if (!appointmentOpt.isPresent()) {
+            return;
+        }
+
+        Appointment appointment = appointmentOpt.get();
+        DoctorAvailability bookedTimeSlot = appointment.getAvailability();
+        User user = appointment.getPatient().getUser();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // Reset cancellations if a new month
+        if (user.getLastCancelReset() == null ||
+                user.getLastCancelReset().getMonth() != now.getMonth() ||
+                user.getLastCancelReset().getYear() != now.getYear()) {
+
+            user.setAppointmentsCanceled(0);
+            user.setMisconductScore(0);
+            user.setMisconductReason("");
+            user.setLastCancelReset(now);
+        }
+
+        // If cancellation happens less than 5 minutes before appointment
+        if (ChronoUnit.MINUTES.between(now, bookedTimeSlot.getDatetime()) <= 5) {
+            user.setAppointmentsCanceled(user.getAppointmentsCanceled() + 1);
+            userRepository.save(user);
+        }
+
+        if (user.getAppointmentsCanceled() >= 5) {
+            int randomScore = ThreadLocalRandom.current().nextInt(40, 60);
+
+            if (user.getMisconductScore() == 0) {
+                user.setMisconductScore(randomScore);
+            } else {
+                user.setMisconductScore(user.getMisconductScore() + randomScore);
+            }
+
+            user.setMisconductReason("Canceled " + user.getAppointmentsCanceled() + " appointments");
+            userRepository.save(user);
+        }
+
     }
 }

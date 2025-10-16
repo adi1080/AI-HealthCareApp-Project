@@ -13,10 +13,6 @@ public class FeedbackAnalysisScheduler {
         this.feedbackAnalysisService = feedbackAnalysisService;
     }
 
-    /**
-     * Run feedback analysis for all doctors once every night at 2 AM.
-     * Cron format: second minute hour day-of-month month day-of-week
-     */
     @Scheduled(cron = "0 0 2 */15 * ?") // every 15 days at 2 AM
     public void periodicFeedbackUpdate() {
         System.out.println("🕑 15-day feedback analysis check started...");

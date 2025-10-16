@@ -67,10 +67,14 @@
             <ng-container *ngIf="selectedPatient.reportFilePath">
                 <p><strong>Health Reports: </strong>{{selectedPatient.reportFilePath.split('_').slice(1).join('_')}}</p>
                 <button (click)="downloadFile(getFileNameFromPath(selectedPatient.reportFilePath))"
-                    class="btn btn-primary">
+                    class="btn btn-primary" style="margin: 5px; height: 60px; width: 180px;">
                     Download Report
                 </button>
+                <button class="btn btn-danger" style="margin: 5px; height: 60px; width: 180px;" (click)="reportPatient(selectedPatient.id)">
+                       Report Patient
+                </button>
             </ng-container>
+            <p style="color: greenyellow; text-align: center; font-weight: bolder; font-size: 18px; margin-top: 10px;">{{msg}}</p>
         </div>
 
         <div class="modal-buttons">

@@ -41,7 +41,7 @@ public class AIController {
 
     public AIController(@Value("${spring.ai.ollama.base-url}") String ollamaBaseUrl, helperForAI helperForAI,ObjectMapper objectMapper) {
         this.ollamaAPI = new OllamaAPI(ollamaBaseUrl);
-        this.ollamaAPI.setRequestTimeoutSeconds(12000);
+        this.ollamaAPI.setRequestTimeoutSeconds(300000);
         this.helperForAI = helperForAI;
         this.objectMapper = objectMapper;
     }
@@ -200,6 +200,7 @@ public class AIController {
             String joinedFeedback = String.join(". ", feedbacks);
 
             AIResponse analysis = aiService.analyzeFeedback(joinedFeedback);
+            System.out.println("analysis : "+ analysis);
             results.put(doctorId, analysis);
         }
 

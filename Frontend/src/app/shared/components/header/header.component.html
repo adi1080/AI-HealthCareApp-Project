@@ -5,6 +5,7 @@
         <img src="assets/logo.png" width="40" height="40" alt="logo" class="applogo" />
       </a>
       <a class="navbar-brand" href="#" style="font-weight: bold; color: #007bff;">HealthCare</a>
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -13,8 +14,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="nav navbar-nav ms-auto">
           <li class="nav-item" *ngFor='let item of navItems'>
-            <button class="nav-link" (click)="navigateTo(item.route)" style="font-weight: 500; color: #343a40;">
-              {{item.name}}
+            <button 
+              class="nav-link"
+              [ngClass]="{ 'active-nav': currentRoute.includes(item.route) }"
+              (click)="navigateTo(item.route)"
+              style="font-weight: 500;"
+            >
+              {{ item.name }}
             </button>
           </li>
           <li class="nav-item">
@@ -27,4 +33,3 @@
     </div>
   </nav>
 </header>
-

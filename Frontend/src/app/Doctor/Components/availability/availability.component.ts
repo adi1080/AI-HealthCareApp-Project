@@ -16,7 +16,8 @@ export class AvailabilityComponent implements OnInit {
   appointments: any;
   showPatientDetailsModal = false;
   selectedPatient: any = null;
-  isHovered:boolean= false;
+  isHovered: boolean = false;
+  msg!: string;
 
   constructor(private fb: FormBuilder, private docService: DoctorService, private patientService: PatientService) { }
 
@@ -45,9 +46,9 @@ export class AvailabilityComponent implements OnInit {
     console.log('Clicked availability ID:', availabilityId);
 
     const appointment = this.appointments?.find((appt: any) => +appt.availabilityId === +availabilityId);
-
     if (appointment) {
       this.selectedPatient = {
+        id: appointment.patientId,
         name: appointment.patientName,
         age: appointment.patientAge,
         gender: appointment.patientGender,
@@ -86,50 +87,50 @@ export class AvailabilityComponent implements OnInit {
     });
   }
 
-    getFileNameFromPath(fullPath: string): string {
-      return fullPath.split(/[/\\]/).pop() || '';
+  getFileNameFromPath(fullPath: string): string {
+    return fullPath.split(/[/\\]/).pop() || '';
+  }
+
+  closePatientDetails(): void {
+    this.showPatientDetailsModal = false;
+    this.selectedPatient = null;
+  }
+
+  popupAvailabilityInput(): void {
+    this.setAvailability = true;
+  }
+
+  addAvailability(): void {
+    const dateTime = this.availabilityForm.get('dateTime')?.value;
+    if (dateTime) {
+      const [date, time] = dateTime.split('T');
+
+      const availability = {
+        date,
+        time,
+        isBooked: false
+      };
+
+      console.log("availability =>", availability);
+      this.docService.addAvailability(this.doctorId, availability).subscribe(
+        response => {
+          console.log(response);
+        },
+        error => {
+          console.error('Error adding availability:', error);
+        }
+      );
     }
-
-    closePatientDetails(): void {
-      this.showPatientDetailsModal = false;
-      this.selectedPatient = null;
-    }
-
-    popupAvailabilityInput(): void {
-      this.setAvailability = true;
-    }
-
-    addAvailability(): void {
-      const dateTime = this.availabilityForm.get('dateTime')?.value;
-      if(dateTime) {
-        const [date, time] = dateTime.split('T');
-
-        const availability = {
-          date,
-          time,
-          isBooked: false
-        };
-
-        console.log("availability =>", availability);
-        this.docService.addAvailability(this.doctorId, availability).subscribe(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.error('Error adding availability:', error);
-          }
-        );
-      }
 
     this.setAvailability = false;
-      setTimeout(() => {
+    setTimeout(() => {
       window.location.reload();
     }, 500);
     this.findAllAvailability();
   }
 
   findAllAvailability() {
-    console.log("finding availability for doctor id : " , this.doctorId);
+    console.log("finding availability for doctor id : ", this.doctorId);
     this.docService.FindAllAvailability(this.doctorId).subscribe(
       response => {
         console.log('Fetched availability:', response);
@@ -159,4 +160,37 @@ export class AvailabilityComponent implements OnInit {
     this.docService.DeleteAvailabilityById(availabilityId).subscribe();
     window.location.reload();
   }
+
+  reportPatient(id: number) {
+    const reportedPatients = JSON.parse(localStorage.getItem('reportedPatients') || '[]');
+
+    // Check if already reported
+    if (reportedPatients.includes(id)) {
+      this.msg = "You've already reported this patient.";
+      setTimeout(() => this.msg = '', 3000);
+      return;
+    }
+
+    console.log("Reporting user id:", id);
+    this.docService.reportPatient(id).subscribe(
+      (response) => {
+        console.log(response);
+        this.msg = "Patient Reported";
+
+        // Save reported ID in localStorage
+        reportedPatients.push(id);
+        localStorage.setItem('reportedPatients', JSON.stringify(reportedPatients));
+
+        setTimeout(() => {
+          this.msg = '';
+        }, 3000);
+      },
+      (error) => {
+        console.error("Error reporting patient", error);
+        this.msg = "Failed to report patient.";
+        setTimeout(() => this.msg = '', 3000);
+      }
+    );
+  }
+
 }

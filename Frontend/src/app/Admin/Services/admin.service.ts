@@ -8,8 +8,14 @@ export interface User {
   emailid: string;
   password: string;
   role: string;
-  feedbackAnalysis: string;
+  feedbackAnalysis: string | null;
+  lastCancelReset: string | null;
+  misconductScore: number;
+  appointmentsCanceled: number;
+  misconductReason: string | null;
+  permitted: boolean;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +42,12 @@ export class AdminService {
   }
 
   // ✅ Permit doctor
-  permitDoctor(id: number): Observable<string> {
+  permit(id: number): Observable<string> {
     return this.Http.post(`${this.baseurl}/permit/${id}`, {}, { responseType: 'text' });
   }
 
   // ✅ Block doctor
-  blockDoctor(id: number): Observable<string> {
+  block(id: number): Observable<string> {
     return this.Http.post(`${this.baseurl}/block/${id}`, {}, { responseType: 'text' });
   }
 }

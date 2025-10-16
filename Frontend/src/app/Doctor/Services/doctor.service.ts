@@ -46,4 +46,7 @@ getAllFeedbacks(){
   return this.http.get(`${this.baseUrl}/getAllFeedbacks`);
 }
 
+reportPatient(id:number){
+  return this.http.get(`${this.baseUrl}/reportPatient/${id}`, { responseType: 'text' });
+}
 }

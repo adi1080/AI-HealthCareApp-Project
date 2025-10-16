@@ -22,13 +22,35 @@ export class PatientsComponent {
           if (user.role == "User") {
             this.PatientList.push(user);
           }
-          console.log("patients : ", this.PatientList);
         });
+        console.log("patients : ", this.PatientList);
       },
       (error) => {
         console.error("Error fetching users:", error);
       }
     );
 
+  }
+
+  permitPatient(id: number): void {
+    this.adminService.permit(id).subscribe({
+      next: () => {
+        console.log(`✅ Patient ${id} permitted`);
+        alert("Patient Access Permitted");
+        window.location.reload();
+      },
+      error: (err) => console.error('❌ Permit failed:', err)
+    });
+  }
+
+  blockPatient(id: number): void {
+    this.adminService.block(id).subscribe({
+      next: () => {
+        console.log(`🚫 Patient ${id} blocked`);
+        alert("Patient Access Blocked");
+        window.location.reload();
+      },
+      error: (err) => console.error('❌ Block failed:', err)
+    });
   }
 }
