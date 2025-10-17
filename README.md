@@ -6,11 +6,12 @@ A full-stack **Healthcare Management System** with role-based login for **Patien
 
 - 🩺 Appointment booking  
 - 👨‍⚕️ Doctor search  
-- ⭐ Feedback & rating system  
+- ⭐ Feedback & rating system 
 - 📅 Doctor scheduling  
 - ⏰ Reminders  
-- 🛡️ Admin moderation
+- 🛡️ Admin moderation with misconduct ,           reason , analysis
 -  AI chatbot with speech to text
+-  AI Analysis for feedbacks , health report    summary , suggestion , healthscore
 
 ---
 
