@@ -8,7 +8,7 @@ A full-stack **Healthcare Management System** with role-based login for **Patien
 - 👨‍⚕️ Doctor search  
 - ⭐ Feedback & rating system 
 - 📅 Doctor scheduling  
-- ⏰ Reminders  
+- ⏰ Email Reminders  
 - 🛡️ Admin moderation with misconduct ,           reason , analysis
 -  AI chatbot with speech to text
 -  AI Analysis for feedbacks , health report    summary , suggestion , healthscore
