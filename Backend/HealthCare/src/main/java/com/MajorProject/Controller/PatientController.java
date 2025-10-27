@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -30,14 +31,14 @@ import java.util.Optional;
 //@CrossOrigin(origins = "http://localhost:4200")
 public class PatientController {
 
-	@Autowired
-	PatientService ps;
-	
-	@Autowired
-	DoctorService ds;
+    @Autowired
+    PatientService ps;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    DoctorService ds;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AIAnalysis aiAnalysis;
@@ -98,8 +99,8 @@ public class PatientController {
     }
 
     @GetMapping("/FindById/{id}")
-	public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {
-	    Optional<Patient> optionalPatient = ps.FindById(id);
+    public ResponseEntity<PatientDTO> showProfileDetails(@PathVariable long id) {
+        Optional<Patient> optionalPatient = ps.FindById(id);
 
         if (optionalPatient.isPresent()) {
             Patient patient = optionalPatient.get();
@@ -115,61 +116,101 @@ public class PatientController {
         } else {
             return ResponseEntity.notFound().build();
         }
-	}
+    }
 
 
-	@PutMapping("/updateprofile/{id}")
-	public ResponseEntity<?> updateprofile(@PathVariable long id , @RequestBody Patient incomingDataPatient){
-		 Optional<Patient> existingPatientOpt = ps.FindById(id);
-		 
-		if(!existingPatientOpt.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("patient not found");
-		}
-		
-		Patient existingPatient = existingPatientOpt.get();
-		existingPatient.setName(incomingDataPatient.getName());
-		existingPatient.setAge(incomingDataPatient.getAge());
-		existingPatient.setGender(incomingDataPatient.getGender());
-		existingPatient.setMobileno(incomingDataPatient.getMobileno());
-		existingPatient.setAddress(incomingDataPatient.getAddress());
-		existingPatient.setHistory(incomingDataPatient.getHistory());
-		
-		ps.saveProfile(existingPatient);
-				
-		return ResponseEntity.ok(existingPatient);
-	}
-	
-	@PostMapping("BookAppointment")
-	public ResponseEntity<?> createAppointment(@RequestBody Appointment appointment) {
-		System.out.println(appointment);
-	    try {
-	        // You receive doctor, patient, and availability as nested objects with only IDs
-	        Doctor doctor = ds.FindDoctorById(appointment.getDoctor().getId())
-	                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+    @PutMapping("/updateprofile/{id}")
+    public ResponseEntity<?> updateProfile(
+            @PathVariable long id,
+            @RequestParam("patient") String patientJson,
+            @RequestParam(value = "report", required = false) MultipartFile reportFile) {
 
-	        Patient patient = ps.FindById(appointment.getPatient().getId())
-	                .orElseThrow(() -> new RuntimeException("Patient not found"));
+        Optional<Patient> existingPatientOpt = ps.FindById(id);
 
-	        DoctorAvailability availability = ds.findAvailability(appointment.getAvailability().getId())
-	                .orElseThrow(() -> new RuntimeException("Availability not found"));
+        if (!existingPatientOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient not found");
+        }
 
-	        if (ps.existsByAvailability(availability)) {
-	            return ResponseEntity.badRequest().body("Slot already booked.");
-	        }
+        Patient existingPatient = existingPatientOpt.get();
 
-	        appointment.setDoctor(doctor);
-	        appointment.setPatient(patient);
-	        appointment.setAvailability(availability);
-	        appointment.setStatus(Appointment.AppointmentStatus.PENDING);
-	        availability.setBooked(true);
-	        
-	        Appointment saved = ps.saveAppointment(appointment);
-	        return ResponseEntity.ok(saved);
+        // Convert incoming JSON string to Patient object
+        ObjectMapper mapper = new ObjectMapper();
+        Patient incomingDataPatient;
+        try {
+            incomingDataPatient = mapper.readValue(patientJson, Patient.class);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid patient data: " + e.getMessage());
+        }
 
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-	    }
-	}
+        // Update patient fields
+        existingPatient.setName(incomingDataPatient.getName());
+        existingPatient.setAge(incomingDataPatient.getAge());
+        existingPatient.setGender(incomingDataPatient.getGender());
+        existingPatient.setMobileno(incomingDataPatient.getMobileno());
+        existingPatient.setAddress(incomingDataPatient.getAddress());
+        existingPatient.setHistory(incomingDataPatient.getHistory());
+
+        // ✅ Handle new report file upload
+        if (reportFile != null && !reportFile.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + reportFile.getOriginalFilename();
+                String uploadDir = "F:/Pendrive Stuff/Major-Project/reports/";
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(fileName);
+                reportFile.transferTo(filePath.toFile());
+
+                // Update new file path and reset AI analysis flag
+                existingPatient.setReportFilePath(fileName);
+                existingPatient.setAiAnalysisDone(false);
+
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error saving file: " + e.getMessage());
+            }
+        }
+
+        // Save updated patient
+        ps.saveProfile(existingPatient);
+
+        return ResponseEntity.ok(Map.of("message", "Profile updated successfully"));
+    }
+
+    @PostMapping("BookAppointment")
+    public ResponseEntity<?> createAppointment(@RequestBody Appointment appointment) {
+        System.out.println(appointment);
+        try {
+            // You receive doctor, patient, and availability as nested objects with only IDs
+            Doctor doctor = ds.FindDoctorById(appointment.getDoctor().getId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+            Patient patient = ps.FindById(appointment.getPatient().getId())
+                    .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+            DoctorAvailability availability = ds.findAvailability(appointment.getAvailability().getId())
+                    .orElseThrow(() -> new RuntimeException("Availability not found"));
+
+            if (ps.existsByAvailability(availability)) {
+                return ResponseEntity.badRequest().body("Slot already booked.");
+            }
+
+            appointment.setDoctor(doctor);
+            appointment.setPatient(patient);
+            appointment.setAvailability(availability);
+            appointment.setStatus(Appointment.AppointmentStatus.PENDING);
+            availability.setBooked(true);
+
+            Appointment saved = ps.saveAppointment(appointment);
+            return ResponseEntity.ok(saved);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     @PostMapping("add-feedback")
     public ResponseEntity<?> addFeedback(@RequestBody Feedback fb) {
@@ -203,17 +244,17 @@ public class PatientController {
     }
 
     @GetMapping("getAllFeedbacks/{doctorId}")
-	public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks(@PathVariable long doctorId){
-	    List<FeedbackDTO> list = ps.getFeedbacks(doctorId); 
-	    return ResponseEntity.ok(list);
-	}
+    public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks(@PathVariable long doctorId) {
+        List<FeedbackDTO> list = ps.getFeedbacks(doctorId);
+        return ResponseEntity.ok(list);
+    }
 
-	@DeleteMapping("deleteAppointment/{appointmentId}")
-	public String cancelAppointment(@PathVariable("appointmentId") long id) {
+    @DeleteMapping("deleteAppointment/{appointmentId}")
+    public String cancelAppointment(@PathVariable("appointmentId") long id) {
         ps.updateMisconductAndReason(id);
-		ps.deleteAppointment(id);
-		return "Appointment Canceled!";
-	}
+        ps.deleteAppointment(id);
+        return "Appointment Canceled!";
+    }
 
     @GetMapping("/download-report/{filename:.+}")
     public ResponseEntity<Resource> downloadReport(@PathVariable String filename) {

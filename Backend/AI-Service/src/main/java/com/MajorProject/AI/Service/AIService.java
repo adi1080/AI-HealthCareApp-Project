@@ -1,7 +1,7 @@
 package com.MajorProject.AI.Service;
 
-import com.MajorProject.AI.Domains.AIResponse;
 import com.MajorProject.AI.Util.helperForAI;
+import com.MajorProject.common.Domain.AIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 

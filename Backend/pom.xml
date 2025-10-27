@@ -21,6 +21,7 @@
     <modules>
         <module>HealthCare</module>
         <module>AI-Service</module>
+        <module>common</module>
     </modules>
 
     <properties>
@@ -78,6 +79,13 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Common code -->
+        <dependency>
+            <groupId>com.MajorProject</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

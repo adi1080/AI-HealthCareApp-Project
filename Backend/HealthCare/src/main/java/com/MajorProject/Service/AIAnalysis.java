@@ -1,9 +1,9 @@
 package com.MajorProject.Service;
 
 import com.MajorProject.Client.StreamAI;
-import com.MajorProject.Domain.AIRequest;
-import com.MajorProject.Domain.AIResponse;
 import com.MajorProject.Entity.Patient;
+import com.MajorProject.common.Domain.AIRequest;
+import com.MajorProject.common.Domain.AIResponse;
 import jakarta.annotation.PreDestroy;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,7 +13,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;

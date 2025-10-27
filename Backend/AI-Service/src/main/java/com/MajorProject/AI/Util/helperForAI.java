@@ -1,5 +1,6 @@
 package com.MajorProject.AI.Util;
 
+import com.MajorProject.common.Domain.AIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -59,5 +60,37 @@ public class helperForAI {
             start = end;
         }
         return chunks;
+    }
+
+    public AIResponse parseAIResponseSafely(String json) {
+        try {
+            Map<String, Object> map = objectMapper.readValue(json, Map.class);
+
+            String summary = map.getOrDefault("summary", "").toString();
+
+            List<String> suggestions = new ArrayList<>();
+            Object sugObj = map.get("suggestions");
+            if (sugObj instanceof List<?> list) {
+                for (Object o : list) {
+                    suggestions.add(o.toString());
+                }
+            }
+
+            Double healthScore = null;
+            Object scoreObj = map.get("healthScore");
+            if (scoreObj instanceof Number num) {
+                healthScore = num.doubleValue();
+            }
+
+            return new AIResponse(summary, suggestions, healthScore);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AIResponse(
+                    "Error parsing AI response.",
+                    List.of("AI returned invalid JSON."),
+                    null
+            );
+        }
     }
 }

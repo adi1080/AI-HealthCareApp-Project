@@ -1,9 +1,9 @@
 package com.MajorProject.AI.controller;
 
-import com.MajorProject.AI.Domains.AIRequest;
-import com.MajorProject.AI.Domains.AIResponse;
 import com.MajorProject.AI.Service.AIService;
 import com.MajorProject.AI.Util.helperForAI;
+import com.MajorProject.common.Domain.AIRequest;
+import com.MajorProject.common.Domain.AIResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.ollama4j.OllamaAPI;
 import io.github.ollama4j.models.chat.OllamaChatMessageRole;
@@ -110,60 +110,49 @@ public class AIController {
             }
 
             List<String> chunks = helperForAI.chunkText(request.getReportContent(), 2000);
-            List<String> chunkResponses = new ArrayList<>();
+            List<AIResponse> responses = new ArrayList<>();
 
             for (String chunk : chunks) {
                 try {
                     String prompt = """
-                            Analyze the following patient medical report chunk and respond in JSON with:
-                            - summary: A 5-7 line summary of the patient's current health.
-                            - suggestions: Practical steps to improve their health.
-                            - healthScore: A number from 0-100 representing health status.
-                            
-                            Report chunk:
-                            """ + chunk;
+                        Analyze the following patient medical report chunk and respond in **valid JSON** with:
+                        - summary: A 5-7 line summary of the patient's current health.
+                        - suggestions: List of practical steps to improve health, all strings quoted.
+                        - healthScore: Number 0-100.
+                        
+                        Report chunk:
+                        """ + chunk;
 
                     String fullJson = helperForAI.callOllama(prompt);
 
                     Map<String, Object> map = objectMapper.readValue(fullJson, Map.class);
-                    Map<String, String> message = (Map<String, String>) map.get("message");
+                    Map<String, Object> message = (Map<String, Object>) map.get("message");
+                    String innerContent = (String) message.get("content");
 
-                    String innerContent = message.get("content");
-
-                    chunkResponses.add(innerContent.trim());
+                    // Safe parsing of AI JSON
+                    AIResponse aiResponse = helperForAI.parseAIResponseSafely(innerContent);
+                    responses.add(aiResponse);
 
                 } catch (HttpTimeoutException timeoutEx) {
-                    chunkResponses.add("""
-                            {
-                              "summary": "Timeout while processing this chunk.",
-                              "suggestions": ["Try analyzing a smaller portion or increase timeout."],
-                              "healthScore": null
-                            }
-                            """);
+                    responses.add(new AIResponse(
+                            "Timeout while processing this chunk.",
+                            List.of("Try analyzing a smaller portion or increase timeout."),
+                            null
+                    ));
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    chunkResponses.add("""
-                            {
-                              "summary": "Error analyzing this chunk.",
-                              "suggestions": ["Check the input or system logs."],
-                              "healthScore": null
-                            }
-                            """);
+                    responses.add(new AIResponse(
+                            "Error analyzing this chunk.",
+                            List.of("Check the input or system logs."),
+                            null
+                    ));
                 }
             }
 
-            List<AIResponse> responses = new ArrayList<>();
-            for (String json : chunkResponses) {
-                try {
-                    AIResponse r = objectMapper.readValue(json, AIResponse.class);
-                    responses.add(r);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
+            // Aggregate final response
             String fullSummary = responses.stream()
-                    .map(AIResponse::getSummary).filter(Objects::nonNull)
+                    .map(AIResponse::getSummary)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.joining("\n\n"));
 
             List<String> allSuggestions = responses.stream()
@@ -182,6 +171,7 @@ public class AIController {
             AIResponse finalResponse = new AIResponse(fullSummary, allSuggestions, avgScore);
             System.out.println("sending final response : " + finalResponse);
             return ResponseEntity.ok(finalResponse);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500)
