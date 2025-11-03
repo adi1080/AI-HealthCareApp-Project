@@ -22,4 +22,8 @@ export class HomeComponent {
   scrolltobottom(){
      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
+
+  navigate(){
+    this.router.navigate(['/patient/pre-search'])
+  }
 }
