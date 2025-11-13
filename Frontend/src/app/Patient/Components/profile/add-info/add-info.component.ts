@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PatientService } from 'src/app/Patient/Services/patient.service';
+import { MessageService } from 'src/app/Services/message.service';
 
 @Component({
   selector: 'app-add-info',
@@ -20,7 +21,8 @@ export class AddInfoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private patientService: PatientService,
-    private router: Router
+    private router: Router,
+    private messageService:MessageService
   ) {}
 
   ngOnInit(): void {
@@ -54,18 +56,10 @@ export class AddInfoComponent implements OnInit {
     }
   }
 
-  showMessage(message: string, duration: number): void {
-    this.message = message;
-    this.errorMessage = message.toLowerCase().includes('already');
-    setTimeout(() => {
-      this.message = '';
-    }, duration);
-  }
-
   addDetails(): void {
     if (this.AddProfileForm.invalid || this.fileError) {
       this.AddProfileForm.markAllAsTouched();
-      this.showMessage('Please correct the form errors', 3000);
+      this.messageService.showMessage('Please correct the form errors', 3000);
       return;
     }
 
@@ -76,16 +70,16 @@ export class AddInfoComponent implements OnInit {
         (response) => {
           this.isSubmitting = false;
           if (response === 'Profile already exists') {
-            this.showMessage('Profile already exists', 3000);
+            this.messageService.showMessage('Profile already exists', 3000);
           } else {
-            this.showMessage('Profile Added Successfully', 3000);
+            this.messageService.showMessage('Profile Added Successfully', 3000);
             this.router.navigateByUrl('patient/profile/addInfo');
           }
         },
         (error) => {
           console.error('Error adding profile:', error);
           this.isSubmitting = false;
-          this.showMessage('Something went wrong', 3000);
+          this.messageService.showMessage('Something went wrong', 3000);
         }
       );
   }

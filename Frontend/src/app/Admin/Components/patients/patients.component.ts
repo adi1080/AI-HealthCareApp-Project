@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AdminService, User } from '../../Services/admin.service';
 import { DoctorService } from 'src/app/Doctor/Services/doctor.service';
+import { MessageService } from 'src/app/Services/message.service';
 
 @Component({
   selector: 'app-patients',
@@ -11,7 +12,7 @@ export class PatientsComponent {
   users: User[] = [];
   PatientList: User[] = [];
 
-  constructor(private adminService: AdminService, private doctorService: DoctorService) { }
+  constructor(private adminService: AdminService, private doctorService: DoctorService, private messageService:MessageService) { }
 
   ngOnInit(): void {
     this.adminService.getAllUsers().subscribe(
@@ -36,7 +37,7 @@ export class PatientsComponent {
     this.adminService.permit(id).subscribe({
       next: () => {
         console.log(`✅ Patient ${id} permitted`);
-        alert("Patient Access Permitted");
+        this.messageService.showMessage("Patient Access Permitted",3000);
         window.location.reload();
       },
       error: (err) => console.error('❌ Permit failed:', err)
@@ -47,7 +48,7 @@ export class PatientsComponent {
     this.adminService.block(id).subscribe({
       next: () => {
         console.log(`🚫 Patient ${id} blocked`);
-        alert("Patient Access Blocked");
+       this.messageService.showMessage("Patient Access Blocked", 3000);
         window.location.reload();
       },
       error: (err) => console.error('❌ Block failed:', err)
